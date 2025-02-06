@@ -1,0 +1,42 @@
+.button {
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-background-radius: 35%;
+
+    /* Square size with em units */
+    -fx-min-width: 3em;
+    -fx-min-height: 1.5em;
+    -fx-max-width: 5em;
+    -fx-max-height: 2.5em;
+
+    /* Tomato 3D gradient */
+    -fx-background-color:
+            linear-gradient(from 0% 0% to 100% 100%, #ff826d, #ff6347),  /* Main tomato gradient */
+            linear-gradient(from 0% 0% to 100% 100%, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.0)); /* Highlight on top */
+    -fx-text-fill: white;
+    -fx-font-size: 2.5em;
+    -fx-font-weight: bold;
+
+    /* Drop shadow for 3D effect */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0.2, 2, 2);
+
+    /* Smooth transition for animation */
+    -fx-transition: -fx-background-color 0.3s, -fx-effect 0.3s;
+}
+
+.button:hover {
+    -fx-cursor: hand;
+    /* Slightly brighter on hover */
+    -fx-background-color:
+            linear-gradient(from 0% 0% to 100% 100%, #ff9b82, #ff826d),
+            linear-gradient(from 0% 0% to 100% 100%, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.0));
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0.3, 2, 2);
+}
+
+.button:pressed {
+    /* Darker gradient and inner shadow for pressed effect */
+    -fx-background-color:
+            linear-gradient(from 0% 0% to 100% 100%, #d94730, #b33b28),
+            linear-gradient(from 0% 0% to 100% 100%, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.0));
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.5), 6, 0.0, 0, 2);
+}
