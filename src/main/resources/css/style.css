@@ -47,7 +47,7 @@
     -fx-border-color: #444;
     -fx-border-width: 0 0 1px 0; /* Bottom border only */
     -fx-border-style: solid;
-    -fx-padding: 10;
+    -fx-padding: 4;
     -fx-spacing: 10;
     -fx-alignment: center-left;
 }
@@ -57,7 +57,7 @@
     -fx-background-color: #2e2e2e;
     -fx-text-fill: white;
     -fx-font-size: 1em;
-    -fx-padding: 4 8;
+    -fx-padding: 0 8; /* Top/Bottom, Left/Right*/
     -fx-background-radius: 4;
     -fx-border-color: transparent;
     -fx-border-radius: 4;
