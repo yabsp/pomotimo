@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -14,6 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -27,11 +29,25 @@ public class PomTimGUI extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.initStyle(StageStyle.TRANSPARENT);
+
         primaryStage.setTitle("PomTim");
         primaryStage.getIcons().add(new Image("icons/logo_tomato_removebg.png"));
 
         BorderPane root = new BorderPane();
+        Rectangle clip = new Rectangle(800, 400);
+        clip.setArcWidth(15);
+        clip.setArcHeight(15);
+        clip.widthProperty().bind(root.widthProperty());
+        clip.heightProperty().bind(root.heightProperty());
+        root.setClip(clip);
+        root.setStyle("-fx-background-color: #ffffff;");
+
+        DropShadow shadow = new DropShadow();
+        shadow.setRadius(12);
+        shadow.setColor(Color.rgb(0, 0, 0, 0.4));
+        root.setEffect(shadow);
+
 
         HBox topBar = new HBox();
         topBar.setId("custom-title-bar");
@@ -97,7 +113,9 @@ public class PomTimGUI extends Application {
         Timer timerPane = new Timer();
         root.setLeft(timerPane);
 
-        primaryStage.setScene(new Scene(root, 800, 400));
+        Scene scene = new Scene(root, 800, 400);
+        scene.setFill(Color.TRANSPARENT);
+        primaryStage.setScene(scene);
         primaryStage.getScene().getStylesheets().add("css/style.css");
         primaryStage.show();
     }
