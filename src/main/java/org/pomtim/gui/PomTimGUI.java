@@ -101,11 +101,9 @@ public class PomTimGUI extends Application {
             primaryStage.setY(e.getScreenY() - yOffset);
         });
 
-        ImageView appIcon = new ImageView(new Image("icons/logo_tomato_removebg.png"));
+        ImageView appIcon = new ImageView(new Image("icons/logo_24x24.png"));
         appIcon.setFitHeight(24);
         appIcon.setFitWidth(24);
-        appIcon.setStyle("-fx-padding: 100;");
-        HBox.setMargin(appIcon, new Insets(0, 10, 0, 0));
 
         topBar.getChildren().addAll(appIcon, settingsButton, profileButton, spacer, minimizeBtn, maximizeBtn, closeBtn);
         root.setTop(topBar);
