@@ -1,4 +1,4 @@
-.button {
+.tomato-button {
     -fx-padding: 0;
     -fx-border-width: 0;
     -fx-background-radius: 35%;
@@ -24,7 +24,7 @@
     -fx-transition: -fx-background-color 0.3s, -fx-effect 0.3s;
 }
 
-.button:hover {
+.tomato-button:hover {
     -fx-cursor: hand;
     /* Slightly brighter on hover */
     -fx-background-color:
@@ -33,10 +33,63 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0.3, 2, 2);
 }
 
-.button:pressed {
+.tomato-button:pressed {
     /* Darker gradient and inner shadow for pressed effect */
     -fx-background-color:
             linear-gradient(from 0% 0% to 100% 100%, #d94730, #b33b28),
             linear-gradient(from 0% 0% to 100% 100%, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.0));
     -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.5), 6, 0.0, 0, 2);
+}
+
+/* Style the custom title bar */
+#custom-title-bar {
+    -fx-background-color: #2e2e2e; /* Dark grey */
+    -fx-border-color: #444;
+    -fx-border-width: 0 0 1px 0; /* Bottom border only */
+    -fx-border-style: solid;
+    -fx-padding: 10;
+    -fx-spacing: 10;
+    -fx-alignment: center-left;
+}
+
+/* Base styling for buttons and menubuttons in the title bar */
+.topbar-button {
+    -fx-background-color: #2e2e2e;
+    -fx-text-fill: white;
+    -fx-font-size: 1em;
+    -fx-padding: 4 8;
+    -fx-background-radius: 4;
+    -fx-border-color: transparent;
+    -fx-border-radius: 4;
+}
+
+/* Force the text inside MenuButtons to be white */
+.topbar-button .label {
+    -fx-text-fill: white;
+}
+
+.topbar-button .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.topbar-button:hover {
+    -fx-background-color: #3a3a3a;
+    -fx-cursor: hand;
+}
+
+.context-menu {
+    -fx-background-color: #2e2e2e;
+    -fx-border-color: transparent;
+    -fx-effect: none;
+}
+
+.menu-item {
+    -fx-text-fill: white;
+    -fx-background-color: #2e2e2e;
+    -fx-font-size: 1em;
+    -fx-padding: 6 12;
+}
+
+.menu-item:focused {
+    -fx-background-color: #3a3a3a;
 }

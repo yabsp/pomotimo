@@ -7,7 +7,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class Timer  extends BorderPane {
+public class Timer extends BorderPane {
 
     private Label timerLabel;
     private Button startButton, pauseButton, resetButton;
@@ -19,6 +19,9 @@ public class Timer  extends BorderPane {
         startButton = new Button("Start");
         pauseButton = new Button("Pause");
         resetButton = new Button("Reset");
+        startButton.getStyleClass().add("tomato-button");
+        pauseButton.getStyleClass().add("tomato-button");
+        resetButton.getStyleClass().add("tomato-button");
 
         HBox controls = new HBox(10, startButton, pauseButton, resetButton);
         controls.setAlignment(Pos.CENTER);
