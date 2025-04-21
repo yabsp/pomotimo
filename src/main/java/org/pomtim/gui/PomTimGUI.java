@@ -3,6 +3,7 @@ package org.pomtim.gui;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
@@ -26,6 +27,7 @@ public class PomTimGUI extends Application {
 
     private double xOffset = 0;
     private double yOffset = 0;
+    private Cursor resizeCursor = Cursor.DEFAULT;
 
     @Override
     public void start(Stage primaryStage) {
@@ -42,6 +44,8 @@ public class PomTimGUI extends Application {
         clip.heightProperty().bind(root.heightProperty());
         root.setClip(clip);
         root.setStyle("-fx-background-color: #ffffff;");
+
+        makeWindowResizable(primaryStage, root);
 
         DropShadow shadow = new DropShadow();
         shadow.setRadius(12);
@@ -117,4 +121,87 @@ public class PomTimGUI extends Application {
         primaryStage.getScene().getStylesheets().add("css/style.css");
         primaryStage.show();
     }
+
+    private void makeWindowResizable(Stage stage, Region root) {
+        final int RESIZE_MARGIN = 6;
+
+        root.setOnMouseMoved(event -> {
+            double x = event.getX();
+            double y = event.getY();
+            double width = root.getWidth();
+            double height = root.getHeight();
+
+            if (x < RESIZE_MARGIN && y < RESIZE_MARGIN) {
+                resizeCursor = Cursor.NW_RESIZE;
+            } else if (x > width - RESIZE_MARGIN && y < RESIZE_MARGIN) {
+                resizeCursor = Cursor.NE_RESIZE;
+            } else if (x < RESIZE_MARGIN && y > height - RESIZE_MARGIN) {
+                resizeCursor = Cursor.SW_RESIZE;
+            } else if (x > width - RESIZE_MARGIN && y > height - RESIZE_MARGIN) {
+                resizeCursor = Cursor.SE_RESIZE;
+            } else if (x < RESIZE_MARGIN) {
+                resizeCursor = Cursor.W_RESIZE;
+            } else if (x > width - RESIZE_MARGIN) {
+                resizeCursor = Cursor.E_RESIZE;
+            } else if (y < RESIZE_MARGIN) {
+                resizeCursor = Cursor.N_RESIZE;
+            } else if (y > height - RESIZE_MARGIN) {
+                resizeCursor = Cursor.S_RESIZE;
+            } else {
+                resizeCursor = Cursor.DEFAULT;
+            }
+
+            root.setCursor(resizeCursor);
+        });
+
+        root.setOnMouseDragged(event -> {
+            if (resizeCursor == Cursor.DEFAULT) return;
+
+            double mouseX = event.getScreenX();
+            double mouseY = event.getScreenY();
+            double stageX = stage.getX();
+            double stageY = stage.getY();
+            double stageW = stage.getWidth();
+            double stageH = stage.getHeight();
+
+            switch (resizeCursor.toString()) {
+                case "NW_RESIZE":
+                    stage.setX(mouseX);
+                    stage.setY(mouseY);
+                    stage.setWidth(stageW - (mouseX - stageX));
+                    stage.setHeight(stageH - (mouseY - stageY));
+                    break;
+                case "NE_RESIZE":
+                    stage.setY(mouseY);
+                    stage.setWidth(mouseX - stageX);
+                    stage.setHeight(stageH - (mouseY - stageY));
+                    break;
+                case "SW_RESIZE":
+                    stage.setX(mouseX);
+                    stage.setWidth(stageW - (mouseX - stageX));
+                    stage.setHeight(mouseY - stageY);
+                    break;
+                case "SE_RESIZE":
+                    stage.setWidth(mouseX - stageX);
+                    stage.setHeight(mouseY - stageY);
+                    break;
+                case "W_RESIZE":
+                    stage.setX(mouseX);
+                    stage.setWidth(stageW - (mouseX - stageX));
+                    break;
+                case "E_RESIZE":
+                    stage.setWidth(mouseX - stageX);
+                    break;
+                case "N_RESIZE":
+                    stage.setY(mouseY);
+                    stage.setHeight(stageH - (mouseY - stageY));
+                    break;
+                case "S_RESIZE":
+                    stage.setHeight(mouseY - stageY);
+                    break;
+            }
+        });
+    }
+
+
 }
