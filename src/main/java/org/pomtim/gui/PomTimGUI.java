@@ -27,6 +27,7 @@ public class PomTimGUI extends Application {
 
     private double xOffset = 0;
     private double yOffset = 0;
+    private boolean resizing = false;
     private Cursor resizeCursor = Cursor.DEFAULT;
 
     @Override
@@ -43,7 +44,7 @@ public class PomTimGUI extends Application {
         clip.widthProperty().bind(root.widthProperty());
         clip.heightProperty().bind(root.heightProperty());
         root.setClip(clip);
-        root.setStyle("-fx-background-color: #ffffff;");
+        root.setStyle("-fx-background-color: #383736;");
 
         makeWindowResizable(primaryStage, root);
 
@@ -101,13 +102,14 @@ public class PomTimGUI extends Application {
         });
 
         topBar.setOnMouseDragged(e -> {
+            if(resizing) return;
             primaryStage.setX(e.getScreenX() - xOffset);
             primaryStage.setY(e.getScreenY() - yOffset);
         });
 
         ImageView appIcon = new ImageView(new Image("icons/logo_24x24.png"));
-        appIcon.setFitHeight(24);
-        appIcon.setFitWidth(24);
+        appIcon.setFitHeight(18);
+        appIcon.setFitWidth(18);
 
         topBar.getChildren().addAll(appIcon, settingsButton, profileButton, spacer, minimizeBtn, maximizeBtn, closeBtn);
         root.setTop(topBar);
@@ -123,7 +125,7 @@ public class PomTimGUI extends Application {
     }
 
     private void makeWindowResizable(Stage stage, Region root) {
-        final int RESIZE_MARGIN = 6;
+        final int RESIZE_MARGIN = 10;
 
         root.setOnMouseMoved(event -> {
             double x = event.getX();
@@ -156,6 +158,7 @@ public class PomTimGUI extends Application {
 
         root.setOnMouseDragged(event -> {
             if (resizeCursor == Cursor.DEFAULT) return;
+            resizing = true;
 
             double mouseX = event.getScreenX();
             double mouseY = event.getScreenY();
@@ -200,6 +203,10 @@ public class PomTimGUI extends Application {
                     stage.setHeight(mouseY - stageY);
                     break;
             }
+        });
+
+        root.setOnMouseReleased(event -> {
+            resizing = false;
         });
     }
 

@@ -13,8 +13,9 @@ public class Timer extends BorderPane {
     private Button startButton, pauseButton, resetButton;
 
     public Timer () {
-        timerLabel = new Label("25:00");
-        timerLabel.setStyle("-fx-font-size: 30px; -fx-font-weight: bold;");
+        timerLabel = new Label("00:00");
+        timerLabel.setStyle("-fx-font-size: 30px; -fx-font-weight: bold; -fx-background-color: #1e1f22");
+        this.setStyle("-fx-background-color: #1e1f22");
 
         startButton = new Button("Start");
         pauseButton = new Button("Pause");
