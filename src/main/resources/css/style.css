@@ -41,7 +41,7 @@
     -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.5), 6, 0.0, 0, 2);
 }
 
-/* Style the custom title bar */
+/* Style custom title bar */
 #custom-title-bar {
     -fx-background-color: #2e2e2e; /* Dark grey */
     -fx-border-color: #444;
@@ -52,7 +52,7 @@
     -fx-alignment: center-left;
 }
 
-/* Base styling for buttons and menubuttons in the title bar */
+/* Base styling for buttons and menu buttons in the title bar */
 .topbar-button {
     -fx-background-color: #2e2e2e;
     -fx-text-fill: white;

@@ -13,8 +13,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import org.kordamp.ikonli.javafx.FontIcon;
+import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 
 public class PomTimGUI extends Application {
 
@@ -48,9 +52,20 @@ public class PomTimGUI extends Application {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        Button minimizeBtn = new Button("-");
-        Button maximizeBtn = new Button("□");
-        Button closeBtn = new Button("X");
+        Button minimizeBtn = new Button();
+        FontIcon minimizeIcon = new FontIcon(FontAwesomeSolid.WINDOW_MINIMIZE);
+        minimizeIcon.setIconColor(Color.WHITE);
+        minimizeBtn.setGraphic(minimizeIcon);
+
+        Button maximizeBtn = new Button();
+        FontIcon maximizeIcon = new FontIcon(FontAwesomeSolid.WINDOW_MAXIMIZE);
+        maximizeIcon.setIconColor(Color.WHITE);
+        maximizeBtn.setGraphic(maximizeIcon);
+
+        Button closeBtn = new Button();
+        FontIcon closeIcon = new FontIcon(FontAwesomeSolid.WINDOW_CLOSE);
+        closeIcon.setIconColor(Color.WHITE);
+        closeBtn.setGraphic(closeIcon);
 
         minimizeBtn.getStyleClass().add("topbar-button");
         maximizeBtn.getStyleClass().add("topbar-button");

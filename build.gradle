@@ -28,6 +28,10 @@ dependencies {
     implementation 'org.openjfx:javafx-fxml:22.0.1'
     implementation 'org.openjfx:javafx-graphics:22.0.1'
 
+    //Icons for title bar etc.
+    implementation 'org.kordamp.ikonli:ikonli-javafx:12.3.1'
+    implementation 'org.kordamp.ikonli:ikonli-fontawesome5-pack:12.3.1'
+
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
