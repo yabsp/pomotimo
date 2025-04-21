@@ -110,17 +110,18 @@ public class PomTimGUI extends Application {
         ImageView appIcon = new ImageView(new Image("icons/logo_24x24.png"));
         appIcon.setFitHeight(18);
         appIcon.setFitWidth(18);
+        HBox.setMargin(appIcon, new Insets(0, 5, 0, 10));
 
         topBar.getChildren().addAll(appIcon, settingsButton, profileButton, spacer, minimizeBtn, maximizeBtn, closeBtn);
         root.setTop(topBar);
 
-        Timer timerPane = new Timer();
+        TimerPane timerPane = new TimerPane();
         root.setLeft(timerPane);
 
         Scene scene = new Scene(root, 800, 400);
         scene.setFill(Color.TRANSPARENT);
         primaryStage.setScene(scene);
-        primaryStage.getScene().getStylesheets().add("css/style.css");
+        primaryStage.getScene().getStylesheets().add("css/titlebar.css");
         primaryStage.show();
     }
 
