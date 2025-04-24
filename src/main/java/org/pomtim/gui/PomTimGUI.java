@@ -115,6 +115,12 @@ public class PomTimGUI extends Application {
         topBar.getChildren().addAll(appIcon, settingsButton, profileButton, spacer, minimizeBtn, maximizeBtn, closeBtn);
         root.setTop(topBar);
 
+        topBar.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                primaryStage.setMaximized(!primaryStage.isMaximized());
+            }
+        });
+
         TimerPane timerPane = new TimerPane();
         root.setLeft(timerPane);
 
