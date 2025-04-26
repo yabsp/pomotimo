@@ -1,5 +1,7 @@
 package org.pomtim.gui;
 
+import java.util.Set;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -125,13 +127,19 @@ public class PomTimGUI extends Application {
             }
         });
 
-        /* Add the timer */
+        /* Add the timer pane and the task pane */
         TimerPane timerPane = new TimerPane();
-        root.setLeft(timerPane);
-
-        /* Add the taskpane */
         TaskPane taskPane = new TaskPane();
-        root.setRight(taskPane);
+
+        HBox content = new HBox();
+        content.setSpacing(10);
+
+        content.getChildren().addAll(timerPane, taskPane);
+
+        HBox.setHgrow(timerPane, Priority.ALWAYS);
+        HBox.setHgrow(taskPane, Priority.ALWAYS);
+
+        root.setCenter(content);
 
         /* Show the window */
         Scene scene = new Scene(root, 800, 400);
