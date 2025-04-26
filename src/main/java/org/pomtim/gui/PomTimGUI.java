@@ -142,7 +142,7 @@ public class PomTimGUI extends Application {
         root.setCenter(content);
 
         /* Show the window */
-        Scene scene = new Scene(root, 800, 400);
+        Scene scene = new Scene(root, 900, 500);
         scene.setFill(Color.TRANSPARENT);
         primaryStage.setScene(scene);
         primaryStage.getScene().getStylesheets().addAll("css/titlebar.css", "css/generalStyle.css");
@@ -150,7 +150,7 @@ public class PomTimGUI extends Application {
     }
 
     private void makeWindowResizable(Stage stage, Region root) {
-        final int RESIZE_MARGIN = 4;
+        final int RESIZE_MARGIN = 6;
 
         root.setOnMouseMoved(event -> {
             double x = event.getX();
