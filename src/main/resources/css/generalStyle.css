@@ -1,0 +1,22 @@
+.root {
+    -fx-text-fill: white;          /* Default text color */
+    -fx-font-family: "Segoe UI";   /* Default font family */
+}
+
+.button {
+    -fx-background-color: #2e2e2e;
+    -fx-text-fill: white;
+}
+
+.list-view {
+    -fx-background-color: #2e2e2e;
+}
+
+.list-cell {
+    -fx-background-color: transparent; /* inherit parent background */
+    -fx-text-fill: white;
+}
+
+.list-cell:filled:selected, .list-cell:filled:hover {
+    -fx-background-color: #3a3a3a; /* darker when selected or hovered */
+}

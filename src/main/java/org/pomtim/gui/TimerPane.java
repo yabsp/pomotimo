@@ -20,7 +20,6 @@ public class TimerPane extends BorderPane {
     private final PomodoroTimer timer = new PomodoroTimer();
 
     public TimerPane() {
-        System.out.println("This is the path: "+ getClass().getResource("/fxml/TimerPane.fxml"));
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TimerPane.fxml"));
         loader.setRoot(this);
         loader.setController(this);

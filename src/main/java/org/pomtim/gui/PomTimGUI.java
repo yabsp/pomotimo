@@ -37,6 +37,7 @@ public class PomTimGUI extends Application {
         primaryStage.setTitle("PomTim");
         primaryStage.getIcons().add(new Image("icons/logo_tomato_removebg.png"));
 
+        /* Smooth window corners */
         BorderPane root = new BorderPane();
         Rectangle clip = new Rectangle(800, 400);
         clip.setArcWidth(15);
@@ -46,14 +47,17 @@ public class PomTimGUI extends Application {
         root.setClip(clip);
         root.setStyle("-fx-background-color: #383736;");
 
+        /* Window snap and resizable window */
         makeWindowResizable(primaryStage, root);
 
+
+        /* Shadow effect for better window appearance */
         DropShadow shadow = new DropShadow();
         shadow.setRadius(12);
         shadow.setColor(Color.rgb(0, 0, 0, 0.4));
         root.setEffect(shadow);
 
-
+        /* Custom titlebar */
         HBox topBar = new HBox();
         topBar.setId("custom-title-bar");
 
@@ -121,18 +125,24 @@ public class PomTimGUI extends Application {
             }
         });
 
+        /* Add the timer */
         TimerPane timerPane = new TimerPane();
         root.setLeft(timerPane);
 
+        /* Add the taskpane */
+        TaskPane taskPane = new TaskPane();
+        root.setRight(taskPane);
+
+        /* Show the window */
         Scene scene = new Scene(root, 800, 400);
         scene.setFill(Color.TRANSPARENT);
         primaryStage.setScene(scene);
-        primaryStage.getScene().getStylesheets().add("css/titlebar.css");
+        primaryStage.getScene().getStylesheets().addAll("css/titlebar.css", "css/generalStyle.css");
         primaryStage.show();
     }
 
     private void makeWindowResizable(Stage stage, Region root) {
-        final int RESIZE_MARGIN = 10;
+        final int RESIZE_MARGIN = 4;
 
         root.setOnMouseMoved(event -> {
             double x = event.getX();
@@ -175,7 +185,7 @@ public class PomTimGUI extends Application {
             double stageH = stage.getHeight();
 
             switch (resizeCursor.toString()) {
-                case "NW_RESIZE":
+                case "NW_RESIZE": 
                     stage.setX(mouseX);
                     stage.setY(mouseY);
                     stage.setWidth(stageW - (mouseX - stageX));

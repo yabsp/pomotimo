@@ -1,5 +1,5 @@
 .tomato-button {
-    -fx-padding: 10;
+    -fx-padding: 5;
     -fx-border-width: 0;
     -fx-background-radius: 55%;
 
@@ -14,7 +14,7 @@
             linear-gradient(from 0% 0% to 100% 100%, #ea5437, #f12b06),  /* Main tomato gradient */
             linear-gradient(from 0% 0% to 100% 100%, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.0)); /* Highlight on top */
     -fx-text-fill: white;
-    -fx-font-size: 2.5em;
+    -fx-font-size: 1em;
     -fx-font-weight: bold;
 
     /* Drop shadow for 3D effect */
