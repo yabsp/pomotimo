@@ -15,7 +15,7 @@ public class TimerPane extends BorderPane {
 
     @FXML private Label timerLabel;
     @FXML private Button startButton;
-    @FXML private Button pauseButton;
+    @FXML private Button stopButton;
     @FXML private Button resetButton;
     private final PomodoroTimer timer = new PomodoroTimer();
 
@@ -34,6 +34,9 @@ public class TimerPane extends BorderPane {
 
     @FXML
     private void initialize() {
+
+
+        /* Init with buttons and clock directly
         timerLabel.setText("00:00");
 
         startButton.setOnAction(e -> {
@@ -45,10 +48,11 @@ public class TimerPane extends BorderPane {
             });
         });
 
-        pauseButton.setOnAction(e -> timer.pause());
+        stopButton.setOnAction(e -> timer.pause());
         resetButton.setOnAction(e -> {
             timer.reset(25 * 60);
             timerLabel.setText("25:00");
         });
+         */
     }
 }

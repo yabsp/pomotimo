@@ -14,7 +14,7 @@
                    style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: white;"/>
             <HBox HBox.hgrow="ALWAYS" alignment="CENTER" spacing="10">
                 <Button fx:id="startButton" text="Start" styleClass="tomato-button"/>
-                <Button fx:id="pauseButton" text="Pause" styleClass="tomato-button"/>
+                <Button fx:id="stopButton" text="Stop" styleClass="tomato-button"/>
                 <Button fx:id="resetButton" text="Reset" styleClass="tomato-button"/>
             </HBox>
         </VBox>
