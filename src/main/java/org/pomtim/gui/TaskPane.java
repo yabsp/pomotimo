@@ -13,6 +13,8 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 
+import org.pomtim.logic.Preset;
+import org.pomtim.logic.PresetManager;
 import org.pomtim.logic.Task;
 
 public class TaskPane extends BorderPane {
@@ -20,12 +22,13 @@ public class TaskPane extends BorderPane {
     @FXML private ListView<String> taskListView;
     @FXML private TextField taskInput;
     @FXML private Button addTaskButton;
+    private PresetManager presetManager;
 
-    public TaskPane() {
+    public TaskPane(PresetManager presetManager) {
+        this.presetManager = presetManager;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TaskPane.fxml"));
         loader.setRoot(this);
         loader.setController(this);
-        this.getStylesheets().add("css/generalStyle.css");
 
         try {
             loader.load();

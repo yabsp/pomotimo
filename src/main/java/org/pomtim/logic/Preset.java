@@ -1,5 +1,11 @@
 package org.pomtim.logic;
 
+import java.util.List;
+
+/**
+ * Represents a User preset. Contains duration of focus time, breaks, custom alarm sounds,
+ * images and a List of {@link org.pomtim.logic.Task} objects.
+ */
 public class Preset {
     private String name;
     /* Durations in seconds */
@@ -9,14 +15,20 @@ public class Preset {
     /* sound and image file location */
     private String soundFile;
     private String imageFile;
+    private List tasks;
 
-    public Preset(String name, int durationFocus, int durationShortBreak, int durationLongBreak, String soundFile, String imageFile) {
+    public Preset(String name, int durationFocus, int durationShortBreak, int durationLongBreak, String soundFile, String imageFile, List<Task> tasks) {
         this.name = name;
         this.durationFocus = durationFocus;
         this.durationShortBreak = durationShortBreak;
         this.durationLongBreak = durationLongBreak;
         this.soundFile = soundFile;
         this.imageFile = imageFile;
+        this.tasks = tasks;
+    }
+
+    public Preset() {
+
     }
 
     // --- Getters & Setters ---

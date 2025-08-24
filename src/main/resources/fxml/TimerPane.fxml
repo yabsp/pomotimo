@@ -6,7 +6,7 @@
 <?import javafx.scene.control.Label?>
 
 <fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml"
-         style="-fx-background-color: #1e1f22;" maxWidth="Infinity" maxHeight="Infinity">
+         style="-fx-background-color: #1e1f22;" maxWidth="Infinity" maxHeight="Infinity" stylesheets="@../css/generalStyle.css, @../css/timer.css">
     <center>
         <VBox VBox.vgrow="ALWAYS" alignment="CENTER" spacing="10" >
             <Label fx:id="timerLabel"

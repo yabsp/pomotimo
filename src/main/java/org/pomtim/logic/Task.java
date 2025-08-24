@@ -1,5 +1,8 @@
 package org.pomtim.logic;
 
+/**
+ * Represents a task that is to be done. A task has a name and a priority.
+ */
 public class Task {
     private final String name;
     private int priority;

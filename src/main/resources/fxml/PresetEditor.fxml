@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root style="-fx-background-color: #1e1f22;"
+         stylesheets="@../css/generalStyle.css, @../css/titlebar.css"
+         type="BorderPane" xmlns="http://javafx.com/javafx/17.0.12"
+         xmlns:fx="http://javafx.com/fxml/1">
+
+    <center>
+        <TabPane tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab text="Focus Time">
+                    <AnchorPane>
+                        <children>
+                            <Label text="Please set your preferred focus time" layoutX="20" layoutY="20"/>
+                        </children>
+                    </AnchorPane>
+                </Tab>
+                <Tab text="Short Break">
+                    <AnchorPane>
+                        <children>
+                            <Label text="Please set your preferred time for a short break" layoutX="20" layoutY="20"/>
+                        </children>
+                    </AnchorPane>
+                </Tab>
+                <Tab text="Big Break">
+                    <AnchorPane>
+                        <children>
+                            <Label text="" layoutX="20" layoutY="20"/>
+                        </children>
+                    </AnchorPane>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </center>
+
+</fx:root>

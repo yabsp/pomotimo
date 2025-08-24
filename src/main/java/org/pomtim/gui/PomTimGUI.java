@@ -24,6 +24,7 @@ import javafx.stage.StageStyle;
 
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
+import org.pomtim.logic.PresetManager;
 
 public class PomTimGUI extends Application {
 
@@ -31,6 +32,7 @@ public class PomTimGUI extends Application {
     private double yOffset = 0;
     private boolean resizing = false;
     private Cursor resizeCursor = Cursor.DEFAULT;
+    private final PresetManager presetManager = new PresetManager();
 
     @Override
     public void start(Stage primaryStage) {
@@ -128,8 +130,8 @@ public class PomTimGUI extends Application {
         });
 
         /* Add the timer pane and the task pane */
-        TimerPane timerPane = new TimerPane();
-        TaskPane taskPane = new TaskPane();
+        TimerPane timerPane = new TimerPane(presetManager);
+        TaskPane taskPane = new TaskPane(presetManager);
 
         HBox content = new HBox();
         content.setSpacing(10);

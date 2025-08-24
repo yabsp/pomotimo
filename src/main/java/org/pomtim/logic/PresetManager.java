@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import org.pomtim.logic.Preset;
 
+/**
+ * Presents utility to manage and store all loaded Presets.
+ */
 public class PresetManager {
     private final List<Preset> presets = new ArrayList<>();
 
