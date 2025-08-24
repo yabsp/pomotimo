@@ -7,14 +7,25 @@ public class Task {
     private final String name;
     private int priority;
 
+    public final int DEFAULT_PRIO = 0;
+
+    /**
+     * Constructs a task with custom priority.
+     * @param name the name of the task
+     * @param priority the priority of the task, higher int value is higher priority
+     */
     public Task(String name, int priority) {
         this.name = name;
         this.priority = priority;
     }
 
+    /**
+     * Construct a task with default priority.
+     * @param name the name of the task.
+     */
     public Task(String name) {
         this.name = name;
-        this.priority = 0;
+        this.priority = DEFAULT_PRIO;
     }
 
     public String getName() {

@@ -4,6 +4,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Consumer;
 
+/**
+ * Provides timer functionality.
+ * Start, pause and reset the timer.
+ */
+
 public class PomodoroTimer {
 
     private Timer timer;
@@ -55,6 +60,9 @@ public class PomodoroTimer {
         }
     }
 
+    /**
+     * Pause the current timer. If no timer exists does nothing.
+     */
     public void pause() {
         if (timer == null) return;
         if (paused) {

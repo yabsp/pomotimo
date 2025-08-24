@@ -1,5 +1,6 @@
 package org.pomtim.logic;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -9,8 +10,25 @@ import org.pomtim.logic.Preset;
  * Presents utility to manage and store all loaded Presets.
  */
 public class PresetManager {
-    private final List<Preset> presets = new ArrayList<>();
+    private List<Preset> presets;
 
+    /**
+     * Default constructor that creates a PresetManager instance and initializes the list of presets.
+     */
+    public PresetManager() {
+        this.presets = new ArrayList<Preset>();
+    }
+
+    /**
+     * Constructs a new PresetManager instance initialized with a given list of presets
+     * @param presets list of Preset objects, must not be {@code null}
+     */
+    public PresetManager(List<Preset> presets) {
+        this.presets = presets;
+    }
+
+    /* Utility Methods */
+    
     public List<Preset> getPresets() {
         return List.copyOf(presets);
     }
