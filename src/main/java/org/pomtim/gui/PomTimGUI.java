@@ -234,6 +234,4 @@ public class PomTimGUI extends Application {
             resizing = false;
         });
     }
-
-
 }

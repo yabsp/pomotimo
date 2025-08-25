@@ -8,9 +8,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 import java.io.IOException;
 
+import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.pomtim.logic.PomodoroTimer;
 import org.pomtim.logic.PresetManager;
 
@@ -57,7 +60,10 @@ public class TimerPane extends BorderPane {
             timerContainer.setVisible(false);
             timerContainer.setManaged(false);
 
-            Button createPresetButton = new Button("+ Create Preset");
+            Button createPresetButton = new Button("Create Preset");
+            FontIcon plusIcon = new FontIcon(FontAwesomeSolid.PLUS_SQUARE);
+            plusIcon.setIconColor(Color.WHITE);
+            createPresetButton.setGraphic(plusIcon);
             createPresetButton.setOnAction(e -> showPresetEditor());
             this.setCenter(createPresetButton);
         } else {

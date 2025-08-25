@@ -31,7 +31,7 @@
     -fx-border-radius: 4;
 }
 
-.window-close-btns .label {
+.window-close-btn .label {
     -fx-text-fill: white;
 }
 
@@ -41,5 +41,61 @@
 
 .window-close-btn:hover {
     -fx-background-color: #3a3a3a;
+    -fx-cursor: hand;
+}
+
+.tab-pane {
+    fx-background-color: #383736;
+}
+
+.tab-pane .tab-content-area {
+    -fx-background-color: #4e4d4b;
+}
+
+.tab-pane .tab-header-area .tab-header-background{
+    -fx-background-color: #383736;
+}
+
+.tab-pane .tab-header-area .tab {
+    -fx-background-color: #e64d00;
+    -fx-text-fill: #1e1f22;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-padding: 6 16;
+}
+
+/* Hover */
+.tab-pane .tab-header-area .tab:hover {
+    -fx-background-color: #ffbb99;
+    -fx-cursor: hand;
+}
+
+/* Selected */
+.tab-pane .tab-header-area .tab:selected {
+    -fx-background-color: ffbb99;
+    -fx-text-fill: #1e1f22;
+}
+
+.save-btn {
+    -fx-background-color: #ff4000;
+    -fx-text-fill: white;
+    -fx-font-size: 1em;
+    -fx-padding: 0 8; /* Top/Bottom, Left/Right*/
+    -fx-background-radius: 4;
+    -fx-border-color: transparent;
+    -fx-border-radius: 4;
+}
+
+.save-btn .label {
+    -fx-text-fill: white;
+}
+
+.save-btn .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.save-btn:hover {
+    -fx-background-color: #ff794d;
     -fx-cursor: hand;
 }

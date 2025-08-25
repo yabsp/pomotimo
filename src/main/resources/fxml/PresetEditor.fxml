@@ -2,15 +2,16 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
-<fx:root style="-fx-background-color: #1e1f22;" stylesheets="@../css/generalstyle.css, @../css/titlebar.css" type="BorderPane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<?import org.kordamp.ikonli.javafx.*?>
+
+<fx:root style="-fx-background-color: #1e1f22;" stylesheets="@../css/generalstyle.css" type="BorderPane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
 
     <top>
-        <HBox alignment="CENTER_RIGHT">
+        <HBox fx:id="topBox" alignment="CENTER_RIGHT">
             <children>
                 <Button fx:id="closeButton" styleClass="window-close-btn">
                     <graphic>
-                        <FontIcon iconLiteral="fas-window-close" iconColor="white"/>
+                        <FontIcon iconColor="white" iconLiteral="fas-window-close" />
                     </graphic>
                 </Button>
             </children>
@@ -20,28 +21,43 @@
         <TabPane prefHeight="136.0" prefWidth="442.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
                 <Tab text="Focus Time">
-                    <AnchorPane>
+                    <AnchorPane prefHeight="64.0" prefWidth="442.0">
                         <children>
-                            <Label layoutX="20" layoutY="20" text="Please set your preferred focus time" />
+                            <TextField fx:id="focusTimeField" layoutX="20" layoutY="20" prefWidth="80" promptText="MM:SS" />
                         </children>
                     </AnchorPane>
                 </Tab>
                 <Tab text="Short Break">
                     <AnchorPane>
                         <children>
-                            <Label layoutX="20" layoutY="20" text="Please set your preferred time for a short break" />
+                            <TextField fx:id="shortBreakField" layoutX="20" layoutY="20" prefWidth="80" promptText="MM:SS" />
                         </children>
                     </AnchorPane>
                 </Tab>
                 <Tab text="Long Break">
                     <AnchorPane>
                         <children>
-                            <Label layoutX="20" layoutY="20" text="" />
+                            <TextField fx:id="longBreakField" layoutX="20" layoutY="20" prefWidth="80" promptText="MM:SS" />
+                        </children>
+                    </AnchorPane>
+                </Tab>
+                <Tab text="Name">
+                    <AnchorPane>
+                        <children>
+                            <TextField fx:id="nameField" layoutX="20" layoutY="20" prefWidth="80" promptText="e.g. New Preset" />
                         </children>
                     </AnchorPane>
                 </Tab>
             </tabs>
         </TabPane>
     </center>
+   <bottom>
+      <HBox fx:id="bottomBox" alignment="CENTER_RIGHT" spacing="15">
+         <children>
+             <Button mnemonicParsing="false" text="Reset to Defaults" styleClass="save-btn"/>
+             <Button mnemonicParsing="false" text="Save" styleClass="save-btn"/>
+         </children>
+      </HBox>
+   </bottom>
 
 </fx:root>
