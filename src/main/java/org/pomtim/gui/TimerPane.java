@@ -3,9 +3,11 @@ package org.pomtim.gui;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
@@ -18,8 +20,10 @@ public class TimerPane extends BorderPane {
     @FXML private Button startButton;
     @FXML private Button stopButton;
     @FXML private Button resetButton;
+    @FXML private VBox timerContainer;
     private final PomodoroTimer timer = new PomodoroTimer();
     private PresetManager presetManager;
+    private Node timerUI;
 
     public TimerPane(PresetManager presetManager) {
         this.presetManager = presetManager;
@@ -36,12 +40,31 @@ public class TimerPane extends BorderPane {
 
     @FXML
     private void initialize() {
+        refreshUI();
+    }
+
+    private void showPresetEditor(){
+        PresetEditor presetEditor = new PresetEditor(presetManager, this);
+        this.setCenter(presetEditor);
+    }
+
+    /**
+     * Sets up the UI of the timer if the {@link PresetManager} contains a Preset.
+     * Otherwise, show a "Create Preset" Button.
+     */
+    public void refreshUI () {
         if(!presetManager.hasPresets()) {
+            timerContainer.setVisible(false);
+            timerContainer.setManaged(false);
+
             Button createPresetButton = new Button("+ Create Preset");
             createPresetButton.setOnAction(e -> showPresetEditor());
             this.setCenter(createPresetButton);
         } else {
-             /* Init with buttons and clock directly */
+
+            timerContainer.setVisible(true);
+            timerContainer.setManaged(true);
+            /* Init with buttons and clock directly */
             timerLabel.setText("00:00");
 
             startButton.setOnAction(e -> {
@@ -61,9 +84,4 @@ public class TimerPane extends BorderPane {
         }
     }
 
-    private void showPresetEditor(){
-        PresetEditor presetEditor = new PresetEditor(presetManager);
-        this.setCenter(presetEditor);
-
-    }
 }

@@ -1,7 +1,5 @@
 package org.pomtim.gui;
 
-import java.util.Set;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -147,7 +145,7 @@ public class PomTimGUI extends Application {
         Scene scene = new Scene(root, 900, 500);
         scene.setFill(Color.TRANSPARENT);
         primaryStage.setScene(scene);
-        primaryStage.getScene().getStylesheets().addAll("css/titlebar.css", "css/generalStyle.css");
+        primaryStage.getScene().getStylesheets().addAll("css/titlebar.css", "css/generalstyle.css");
         primaryStage.show();
     }
 

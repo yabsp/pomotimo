@@ -20,3 +20,26 @@
 .list-cell:filled:selected, .list-cell:filled:hover {
     -fx-background-color: #3a3a3a; /* darker when selected or hovered */
 }
+
+.window-close-btn {
+    -fx-background-color: #2e2e2e;
+    -fx-text-fill: white;
+    -fx-font-size: 1em;
+    -fx-padding: 0 8; /* Top/Bottom, Left/Right*/
+    -fx-background-radius: 4;
+    -fx-border-color: transparent;
+    -fx-border-radius: 4;
+}
+
+.window-close-btns .label {
+    -fx-text-fill: white;
+}
+
+.window-close-btn .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.window-close-btn:hover {
+    -fx-background-color: #3a3a3a;
+    -fx-cursor: hand;
+}

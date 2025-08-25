@@ -2,33 +2,41 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<fx:root style="-fx-background-color: #1e1f22;" stylesheets="@../css/generalstyle.css, @../css/titlebar.css" type="BorderPane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
 
-<fx:root style="-fx-background-color: #1e1f22;"
-         stylesheets="@../css/generalStyle.css, @../css/titlebar.css"
-         type="BorderPane" xmlns="http://javafx.com/javafx/17.0.12"
-         xmlns:fx="http://javafx.com/fxml/1">
-
+    <top>
+        <HBox alignment="CENTER_RIGHT">
+            <children>
+                <Button fx:id="closeButton" styleClass="window-close-btn">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-window-close" iconColor="white"/>
+                    </graphic>
+                </Button>
+            </children>
+        </HBox>
+    </top>
     <center>
-        <TabPane tabClosingPolicy="UNAVAILABLE">
+        <TabPane prefHeight="136.0" prefWidth="442.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
                 <Tab text="Focus Time">
                     <AnchorPane>
                         <children>
-                            <Label text="Please set your preferred focus time" layoutX="20" layoutY="20"/>
+                            <Label layoutX="20" layoutY="20" text="Please set your preferred focus time" />
                         </children>
                     </AnchorPane>
                 </Tab>
                 <Tab text="Short Break">
                     <AnchorPane>
                         <children>
-                            <Label text="Please set your preferred time for a short break" layoutX="20" layoutY="20"/>
+                            <Label layoutX="20" layoutY="20" text="Please set your preferred time for a short break" />
                         </children>
                     </AnchorPane>
                 </Tab>
-                <Tab text="Big Break">
+                <Tab text="Long Break">
                     <AnchorPane>
                         <children>
-                            <Label text="" layoutX="20" layoutY="20"/>
+                            <Label layoutX="20" layoutY="20" text="" />
                         </children>
                     </AnchorPane>
                 </Tab>

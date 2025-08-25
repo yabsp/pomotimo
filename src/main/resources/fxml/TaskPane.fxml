@@ -8,7 +8,7 @@
 <?import javafx.scene.control.TextField?>
 
 <fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml"
-         style="-fx-background-color: #1e1f22;" maxWidth="Infinity" maxHeight="Infinity" stylesheets="@../css/generalStyle.css, @../css/titlebar.css">
+         style="-fx-background-color: #1e1f22;" maxWidth="Infinity" maxHeight="Infinity" stylesheets="@../css/generalstyle.css, @../css/titlebar.css">
     <top>
         <Label text="Focus Tasks" style="-fx-font-size: 18px; -fx-text-fill: white;"/>
     </top>
