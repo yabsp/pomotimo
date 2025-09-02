@@ -2,9 +2,11 @@ plugins {
     id 'application'
     id 'checkstyle'
     id 'org.openjfx.javafxplugin' version '0.1.0'
+    id 'java'
+    id("com.gradleup.shadow") version "9.1.0"
 }
 
-group = 'org.pomtim'
+group = 'org.pomotimo'
 version = '1.0'
 
 java {
@@ -13,8 +15,8 @@ java {
 }
 
 application {
-    mainClass.set('org.pomtim.Launcher')
-    mainModule.set('org.pomtim')
+    mainClass.set('org.pomotimo.Launcher')
+    mainModule.set('org.pomotimo')
     applicationDefaultJvmArgs = []
 }
 
@@ -59,4 +61,51 @@ run {
             '--module-path', configurations.runtimeClasspath.asPath,
             '--add-modules', 'javafx.controls,javafx.fxml,javafx.web,javafx.swing'
     ]
+}
+
+task createJavadoc(type: Javadoc) {
+    destinationDir = file("build/docs/javadoc")
+    source = sourceSets.main.allJava
+    classpath += configurations.compileClasspath
+}
+
+task buildAll(type: GradleBuild) {
+    tasks = ['build', 'createJavadoc']
+    doLast {
+        // additional actions after the build
+    }
+}
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'org.pomotimo.Launcher'
+        )
+    }
+}
+shadowJar {
+    archiveBaseName.set('pomotimo')
+    archiveVersion.set('1.0')
+    archiveClassifier.set('')
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes 'Main-Class': 'org.pomotimo.Launcher'
+    }
+}
+
+task jpackageApp(type: Exec) {
+    dependsOn shadowJar
+    def jarName = "pomotimo-1.0.jar"
+    def appName = "Pomotimo"
+
+    commandLine "jpackage",
+            "--input", "build/libs",
+            "--main-jar", jarName,
+            "--main-class", "org.pomotimo.Launcher",
+            "--name", appName,
+            "--type", "exe",
+            "--win-dir-chooser",
+            "--win-menu",
+            "--win-shortcut",
+            "--icon", "assets/app_icon.ico",
+            "--dest", "./build/"
 }
