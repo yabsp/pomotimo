@@ -5,7 +5,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -93,7 +96,7 @@ public class PresetEditor extends BorderPane {
         if(nameField.getText() == null || nameField.getText().trim().isEmpty()) {
             showAlert(Alert.AlertType.WARNING,
                     "Input required",
-                    "Missing name",
+                    "Missing Name",
                     "Please enter a name for your preset before saving!");
             return;
         }
@@ -127,6 +130,17 @@ public class PresetEditor extends BorderPane {
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
+
+        /* Add logos */
+        Image logo = new Image(getClass().getResourceAsStream("/icons/logo_tomato_removebg.png"));
+        ImageView logoView = new ImageView(logo);
+        logoView.setFitWidth(48);
+        logoView.setFitHeight(48);
+        alert.setGraphic(logoView);
+
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/logo_24x24.png")));
+
         alert.showAndWait();
     }
 
