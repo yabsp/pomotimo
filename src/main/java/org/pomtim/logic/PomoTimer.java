@@ -9,7 +9,7 @@ import java.util.function.Consumer;
  * Start, pause and reset the timer.
  */
 
-public class PomodoroTimer {
+public class PomoTimer {
 
     private Timer timer;
     private Consumer<Integer> tickFunc;
@@ -18,8 +18,8 @@ public class PomodoroTimer {
 
     /**
      * Starts a new timer.
-     * The duration is given by the {@link PomodoroTimer#remainingSeconds} seconds variable.
-     * Be sure to set {@link PomodoroTimer#setRemainingSeconds(int)} appropriately beforehand.
+     * The duration is given by the {@link PomoTimer#remainingSeconds} seconds variable.
+     * Be sure to set {@link PomoTimer#setRemainingSeconds(int)} appropriately beforehand.
      * @param tickFunc Consumer that takes an input of type {@code int} as argument. The timer ticks every second and accepts the tickFunc consumer,
      *             as long as remaining time is > 0 (Remaining time = duration - running time).
      */
@@ -44,7 +44,7 @@ public class PomodoroTimer {
 
     /**
      * This method will reset any existing timer.
-     * If no timer has been started, it will do nothing. One can start a timer with {@link PomodoroTimer#start(Consumer)}}.
+     * If no timer has been started, it will do nothing. One can start a timer with {@link PomoTimer#start(Consumer)}}.
      * @param seconds the seconds to reset the timer, must be of {@code type int}. Must not be {@code null}.
      */
 

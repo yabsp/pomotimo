@@ -3,7 +3,6 @@ package org.pomtim.gui;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -14,21 +13,33 @@ import java.io.IOException;
 
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
-import org.pomtim.logic.PomodoroTimer;
+import org.pomtim.logic.PomoState;
+import org.pomtim.logic.PomoTimer;
 import org.pomtim.logic.PresetManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.pomtim.logic.PomoState.FOCUS;
+import static org.pomtim.logic.PomoState.LONGBR;
+import static org.pomtim.logic.PomoState.SHORTBR;
 
 public class TimerPane extends BorderPane {
 
     private Logger logger = LoggerFactory.getLogger(TimerPane.class);
     @FXML private Label timerLabel;
-    @FXML private Button startButton;
-    @FXML private Button resetButton;
+    @FXML private Button startBtn;
+    @FXML private Button resetBtn;
+    @FXML private Button skipBtn;
+    @FXML private Label stateLabel;
+    @FXML private Label cycleLabel;
     @FXML private VBox timerContainer;
-    private final PomodoroTimer timer = new PomodoroTimer();
+    private final PomoTimer timer = new PomoTimer();
     private PresetManager presetManager;
-    private Node timerUI;
+    private int cycleCounter;
+    private PomoState state;
+    private int focusSec;
+    private int shortBrSec;
+    private int longBrSec;
 
     public TimerPane(PresetManager presetManager) {
         this.presetManager = presetManager;
@@ -78,36 +89,76 @@ public class TimerPane extends BorderPane {
     }
 
     private void setUIFromPreset(){
+        state = PomoState.FOCUS;
+        cycleCounter = 1;
         presetManager.getFirst().ifPresent(pr -> {
-            int focusSec = pr.getDurationFocus();
-            int shortBrSec = pr.getDurationShortBreak();
-            int longBrSec = pr.getDurationLongBreak();
+            focusSec = pr.getDurationFocus();
+            shortBrSec = pr.getDurationShortBreak();
+            longBrSec = pr.getDurationLongBreak();
             timerLabel.setText(String.format("%02d:%02d", focusSec / 60, focusSec % 60));
 
             timer.setRemainingSeconds(focusSec);
-            startButton.setOnAction(e -> {
+            startBtn.setOnAction(e -> {
                 if(timer.isRunning()) {
                     timer.pause();
-                    startButton.setText("Start");
+                    startBtn.setText("Start");
                 } else {
                     timer.start( seconds -> {
                         int min = seconds / 60;
                         int sec = seconds % 60;
                         String time = String.format("%02d:%02d", min, sec);
                         Platform.runLater(() -> timerLabel.setText(time));
+                        if (seconds <= 0) {
+                            Platform.runLater(this::setNewPomoState);
+                        }
                     });
-                    startButton.setText("Stop");
+                    startBtn.setText("Stop");
                 }
 
             });
-            resetButton.setOnAction(e -> {
+            resetBtn.setOnAction(e -> {
                 if(timer.isRunning()){
-                    startButton.setText("Start");
+                    startBtn.setText("Start");
                 }
                 timer.reset(focusSec);
                 timerLabel.setText(String.format("%02d:%02d", focusSec / 60, focusSec % 60));
             });
+            skipBtn.setOnAction(e -> setNewPomoState());
         });
+    }
+
+    private void setNewPomoState() {
+        switch (state) {
+            case FOCUS:
+                if(cycleCounter >= 4) {
+                    state = LONGBR;
+                    cycleCounter = 1;
+                    timer.setRemainingSeconds(longBrSec);
+                    stateLabel.setText("Long Break");
+                    timerLabel.setText(String.format("%02d:%02d", longBrSec / 60, longBrSec % 60));
+                } else {
+                    state = SHORTBR;
+                    cycleCounter += 1;
+                    timer.setRemainingSeconds(shortBrSec);
+                    stateLabel.setText("Short Break");
+                    timerLabel.setText(String.format("%02d:%02d", shortBrSec / 60, shortBrSec % 60));
+                }
+                break;
+            case SHORTBR:
+                state = FOCUS;
+                stateLabel.setText("Focus");
+                cycleLabel.setText("Cycle: " + cycleCounter + " / 4");
+                timer.setRemainingSeconds(focusSec);
+                timerLabel.setText(String.format("%02d:%02d", focusSec / 60, focusSec % 60));
+                break;
+            case LONGBR:
+                state = PomoState.FOCUS;
+                stateLabel.setText("Focus");
+                cycleLabel.setText("Cycle: " + cycleCounter + " / 4");
+                timer.setRemainingSeconds(focusSec);
+                timerLabel.setText(String.format("%02d:%02d", focusSec / 60, focusSec % 60));
+                break;
+        }
     }
 
 }

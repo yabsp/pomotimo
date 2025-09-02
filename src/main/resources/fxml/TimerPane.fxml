@@ -15,9 +15,9 @@
                    style="-fx-font-size: 14px; -fx-text-fill: gray;"
                    text="Cycle: 1 / 4" />
             <HBox alignment="CENTER" spacing="10" HBox.hgrow="ALWAYS">
-                <Button fx:id="startButton" styleClass="tomato-button" text="Start" />
-                <Button fx:id="resetButton" styleClass="tomato-button" text="Reset" />
-                <Button fx:id="skipButton">
+                <Button fx:id="startBtn" styleClass="tomato-button" text="Start" />
+                <Button fx:id="resetBtn" styleClass="tomato-button" text="Reset" />
+                <Button fx:id="skipBtn">
                     <graphic>
                         <FontIcon iconColor="white" styleClass="window-close-btn" iconLiteral="fas-play"/>
                     </graphic>
