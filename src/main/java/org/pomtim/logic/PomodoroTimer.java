@@ -14,7 +14,7 @@ public class PomodoroTimer {
     private Timer timer;
     private Consumer<Integer> tickFunc;
     private int remainingSeconds;
-    private boolean paused = false;
+    private boolean running = false;
 
     /**
      * Starts a new timer.
@@ -24,10 +24,10 @@ public class PomodoroTimer {
      *             as long as remaining time is > 0 (Remaining time = duration - running time).
      */
     public void start (Consumer<Integer> tickFunc) {
-        if(!paused){
+        if(running){
             stop();
         }
-        paused = false;
+        running = true;
         this.tickFunc = tickFunc;
         timer = new Timer(true);
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -51,13 +51,14 @@ public class PomodoroTimer {
     public void reset(int seconds) {
         stop();
         remainingSeconds = seconds;
+        running = false;
     }
 
     /**
      * Stops the current timer. If no timer exists does nothing.
      */
 
-    public void stop() {
+    private void stop() {
         if (timer != null) {
             timer.cancel();
             timer = null;
@@ -69,11 +70,8 @@ public class PomodoroTimer {
      */
     public void pause() {
         if (timer == null) return;
-        if (paused) {
-            paused = false;
-            start(tickFunc);
-        } else {
-            paused = true;
+        if(running) {
+            running = false;
             stop();
         }
     }
@@ -83,5 +81,9 @@ public class PomodoroTimer {
 
     public void setRemainingSeconds(int seconds) {
         this.remainingSeconds = seconds;
+    }
+
+    public boolean isRunning(){
+        return running;
     }
 }

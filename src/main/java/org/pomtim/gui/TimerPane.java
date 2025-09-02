@@ -26,7 +26,6 @@ public class TimerPane extends BorderPane {
     private Logger logger = LoggerFactory.getLogger(TimerPane.class);
     @FXML private Label timerLabel;
     @FXML private Button startButton;
-    @FXML private Button stopButton;
     @FXML private Button resetButton;
     @FXML private VBox timerContainer;
     private final PomodoroTimer timer = new PomodoroTimer();
@@ -89,15 +88,24 @@ public class TimerPane extends BorderPane {
 
             timer.setRemainingSeconds(focusSec);
             startButton.setOnAction(e -> {
-                timer.start( seconds -> {
-                    int min = seconds / 60;
-                    int sec = seconds % 60;
-                    String time = String.format("%02d:%02d", min, sec);
-                    Platform.runLater(() -> timerLabel.setText(time));
-                });
+                if(timer.isRunning()) {
+                    timer.pause();
+                    startButton.setText("Start");
+                } else {
+                    timer.start( seconds -> {
+                        int min = seconds / 60;
+                        int sec = seconds % 60;
+                        String time = String.format("%02d:%02d", min, sec);
+                        Platform.runLater(() -> timerLabel.setText(time));
+                    });
+                    startButton.setText("Stop");
+                }
+
             });
-            stopButton.setOnAction(e -> timer.pause());
             resetButton.setOnAction(e -> {
+                if(timer.isRunning()){
+                    startButton.setText("Start");
+                }
                 timer.reset(focusSec);
                 timerLabel.setText(String.format("%02d:%02d", focusSec / 60, focusSec % 60));
             });
