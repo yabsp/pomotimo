@@ -1,4 +1,4 @@
-package org.pomtim.platform;
+package org.pomotimo.platform;
 
 public enum OperatingSystem {
     WINDOWS,

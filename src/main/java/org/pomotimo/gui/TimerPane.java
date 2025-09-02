@@ -1,4 +1,4 @@
-package org.pomtim.gui;
+package org.pomotimo.gui;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -13,15 +13,15 @@ import java.io.IOException;
 
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
-import org.pomtim.logic.PomoState;
-import org.pomtim.logic.PomoTimer;
-import org.pomtim.logic.PresetManager;
+import org.pomotimo.logic.PomoState;
+import org.pomotimo.logic.PomoTimer;
+import org.pomotimo.logic.PresetManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.pomtim.logic.PomoState.FOCUS;
-import static org.pomtim.logic.PomoState.LONGBR;
-import static org.pomtim.logic.PomoState.SHORTBR;
+import static org.pomotimo.logic.PomoState.FOCUS;
+import static org.pomotimo.logic.PomoState.LONGBR;
+import static org.pomotimo.logic.PomoState.SHORTBR;
 
 public class TimerPane extends BorderPane {
 

@@ -1,4 +1,4 @@
-package org.pomtim.logic;
+package org.pomotimo.logic;
 
 /**
  * Represents a task that is to be done. A task has a name and a priority.

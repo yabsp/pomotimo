@@ -1,4 +1,4 @@
-package org.pomtim.gui;
+package org.pomotimo.gui;
 
 import java.io.IOException;
 
@@ -13,9 +13,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 
-import org.pomtim.logic.Preset;
-import org.pomtim.logic.PresetManager;
-import org.pomtim.logic.Task;
+import org.pomotimo.logic.PresetManager;
 
 public class TaskPane extends BorderPane {
 

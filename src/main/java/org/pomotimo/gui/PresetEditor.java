@@ -1,4 +1,4 @@
-package org.pomtim.gui;
+package org.pomotimo.gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,11 +12,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import org.pomtim.logic.Preset;
+import org.pomotimo.logic.Preset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.pomtim.logic.PresetManager;
+import org.pomotimo.logic.PresetManager;
 
 public class PresetEditor extends BorderPane {
     private static final Logger logger = LoggerFactory.getLogger(PresetEditor.class);

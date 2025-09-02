@@ -1,4 +1,4 @@
-package org.pomtim.gui;
+package org.pomotimo.gui;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -22,9 +22,9 @@ import javafx.stage.StageStyle;
 
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
-import org.pomtim.logic.PresetManager;
+import org.pomotimo.logic.PresetManager;
 
-public class PomTimGUI extends Application {
+public class PomotimoGUI extends Application {
 
     private double xOffset = 0;
     private double yOffset = 0;

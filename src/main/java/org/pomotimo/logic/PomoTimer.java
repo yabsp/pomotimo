@@ -1,4 +1,4 @@
-package org.pomtim.logic;
+package org.pomotimo.logic;
 
 import java.util.Timer;
 import java.util.TimerTask;

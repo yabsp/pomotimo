@@ -1,4 +1,4 @@
-package org.pomtim.logic;
+package org.pomotimo.logic;
 
 import java.util.ArrayList;
 import java.util.List;

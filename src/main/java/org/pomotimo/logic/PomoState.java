@@ -1,4 +1,4 @@
-package org.pomtim.logic;
+package org.pomotimo.logic;
 
 public enum PomoState {
     FOCUS,
