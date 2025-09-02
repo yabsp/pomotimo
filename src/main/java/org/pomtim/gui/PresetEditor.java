@@ -7,21 +7,24 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
+
+import org.pomtim.logic.Preset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import org.pomtim.logic.PresetManager;
-import org.w3c.dom.Text;
 
 public class PresetEditor extends BorderPane {
     private static final Logger logger = LoggerFactory.getLogger(PresetEditor.class);
     private PresetManager presetManager;
     private TimerPane parentPane;
-    @FXML private Button closeButton;
+    @FXML private Button closeBtn;
     @FXML private TextField focusTimeField;
     @FXML private TextField shortBreakField;
     @FXML private TextField longBreakField;
+    @FXML private TextField nameField;
+    @FXML private Button saveBtn;
+    @FXML private Button setDefaultsBtn;
 
     public PresetEditor(PresetManager presetManager, TimerPane parentPane) {
         this.presetManager = presetManager;
@@ -40,11 +43,13 @@ public class PresetEditor extends BorderPane {
 
     @FXML
     private void initialize() {
-        closeButton.setOnAction(e -> parentPane.refreshUI());
+        closeBtn.setOnAction(e -> parentPane.refreshUI());
+        saveBtn.setOnAction(e -> this.savePresetConfiguration());
 
         configureTimeField(focusTimeField, "25:00");
         configureTimeField(shortBreakField, "05:00");
         configureTimeField(longBreakField, "15:00");
+        configureTextField(nameField, "preset" + (presetManager.getPresetCount()+1));
 
     }
 
@@ -66,16 +71,25 @@ public class PresetEditor extends BorderPane {
             }
             return change;
         }));
-
-        // Autosave
-        field.textProperty().addListener((obs, oldVal, newVal) -> {
-            saveFieldValue(field, newVal);
-        });
     }
 
-    //TODO implement save logic
-    private void saveFieldValue(TextField field, String value) {
-        logger.info("Autosaving " + field.getId() + ": " + value);
+    public void savePresetConfiguration() {
+        logger.info("Saving preset");
+        int focusSecs = extractTimeInSeconds(focusTimeField);
+        int shortBrSecs = extractTimeInSeconds(shortBreakField);
+        int longBrSecs = extractTimeInSeconds(longBreakField);
+        Preset p = new Preset(nameField.getText(), focusSecs, shortBrSecs, longBrSecs);
+        presetManager.addPreset(p);
+        parentPane.refreshUI();
+    }
+
+    private void configureTextField(TextField field, String initialValue) {
+        field.setText(initialValue);
+    }
+
+    private int extractTimeInSeconds(TextField field) {
+        String[] temp = field.getText().split(":");
+        return Integer.parseInt(temp[0])*60 + Integer.parseInt(temp[1]);
     }
 
 }

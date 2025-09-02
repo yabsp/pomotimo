@@ -9,7 +9,7 @@
     <top>
         <HBox fx:id="topBox" alignment="CENTER_RIGHT">
             <children>
-                <Button fx:id="closeButton" styleClass="window-close-btn">
+                <Button fx:id="closeBtn" styleClass="window-close-btn">
                     <graphic>
                         <FontIcon iconColor="white" iconLiteral="fas-window-close" />
                     </graphic>
@@ -54,8 +54,8 @@
    <bottom>
       <HBox fx:id="bottomBox" alignment="CENTER_RIGHT" spacing="15">
          <children>
-             <Button mnemonicParsing="false" text="Reset to Defaults" styleClass="save-btn"/>
-             <Button mnemonicParsing="false" text="Save" styleClass="save-btn"/>
+             <Button fx:id="setDefaultsBtn" mnemonicParsing="false" text="Reset to Defaults" styleClass="save-btn"/>
+             <Button fx:id="saveBtn" mnemonicParsing="false" text="Save" styleClass="save-btn"/>
          </children>
       </HBox>
    </bottom>

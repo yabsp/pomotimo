@@ -50,6 +50,23 @@ public class Preset {
     }
 
     /**
+    * Construct a Preset instance with new name and durations.
+     * @param name name of the preset
+     * @param durationFocus duration in seconds of the focus period
+     * @param durationShortBreak duration in seconds of a small break
+     * @param durationLongBreak duration in seconds of a big break
+    */
+    public Preset(String name, int durationFocus, int durationShortBreak, int durationLongBreak) {
+        this.name = name;
+        this.durationFocus = durationFocus;
+        this.durationShortBreak = durationShortBreak;
+        this.durationLongBreak = durationLongBreak;
+        this.soundFile = DEFAULT_PATH;
+        this.imageFile = DEFAULT_PATH;
+        this.tasks = new ArrayList<Task>();
+    }
+
+    /**
      * Constructor for Default preset creation
      * @param name name of the preset (must be provided)
      */
@@ -76,8 +93,24 @@ public class Preset {
         return durationFocus;
     }
 
-    public void setDurationFocus(int durationFocus) {
-        this.durationFocus = durationFocus;
+    public void setDurationFocus(int duration) {
+        this.durationFocus = duration;
+    }
+
+    public int getDurationShortBreak() {
+        return durationShortBreak;
+    }
+
+    public void setDurationShortBreak(int duration) {
+        this.durationShortBreak = duration;
+    }
+
+    public int getDurationLongBreak() {
+        return durationLongBreak;
+    }
+
+    public void setDurationLongBreak(int duration) {
+        this.durationLongBreak = duration;
     }
 
     public String getSoundFile() {

@@ -18,14 +18,17 @@ public class PomodoroTimer {
 
     /**
      * Starts a new timer.
-     * @param seconds The duration of the timer in seconds. Must be of type {@code int} and must not be {@code null}.
+     * The duration is given by the {@link PomodoroTimer#remainingSeconds} seconds variable.
+     * Be sure to set {@link PomodoroTimer#setRemainingSeconds(int)} appropriately beforehand.
      * @param tickFunc Consumer that takes an input of type {@code int} as argument. The timer ticks every second and accepts the tickFunc consumer,
      *             as long as remaining time is > 0 (Remaining time = duration - running time).
      */
-    public void start (int seconds, Consumer<Integer> tickFunc) {
-        stop();
+    public void start (Consumer<Integer> tickFunc) {
+        if(!paused){
+            stop();
+        }
+        paused = false;
         this.tickFunc = tickFunc;
-        this.remainingSeconds = seconds;
         timer = new Timer(true);
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -41,7 +44,7 @@ public class PomodoroTimer {
 
     /**
      * This method will reset any existing timer.
-     * If no timer has been started, it will do nothing. One can start a timer with {@link PomodoroTimer#start(int, Consumer)}}.
+     * If no timer has been started, it will do nothing. One can start a timer with {@link PomodoroTimer#start(Consumer)}}.
      * @param seconds the seconds to reset the timer, must be of {@code type int}. Must not be {@code null}.
      */
 
@@ -57,6 +60,7 @@ public class PomodoroTimer {
     public void stop() {
         if (timer != null) {
             timer.cancel();
+            timer = null;
         }
     }
 
@@ -67,10 +71,17 @@ public class PomodoroTimer {
         if (timer == null) return;
         if (paused) {
             paused = false;
-            start(remainingSeconds, tickFunc);
+            start(tickFunc);
         } else {
             paused = true;
             stop();
         }
+    }
+    public int getRemainingSeconds() {
+        return this.remainingSeconds;
+    }
+
+    public void setRemainingSeconds(int seconds) {
+        this.remainingSeconds = seconds;
     }
 }
