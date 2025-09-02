@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import org.kordamp.ikonli.javafx.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <fx:root style="-fx-background-color: #1e1f22;" stylesheets="@../css/generalstyle.css" type="BorderPane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
 
@@ -11,7 +11,7 @@
             <children>
                 <Button fx:id="closeBtn" styleClass="window-close-btn">
                     <graphic>
-                        <FontIcon iconColor="white" iconLiteral="fas-window-close" />
+                        <FontIcon iconColor="white" iconLiteral="fas-window-close"/>
                     </graphic>
                 </Button>
             </children>

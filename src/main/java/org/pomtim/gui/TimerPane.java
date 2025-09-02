@@ -11,12 +11,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
-import java.util.Optional;
 
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.pomtim.logic.PomodoroTimer;
-import org.pomtim.logic.Preset;
 import org.pomtim.logic.PresetManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

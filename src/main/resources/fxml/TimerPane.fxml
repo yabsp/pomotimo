@@ -2,14 +2,26 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
+<?import javafx.scene.shape.SVGPath?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <fx:root maxHeight="Infinity" maxWidth="Infinity" style="-fx-background-color: #1e1f22;" stylesheets="@../css/generalstyle.css, @../css/timer.css" type="BorderPane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
     <center>
         <VBox fx:id="timerContainer" alignment="CENTER" prefHeight="111.0" prefWidth="202.0" spacing="10" VBox.vgrow="ALWAYS">
+            <Label fx:id="stateLabel"
+                   style="-fx-font-size: 16px; -fx-text-fill: orange;"
+                   text="Focus" />
             <Label fx:id="timerLabel" style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: white;" text="00:00" />
+            <Label fx:id="cycleLabel"
+                   style="-fx-font-size: 14px; -fx-text-fill: gray;"
+                   text="Cycle: 1 / 4" />
             <HBox alignment="CENTER" spacing="10" HBox.hgrow="ALWAYS">
                 <Button fx:id="startButton" styleClass="tomato-button" text="Start" />
                 <Button fx:id="resetButton" styleClass="tomato-button" text="Reset" />
+                <Button fx:id="skipButton">
+                    <graphic>
+                        <FontIcon iconColor="white" styleClass="window-close-btn" iconLiteral="fas-play"/>
+                    </graphic>
+                </Button>
             </HBox>
         </VBox>
     </center>
