@@ -12,13 +12,20 @@
     -fx-text-fill: white;
 }
 
+.text-field {
+    -fx-font-size: 1.2em;
+    -fx-background-color: #c5c5c5;
+    -fx-prompt-text-fill: #555555;
+}
+
 .list-view {
     -fx-background-color: #2e2e2e;
 }
 
-.list-cell {
+.list-view .list-cell {
     -fx-background-color: transparent; /* inherit parent background */
     -fx-text-fill: white;
+    -fx-font-size: 1.3em;
 }
 
 .list-cell:filled:selected, .list-cell:filled:hover {
