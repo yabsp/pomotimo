@@ -15,8 +15,11 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 
 import org.pomotimo.gui.utils.AlertFactory;
+import org.pomotimo.logic.Preset;
 import org.pomotimo.logic.PresetManager;
 import org.pomotimo.logic.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TaskPane extends BorderPane {
 
@@ -24,6 +27,7 @@ public class TaskPane extends BorderPane {
     @FXML private TextField taskInput;
     @FXML private Button addTaskButton;
     private PresetManager presetManager;
+    private final Logger logger = LoggerFactory.getLogger(TaskPane.class);
 
     public TaskPane(PresetManager presetManager) {
         this.presetManager = presetManager;
@@ -51,9 +55,11 @@ public class TaskPane extends BorderPane {
         }
 
         if(presetManager.getCurrentPreset().isPresent()){
-            Task t = new Task(taskInput.getText(), 0);
-            presetManager.getCurrentPreset().get().addTask(t);
+            Preset pr = presetManager.getCurrentPreset().get();
+            Task t = new Task(taskInput.getText(), pr.getTaskAmount());
+            pr.addTask(t);
             taskListView.getItems().add(t);
+            logger.info("Task added: " + t);
             taskInput.clear();
         } else {
             AlertFactory.createAlert(Alert.AlertType.WARNING, "No Preset Selected",
@@ -79,16 +85,32 @@ public class TaskPane extends BorderPane {
 
                 Dragboard db = cell.startDragAndDrop(TransferMode.MOVE);
                 ClipboardContent content = new ClipboardContent();
-                content.putString(cell.getItem().getName());
+
+                int draggedIndex = cell.getIndex();
+                content.putString(Integer.toString(draggedIndex));
                 db.setContent(content);
+                db.setDragView(cell.snapshot(null, null));
+
                 event.consume();
             });
 
             cell.setOnDragOver(event -> {
-                if (event.getGestureSource() != cell && event.getDragboard().hasString()) {
+                Dragboard db = event.getDragboard();
+                if (event.getGestureSource() != cell && db.hasString()) {
                     event.acceptTransferModes(TransferMode.MOVE);
+
+                    int draggedIdx = Integer.parseInt(db.getString());
+                    Task draggedTask = taskListView.getItems().get(draggedIdx);
+                    cell.setText(draggedTask.getName());
+                    cell.setStyle("-fx-border-color: grey; -fx-border-width: 2 0 0 0; -fx-background-color: lightgrey;");
                 }
                 event.consume();
+            });
+
+            cell.setOnDragExited(event -> {
+                Task task = cell.getItem();
+                cell.setText(task == null ? null : task.getName());
+                cell.setStyle("");
             });
 
             cell.setOnDragDropped(event -> {
@@ -97,27 +119,43 @@ public class TaskPane extends BorderPane {
 
                 Dragboard db = event.getDragboard();
                 if (db.hasString()) {
-                    Task draggedTask = taskListView.getItems().stream()
-                                                   .filter(t -> t.getName().equals(db.getString()))
-                                                   .findFirst()
-                                                   .orElse(null);
+                    int draggedIdx = Integer.parseInt(db.getString());
+                    int thisIdx = cell.getIndex();
 
-                    if (draggedTask != null) {
-                        int draggedIdx = taskListView.getItems().indexOf(draggedTask);
-                        int thisIdx = cell.getIndex();
+                    if (draggedIdx != thisIdx) {
+                        Task draggedTask = taskListView.getItems().get(draggedIdx);
+                        Task targetTask = taskListView.getItems().get(thisIdx);
 
-                        taskListView.getItems().remove(draggedIdx);
-                        taskListView.getItems().add(thisIdx, draggedTask);
+                        logger.info("Dragged index: " + draggedIdx);
+                        logger.info("Target index: " + thisIdx);
+                        logger.info("Dragged task (before prio adjustment): " + draggedTask);
+                        logger.info("Target task (before prio adjustment): " + targetTask);
+
+                        taskListView.getItems().set(draggedIdx, targetTask);
+                        taskListView.getItems().set(thisIdx, draggedTask);
+
+                        int tempPriority = draggedTask.getPriority();
+                        draggedTask.setPriority(targetTask.getPriority());
+                        targetTask.setPriority(tempPriority);
+
+                        logger.info("Dragged task (after prio adjustment): " + draggedTask);
+                        logger.info("Target task (after prio adjustment): " + targetTask);
+
+                        taskListView.refresh();
                         taskListView.getSelectionModel().select(thisIdx);
-
-                        event.setDropCompleted(true);
                     }
+
+                    event.setDropCompleted(true);
                 }
                 event.consume();
             });
 
             return cell;
         });
+    }
+
+    private void enableContextMenu() {
+
     }
 
 }

@@ -129,6 +129,10 @@ public class Preset {
         this.imageFile = imageFile;
     }
 
+    public int getTaskAmount() {
+        return tasks.size();
+    }
+
     /**
      * Add a task to the preset. See {@link Task} for more information.
      * @param t Task that should be added to the preset.
