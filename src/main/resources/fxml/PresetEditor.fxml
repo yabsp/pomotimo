@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import org.kordamp.ikonli.javafx.*?>
 
 <fx:root style="-fx-background-color: #1e1f22;" stylesheets="@../css/generalstyle.css" type="BorderPane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
 
@@ -11,7 +12,7 @@
             <children>
                 <Button fx:id="closeBtn" styleClass="window-close-btn">
                     <graphic>
-                        <FontIcon iconColor="white" iconLiteral="fas-window-close"/>
+                        <FontIcon iconColor="white" iconLiteral="fas-window-close" />
                     </graphic>
                 </Button>
             </children>
@@ -23,7 +24,7 @@
                 <Tab text="Focus Time">
                     <AnchorPane prefHeight="64.0" prefWidth="442.0">
                         <children>
-                            <TextField fx:id="focusTimeField" layoutX="20" layoutY="20" prefWidth="80" promptText="MM:SS" />
+                            <TextField fx:id="focusTimeField" layoutX="20" layoutY="20" prefHeight="23.0" prefWidth="80.0" promptText="MM:SS" />
                         </children>
                     </AnchorPane>
                 </Tab>
@@ -44,7 +45,7 @@
                 <Tab text="Name">
                     <AnchorPane>
                         <children>
-                            <TextField fx:id="nameField" layoutX="20" layoutY="20" prefWidth="80" promptText="e.g. New Preset" />
+                            <TextField fx:id="nameField" layoutX="20" layoutY="20" prefHeight="23.0" prefWidth="142.0" promptText="e.g. New Preset" />
                         </children>
                     </AnchorPane>
                 </Tab>
@@ -54,9 +55,15 @@
    <bottom>
       <HBox fx:id="bottomBox" alignment="CENTER_RIGHT" spacing="15">
          <children>
-             <Button fx:id="setDefaultsBtn" mnemonicParsing="false" text="Reset to Defaults" styleClass="save-btn"/>
-             <Button fx:id="saveBtn" mnemonicParsing="false" text="Save" styleClass="save-btn"/>
+             <Button fx:id="setDefaultsBtn" mnemonicParsing="false" styleClass="save-btn" text="Reset to Defaults" />
+             <Button fx:id="saveBtn" mnemonicParsing="false" styleClass="save-btn" text="Save" />
          </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+         </padding>
       </HBox>
    </bottom>
 

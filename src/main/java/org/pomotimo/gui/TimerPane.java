@@ -76,7 +76,9 @@ public class TimerPane extends BorderPane {
             Button createPresetButton = new Button("Create Preset");
             FontIcon plusIcon = new FontIcon(FontAwesomeSolid.PLUS_SQUARE);
             plusIcon.setIconColor(Color.WHITE);
+            plusIcon.setIconSize(18);
             createPresetButton.setGraphic(plusIcon);
+            createPresetButton.getStyleClass().add("create-preset-button");
             createPresetButton.setOnAction(e -> showPresetEditor());
             this.setCenter(createPresetButton);
         } else {

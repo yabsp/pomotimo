@@ -9,6 +9,7 @@ import java.util.Optional;
  */
 public class PresetManager {
     private List<Preset> presets;
+    private Preset currentPreset;
 
     /**
      * Default constructor that creates a PresetManager instance and initializes the list of presets.
@@ -61,5 +62,13 @@ public class PresetManager {
 
     public Optional<Preset> getFirst(){
         return presets.stream().findFirst();
+    }
+
+    public Preset getCurrentPreset() {
+        return currentPreset;
+    }
+
+    public void setCurrentPreset(Preset pr){
+        this.currentPreset = pr;
     }
 }
