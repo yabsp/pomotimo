@@ -5,6 +5,10 @@ package org.pomotimo.logic;
  */
 public class Task {
     private final String name;
+    /**
+     * Priority is used as a number to sort tasks. Value 1 means that the priority is the highest.
+     * In the task list the numbers refer to the placement in the list and can be used to sort tasks.
+     */
     private int priority;
 
     public final int DEFAULT_PRIO = 0;
@@ -12,7 +16,7 @@ public class Task {
     /**
      * Constructs a task with custom priority.
      * @param name the name of the task
-     * @param priority the priority of the task, higher int value is higher priority
+     * @param priority the priority of the task, lower int value means higher priority.
      */
     public Task(String name, int priority) {
         this.name = name;
@@ -51,5 +55,10 @@ public class Task {
         }
 
         return t.getName().equals(name) && t.getPriority() == priority;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

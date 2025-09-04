@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -13,11 +14,13 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 
+import org.pomotimo.gui.utils.AlertFactory;
 import org.pomotimo.logic.PresetManager;
+import org.pomotimo.logic.Task;
 
 public class TaskPane extends BorderPane {
 
-    @FXML private ListView<String> taskListView;
+    @FXML private ListView<Task> taskListView;
     @FXML private TextField taskInput;
     @FXML private Button addTaskButton;
     private PresetManager presetManager;
@@ -43,30 +46,41 @@ public class TaskPane extends BorderPane {
     }
 
     private void addTask() {
-        String newTask = taskInput.getText();
-        if (newTask != null && !newTask.isBlank()) {
-            taskListView.getItems().add(newTask);
-            taskInput.clear();
+        if(taskInput.getText() == null || taskInput.getText().trim().isEmpty() || taskInput.getText().isBlank()) {
+            return;
         }
+
+        if(presetManager.getCurrentPreset().isPresent()){
+            Task t = new Task(taskInput.getText(), 0);
+            presetManager.getCurrentPreset().get().addTask(t);
+            taskListView.getItems().add(t);
+            taskInput.clear();
+        } else {
+            AlertFactory.createAlert(Alert.AlertType.WARNING, "No Preset Selected",
+                    "No Current Preset",
+                    "Please select or create a preset in order to add a task!").showAndWait();
+        }
+
     }
 
     private void enableDragAndDrop() {
         taskListView.setCellFactory(lv -> {
-            ListCell<String> cell = new ListCell<>() {
+            ListCell<Task> cell = new ListCell<>() {
                 @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    setText(empty ? null : item);
+                protected void updateItem(Task task, boolean empty) {
+                    super.updateItem(task, empty);
+                    setText(empty || task == null ? null : task.getName());
                 }
             };
 
             cell.setOnDragDetected(event -> {
-                if (cell.isEmpty()) return;
+                if (cell.isEmpty())
+                    return;
 
-                Dragboard dragboard = cell.startDragAndDrop(TransferMode.MOVE);
+                Dragboard db = cell.startDragAndDrop(TransferMode.MOVE);
                 ClipboardContent content = new ClipboardContent();
-                content.putString(cell.getItem());
-                dragboard.setContent(content);
+                content.putString(cell.getItem().getName());
+                db.setContent(content);
                 event.consume();
             });
 
@@ -78,20 +92,26 @@ public class TaskPane extends BorderPane {
             });
 
             cell.setOnDragDropped(event -> {
-                if (cell.isEmpty()) return;
+                if (cell.isEmpty())
+                    return;
 
-                Dragboard dragboard = event.getDragboard();
-                if (dragboard.hasString()) {
-                    int draggedIdx = taskListView.getItems().indexOf(dragboard.getString());
-                    int thisIdx = taskListView.getItems().indexOf(cell.getItem());
+                Dragboard db = event.getDragboard();
+                if (db.hasString()) {
+                    Task draggedTask = taskListView.getItems().stream()
+                                                   .filter(t -> t.getName().equals(db.getString()))
+                                                   .findFirst()
+                                                   .orElse(null);
 
-                    if (draggedIdx != -1 && thisIdx != -1) {
-                        String draggedItem = taskListView.getItems().remove(draggedIdx);
-                        taskListView.getItems().add(thisIdx, draggedItem);
+                    if (draggedTask != null) {
+                        int draggedIdx = taskListView.getItems().indexOf(draggedTask);
+                        int thisIdx = cell.getIndex();
 
+                        taskListView.getItems().remove(draggedIdx);
+                        taskListView.getItems().add(thisIdx, draggedTask);
                         taskListView.getSelectionModel().select(thisIdx);
+
+                        event.setDropCompleted(true);
                     }
-                    event.setDropCompleted(true);
                 }
                 event.consume();
             });
@@ -99,6 +119,5 @@ public class TaskPane extends BorderPane {
             return cell;
         });
     }
-
 
 }

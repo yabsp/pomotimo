@@ -2,16 +2,13 @@ package org.pomotimo.gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import org.pomotimo.gui.utils.AlertFactory;
 import org.pomotimo.logic.Preset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,27 +77,25 @@ public class PresetEditor extends BorderPane {
     public void savePresetConfiguration() {
         logger.info("Saving preset");
         if(fieldEmpty(focusTimeField)){
-            showMissingTimeAlert("Focus Time Field");
+            AlertFactory.createEmptyTimeFieldAlert("Focus Time Field").showAndWait();
             return;
         } else if(fieldEmpty(shortBreakField)) {
-            showMissingTimeAlert("Short Break Field");
+            AlertFactory.createEmptyTimeFieldAlert("Short Break Field").showAndWait();
             return;
         } else if(fieldEmpty(longBreakField)) {
-            showMissingTimeAlert("longBreakField");
+            AlertFactory.createEmptyTimeFieldAlert("Long Break Field").showAndWait();
             return;
         }
         int focusSecs = extractTimeInSeconds(focusTimeField);
         int shortBrSecs = extractTimeInSeconds(shortBreakField);
         int longBrSecs = extractTimeInSeconds(longBreakField);
         if(nameField.getText() == null || nameField.getText().trim().isEmpty()) {
-            showAlert(Alert.AlertType.WARNING,
-                    "Input required",
-                    "Missing Name",
-                    "Please enter a name for your preset before saving!");
+            AlertFactory.createEmptyNameFieldAlert("Preset Name Field").showAndWait();
             return;
         }
         Preset p = new Preset(nameField.getText(), focusSecs, shortBrSecs, longBrSecs);
         presetManager.addPreset(p);
+        presetManager.setCurrentPreset(p);
         parentPane.refreshUI();
     }
 
@@ -115,32 +110,6 @@ public class PresetEditor extends BorderPane {
     private int extractTimeInSeconds(TextField field) {
         String[] temp = field.getText().split(":");
         return Integer.parseInt(temp[0])*60 + Integer.parseInt(temp[1]);
-    }
-
-    private void showMissingTimeAlert(String field){
-        showAlert(Alert.AlertType.WARNING,
-                "Input required",
-                field,
-                "Please enter a time into your " + field + " before saving!");
-    }
-
-    private void showAlert(Alert.AlertType type, String title, String header, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-
-        /* Add logos */
-        Image logo = new Image(getClass().getResourceAsStream("/icons/logo_tomato_removebg.png"));
-        ImageView logoView = new ImageView(logo);
-        logoView.setFitWidth(48);
-        logoView.setFitHeight(48);
-        alert.setGraphic(logoView);
-
-        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/logo_24x24.png")));
-
-        alert.showAndWait();
     }
 
 }

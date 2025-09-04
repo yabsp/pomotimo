@@ -129,6 +129,20 @@ public class Preset {
         this.imageFile = imageFile;
     }
 
+    /**
+     * Add a task to the preset. See {@link Task} for more information.
+     * @param t Task that should be added to the preset.
+     * @return {@code true} if the task has been added successfully, {@code false} otherwise.
+     * {@code false} is an indicator that the task already exists in the presets task list.
+     */
+    public boolean addTask(Task t) {
+        if(!tasks.contains(t)){
+            tasks.add(t);
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return name + " (focus: " + durationFocus + "s, short break: " + durationShortBreak + "s, long break: " + durationLongBreak + "s)";

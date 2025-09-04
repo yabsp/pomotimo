@@ -28,7 +28,7 @@
 .window-close-btn {
     -fx-background-color: #2e2e2e;
     -fx-text-fill: white;
-    -fx-font-size: 1.4em;
+    -fx-font-size: 1.3em;
     -fx-padding: 0 8; /* Top/Bottom, Left/Right*/
     -fx-background-radius: 4;
     -fx-border-color: transparent;
@@ -157,6 +157,11 @@
 .create-preset-button {
     -fx-min-width: 120;
     -fx-min-height: 35;
-    -fx-font-size: 14px;
+    -fx-font-size: 1.3em;
+}
+
+.focus-task-title {
+    -fx-font-size: 1.5em;
+    -fx-font-weight: bold;
 }
 

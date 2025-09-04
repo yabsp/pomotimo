@@ -24,6 +24,7 @@ public class PresetManager {
      */
     public PresetManager(List<Preset> presets) {
         this.presets = presets;
+        setCurrentPreset(presets.getFirst());
     }
 
     /* Utility Methods */
@@ -64,11 +65,12 @@ public class PresetManager {
         return presets.stream().findFirst();
     }
 
-    public Preset getCurrentPreset() {
-        return currentPreset;
+    public Optional<Preset> getCurrentPreset() {
+        return Optional.ofNullable(currentPreset);
     }
 
     public void setCurrentPreset(Preset pr){
         this.currentPreset = pr;
     }
+
 }
