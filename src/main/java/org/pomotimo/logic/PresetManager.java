@@ -137,4 +137,10 @@ public class PresetManager {
     public synchronized void setCurrentPreset(Preset pr) {
         this.currentPreset = pr;
     }
+
+    public void shutDownScheduler() {
+        if (!scheduler.isShutdown()) {
+            scheduler.shutdown();
+        }
+    }
 }

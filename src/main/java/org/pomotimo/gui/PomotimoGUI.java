@@ -36,7 +36,7 @@ public class PomotimoGUI extends Application {
     public void start(Stage primaryStage) {
         primaryStage.initStyle(StageStyle.TRANSPARENT);
 
-        primaryStage.setTitle("PomTim");
+        primaryStage.setTitle("Pomotimo");
         primaryStage.getIcons().add(new Image("icons/logo_tomato_removebg.png"));
 
         /* Smooth window corners */
@@ -100,7 +100,10 @@ public class PomotimoGUI extends Application {
 
         minimizeBtn.setOnAction(e -> primaryStage.setIconified(true));
         maximizeBtn.setOnAction(e -> primaryStage.setMaximized(!primaryStage.isMaximized()));
-        closeBtn.setOnAction(e -> Platform.exit());
+        closeBtn.setOnAction(e -> {
+            presetManager.shutDownScheduler();
+            Platform.exit();
+        });
 
         topBar.setOnMousePressed(e -> {
             xOffset = e.getSceneX();

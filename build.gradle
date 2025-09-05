@@ -109,6 +109,6 @@ task jpackageApp(type: Exec) {
             "--win-dir-chooser",
             "--win-menu",
             "--win-shortcut",
-            "--icon", "assets/app_icon.ico",
+            "--icon", "assets/app_icon_2.ico",
             "--dest", "./build/jpackage"
 }
