@@ -9,48 +9,37 @@
 
     <top>
         <HBox fx:id="topBox" alignment="CENTER_RIGHT">
-            <children>
-                <Button fx:id="closeBtn" styleClass="window-close-btn">
-                    <graphic>
-                        <FontIcon iconColor="white" iconLiteral="fas-window-close" />
-                    </graphic>
-                </Button>
-            </children>
+            <Button fx:id="closeBtn" styleClass="window-close-btn">
+                <graphic>
+                    <FontIcon iconColor="white" iconLiteral="fas-window-close" />
+                </graphic>
+            </Button>
         </HBox>
     </top>
     <center>
-        <TabPane prefHeight="136.0" prefWidth="442.0" tabClosingPolicy="UNAVAILABLE">
-            <tabs>
-                <Tab text="Focus Time">
-                    <AnchorPane prefHeight="64.0" prefWidth="442.0">
-                        <children>
-                            <TextField fx:id="focusTimeField" layoutX="20" layoutY="20" prefHeight="23.0" prefWidth="80.0" promptText="MM:SS" />
-                        </children>
-                    </AnchorPane>
-                </Tab>
-                <Tab text="Short Break">
-                    <AnchorPane>
-                        <children>
-                            <TextField fx:id="shortBreakField" layoutX="20" layoutY="20" prefWidth="80" promptText="MM:SS" />
-                        </children>
-                    </AnchorPane>
-                </Tab>
-                <Tab text="Long Break">
-                    <AnchorPane>
-                        <children>
-                            <TextField fx:id="longBreakField" layoutX="20" layoutY="20" prefWidth="80" promptText="MM:SS" />
-                        </children>
-                    </AnchorPane>
-                </Tab>
-                <Tab text="Name">
-                    <AnchorPane>
-                        <children>
-                            <TextField fx:id="nameField" layoutX="20" layoutY="20" prefHeight="23.0" prefWidth="142.0" promptText="e.g. New Preset" />
-                        </children>
-                    </AnchorPane>
-                </Tab>
-            </tabs>
-        </TabPane>
+        <VBox spacing="10.0">
+            <HBox spacing="180.0">
+                <Label style="-fx-font-size: 1.3em; -fx-text-fill: white;" text="Focus" />
+                <TextField fx:id="focusTimeField" layoutX="20" layoutY="20" prefHeight="23.0" prefWidth="80.0" promptText="MM:SS" />
+            </HBox>
+            <HBox spacing="140.0">
+                <Label style="-fx-font-size: 1.3em; -fx-text-fill: white;" text="Short Break" />
+                <TextField fx:id="shortBreakField" layoutX="20" layoutY="20" prefWidth="80" promptText="MM:SS" />
+            </HBox>
+            <HBox spacing="142.0">
+                <Label style="-fx-font-size: 1.3em; -fx-text-fill: white;" text="Long Break" />
+                <TextField fx:id="longBreakField" layoutX="20" layoutY="20" prefWidth="80" promptText="MM:SS" />
+            </HBox>
+            <HBox spacing="14.0">
+                <Label style="-fx-font-size: 1.3em; -fx-text-fill: white;" text="Name of your profile" />
+                <TextField fx:id="nameField" layoutX="20" layoutY="20" prefHeight="23.0" prefWidth="142.0" promptText="e.g. New Preset" />
+            </HBox>
+         <padding>
+            <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+         </padding>
+        </VBox>
+
+
     </center>
    <bottom>
       <HBox fx:id="bottomBox" alignment="CENTER_RIGHT" spacing="15">

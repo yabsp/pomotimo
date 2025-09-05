@@ -22,15 +22,18 @@
     -fx-background-color: #2e2e2e;
 }
 
-.list-view .list-cell {
-    -fx-background-color: transparent; /* inherit parent background */
+.list-cell {
+    -fx-background-color: #2e2e2e;
     -fx-text-fill: white;
     -fx-font-size: 1.3em;
 }
 
-.list-cell:filled:selected, .list-cell:filled:hover {
-    -fx-background-color: #3a3a3a; /* darker when selected or hovered */
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: linear-gradient(#fb3838 0%, #ec2222 25%, #da0b0b 75%, #c50101 100%);
+    -fx-text-fill: white;
 }
+
+
 
 .window-close-btn {
     -fx-background-color: #2e2e2e;
@@ -72,7 +75,7 @@
 }
 
 .tab-pane .tab-header-area .tab {
-    -fx-background-color: #ff4000;
+    -fx-background-color: linear-gradient(#fb3838 0%, #ec2222 25%, #da0b0b 75%, #c50101 100%);
     -fx-text-fill: white;
     -fx-font-size: 1.3em;
     -fx-text-base-color: white;
@@ -82,20 +85,18 @@
     -fx-padding: 6 9;
 }
 
-/* Hover */
 .tab-pane .tab-header-area .tab:hover {
-    -fx-background-color: #ff794d;
+    -fx-background-color: linear-gradient(#fb3838 0%, #ec2222 25%, #da0b0b 75%, #c50101 100%);
     -fx-cursor: hand;
 }
 
-/* Selected */
 .tab-pane .tab-header-area .tab:selected {
-    -fx-background-color: #aa2e00;
+    -fx-background-color: linear-gradient(#fb5c5c 0%, #dc4444 25%, #da2a2a 75%, #c31a1a 100%);
     -fx-text-fill: white;
 }
 
 .save-btn {
-    -fx-background-color: #ff4000;
+    -fx-background-color: linear-gradient(#fb3838 0%, #ec2222 25%, #da0b0b 75%, #c50101 100%);
     -fx-text-fill: white;
     -fx-font-size: 1.3em;
     -fx-font-weight: bold;
@@ -123,22 +124,15 @@
     -fx-border-width: 0;
     -fx-background-radius: 10%;
 
-    /* Square size with em units */
     -fx-min-width: 3em;
     -fx-min-height: 2em;
     -fx-max-width: 5em;
     -fx-max-height: 2.5em;
 
-    /* Tomato 3D gradient */
-    -fx-background-color:
-            linear-gradient(from 0% 0% to 100% 100%, #ff4f2b, #c11e00),  /* Main tomato gradient */
-            linear-gradient(from 0% 0% to 100% 100%, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.0)); /* Highlight on top */
+    -fx-background-color: linear-gradient(#fb3838 0%, #ec2222 25%, #da0b0b 75%, #c50101 100%);
     -fx-text-fill: white;
     -fx-font-size: 1.5em;
     -fx-font-weight: bold;
-
-    /* Drop shadow for 3D effect */
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0.2, 2, 2);
 
     /* Smooth transition for animation */
     -fx-transition: -fx-background-color 0.3s, -fx-effect 0.3s;
@@ -146,18 +140,12 @@
 
 .tomato-button:hover {
     -fx-cursor: hand;
-    /* Slightly brighter on hover */
-    -fx-background-color:
-            linear-gradient(from 0% 0% to 100% 100%, #ff9b82, #ff826d),
-            linear-gradient(from 0% 0% to 100% 100%, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.0));
+    -fx-background-color: linear-gradient(#fb5c5c 0%, #dc4444 25%, #da2a2a 75%, #c31a1a 100%);
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0.3, 2, 2);
 }
 
 .tomato-button:pressed {
-    /* Darker gradient and inner shadow for pressed effect */
-    -fx-background-color:
-            linear-gradient(from 0% 0% to 100% 100%, #d94730, #b33b28),
-            linear-gradient(from 0% 0% to 100% 100%, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.0));
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #d94730, #b33b28);
     -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.5), 6, 0.0, 0, 2);
 }
 

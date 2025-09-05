@@ -6,8 +6,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
@@ -26,6 +28,7 @@ public class TaskPane extends BorderPane {
     @FXML private ListView<Task> taskListView;
     @FXML private TextField taskInput;
     @FXML private Button addTaskButton;
+    private final ContextMenu contextMenu = new ContextMenu();
     private final PresetManager presetManager;
     private final Logger logger = LoggerFactory.getLogger(TaskPane.class);
 
@@ -45,7 +48,8 @@ public class TaskPane extends BorderPane {
     @FXML
     private void initialize(){
         addTaskButton.setOnAction(e -> addTask());
-        enableDragAndDrop();
+        taskInput.setOnAction(e -> addTaskButton.fire());
+        enableCellFactory();
         presetManager.getCurrentPreset().ifPresent(pr -> {
                 taskListView.getItems().setAll(pr.getTasks());
         });
@@ -73,7 +77,7 @@ public class TaskPane extends BorderPane {
 
     }
 
-    private void enableDragAndDrop() {
+    private void enableCellFactory() {
         taskListView.setCellFactory(lv -> {
             ListCell<Task> cell = new ListCell<>() {
                 @Override
@@ -83,6 +87,27 @@ public class TaskPane extends BorderPane {
                 }
             };
 
+            /* --- Context menu functionality --- */
+
+            ContextMenu menu = new ContextMenu();
+            MenuItem deleteItem = new MenuItem("Delete");
+
+            deleteItem.setOnAction(e -> {
+                Task task = cell.getItem();
+                if (task != null) {
+                    taskListView.getItems().remove(task);
+                    presetManager.getCurrentPreset().ifPresent(pr -> pr.removeTask(task));
+                    presetManager.scheduleSave();
+                    logger.info("Deleted: {}", task);
+                }
+            });
+
+            menu.getItems().add(deleteItem);
+            cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
+                cell.setContextMenu(isNowEmpty ? null : menu);
+            });
+
+            /* --- Drag and drop functionality --- */
             cell.setOnDragDetected(event -> {
                 if (cell.isEmpty())
                     return;
@@ -156,10 +181,6 @@ public class TaskPane extends BorderPane {
 
             return cell;
         });
-    }
-
-    private void enableContextMenu() {
-
     }
 
 }

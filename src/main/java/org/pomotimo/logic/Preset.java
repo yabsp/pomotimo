@@ -157,6 +157,15 @@ public class Preset {
         return false;
     }
 
+    /**
+     * Remove a task from the task list.
+     * @param t the Task that should be removed.
+     * @return True if removal was successful, false otherwise.
+     */
+    public boolean removeTask(Task t) {
+        return tasks.remove(t);
+    }
+
     @Override
     public String toString() {
         return name + " (focus: " + durationFocus + "s, short break: " + durationShortBreak + "s, long break: " + durationLongBreak + "s)";
