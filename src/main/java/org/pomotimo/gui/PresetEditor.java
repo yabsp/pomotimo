@@ -46,7 +46,6 @@ public class PresetEditor extends BorderPane {
     private void initialize() {
         closeBtn.setOnAction(e -> parentPane.refreshUI());
         saveBtn.setOnAction(e -> this.savePresetConfiguration());
-
         configureTimeField(focusTimeField, "25:00");
         configureTimeField(shortBreakField, "05:00");
         configureTimeField(longBreakField, "15:00");
@@ -96,6 +95,8 @@ public class PresetEditor extends BorderPane {
         Preset p = new Preset(nameField.getText(), focusSecs, shortBrSecs, longBrSecs);
         presetManager.addPreset(p);
         presetManager.setCurrentPreset(p);
+        presetManager.scheduleSave();
+        parentPane.refreshTopBar();
         parentPane.refreshUI();
     }
 

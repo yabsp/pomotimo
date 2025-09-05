@@ -59,7 +59,6 @@ public class TaskPane extends BorderPane {
         presetManager.getCurrentPreset().ifPresent(pr -> {
                 taskListView.getItems().setAll(pr.getTasks());
         });
-
     }
 
     private void addTask() {
@@ -191,6 +190,12 @@ public class TaskPane extends BorderPane {
             presetManager.scheduleSave();
             logger.info("Deleted: {}", task);
         }
+    }
+
+    public void refreshTaskListView() {
+        presetManager.getCurrentPreset().ifPresent(pr -> {
+            taskListView.getItems().setAll(pr.getTasks());
+        });
     }
 
 }

@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
+import org.pomotimo.gui.utils.TopBarRefreshable;
 import org.pomotimo.logic.PomoState;
 import org.pomotimo.logic.PomoTimer;
 import org.pomotimo.logic.PresetManager;
@@ -35,15 +36,17 @@ public class TimerPane extends BorderPane {
     @FXML private Label cycleLabel;
     @FXML private VBox timerContainer;
     private final PomoTimer timer = new PomoTimer();
-    private PresetManager presetManager;
+    private final PresetManager presetManager;
+    private final TopBarRefreshable refresher;
     private int cycleCounter;
     private PomoState state;
     private int focusSec;
     private int shortBrSec;
     private int longBrSec;
 
-    public TimerPane(PresetManager presetManager) {
+    public TimerPane(PresetManager presetManager, TopBarRefreshable refresher) {
         this.presetManager = presetManager;
+        this.refresher = refresher;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TimerPane.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -60,7 +63,7 @@ public class TimerPane extends BorderPane {
         refreshUI();
     }
 
-    private void showPresetEditor(){
+    public void showPresetEditor(){
         PresetEditor presetEditor = new PresetEditor(presetManager, this);
         this.setCenter(presetEditor);
     }
@@ -170,6 +173,10 @@ public class TimerPane extends BorderPane {
                 timerLabel.setText(String.format("%02d:%02d", focusSec / 60, focusSec % 60));
                 break;
         }
+    }
+
+    public void refreshTopBar() {
+        refresher.refreshTopBar();
     }
 
 }
