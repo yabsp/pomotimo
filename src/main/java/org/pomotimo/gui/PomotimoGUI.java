@@ -9,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,6 +27,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.pomotimo.gui.utils.UIRefreshable;
 import org.pomotimo.logic.PresetManager;
+import org.pomotimo.logic.utils.EditorMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -192,24 +195,41 @@ public class PomotimoGUI extends Application implements UIRefreshable {
         settingsButton.getStyleClass().add("topbar-button");
         MenuItem importItem = new MenuItem("Import");
         MenuItem exportItem = new MenuItem("Export");
-        Menu switchMenu = new Menu("Switch");
+
+
+        Menu manageMenu = new Menu("Manage");
         MenuItem createItem = new MenuItem("Create New");
+        MenuItem editItem = new MenuItem("Edit Current Profile");
+        MenuItem deleteItem = new MenuItem("Delete");
         createItem.setOnAction(e -> {
-            timerPane.showPresetEditor();
+            timerPane.showPresetEditor(EditorMode.ADD_NEW);
         });
 
-        MenuButton profileButton = new MenuButton("Profile");
+        editItem.setOnAction(e -> {
+            timerPane.showPresetEditor(EditorMode.EDIT_OLD);
+        });
+        manageMenu.getItems().addAll(createItem, editItem, deleteItem);
+        Menu switchMenu = new Menu("Select");
+        ToggleGroup presetsGroup = new ToggleGroup();
+
         presetManager.getPresets().forEach(pr -> {
-            MenuItem prItem = new MenuItem(pr.getName());
+            RadioMenuItem prItem = new RadioMenuItem(pr.getName());
+            prItem.setToggleGroup(presetsGroup);
+            if (presetManager.getCurrentPreset().map(p -> p.equals(pr)).orElse(false)) {
+                prItem.setSelected(true);
+            }
             prItem.setOnAction(e -> {
                 presetManager.setCurrentPreset(pr);
+                prItem.setSelected(true);
                 timerPane.refreshUI();
                 taskPane.refreshTaskListView();
                 logger.info("Switched to preset: {}", pr);
             });
             switchMenu.getItems().add(prItem);
         });
-        profileButton.getItems().addAll(importItem, exportItem, switchMenu, createItem);
+
+        MenuButton profileButton = new MenuButton("Profile");
+        profileButton.getItems().addAll(importItem, exportItem, switchMenu, manageMenu);
         profileButton.getStyleClass().add("topbar-button");
 
         Region spacer = new Region();

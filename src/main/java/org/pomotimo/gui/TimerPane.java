@@ -14,15 +14,16 @@ import java.io.IOException;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.pomotimo.gui.utils.UIRefreshable;
-import org.pomotimo.logic.PomoState;
+import org.pomotimo.logic.utils.EditorMode;
+import org.pomotimo.logic.utils.PomoState;
 import org.pomotimo.logic.PomoTimer;
 import org.pomotimo.logic.PresetManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.pomotimo.logic.PomoState.FOCUS;
-import static org.pomotimo.logic.PomoState.LONGBR;
-import static org.pomotimo.logic.PomoState.SHORTBR;
+import static org.pomotimo.logic.utils.PomoState.FOCUS;
+import static org.pomotimo.logic.utils.PomoState.LONGBR;
+import static org.pomotimo.logic.utils.PomoState.SHORTBR;
 
 public class TimerPane extends BorderPane {
 
@@ -62,8 +63,8 @@ public class TimerPane extends BorderPane {
         refreshUI();
     }
 
-    public void showPresetEditor(){
-        PresetEditor presetEditor = new PresetEditor(presetManager, this);
+    public void showPresetEditor(EditorMode mode){
+        PresetEditor presetEditor = new PresetEditor(presetManager, this, mode);
         this.setCenter(presetEditor);
     }
 
@@ -82,7 +83,7 @@ public class TimerPane extends BorderPane {
             plusIcon.setIconSize(18);
             createPresetButton.setGraphic(plusIcon);
             createPresetButton.getStyleClass().add("create-preset-button");
-            createPresetButton.setOnAction(e -> showPresetEditor());
+            createPresetButton.setOnAction(e -> showPresetEditor(EditorMode.ADD_NEW));
             this.setCenter(createPresetButton);
         } else {
             logger.info("Refreshing UI with a Preset");

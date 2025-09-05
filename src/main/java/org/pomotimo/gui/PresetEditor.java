@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import org.pomotimo.gui.utils.AlertFactory;
 import org.pomotimo.logic.Preset;
+import org.pomotimo.logic.utils.EditorMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,8 +18,9 @@ import org.pomotimo.logic.PresetManager;
 
 public class PresetEditor extends BorderPane {
     private static final Logger logger = LoggerFactory.getLogger(PresetEditor.class);
-    private PresetManager presetManager;
-    private TimerPane parentPane;
+    private final PresetManager presetManager;
+    private final TimerPane parentPane;
+    private EditorMode mode;
     @FXML private Button closeBtn;
     @FXML private TextField focusTimeField;
     @FXML private TextField shortBreakField;
@@ -27,9 +29,10 @@ public class PresetEditor extends BorderPane {
     @FXML private Button saveBtn;
     @FXML private Button setDefaultsBtn;
 
-    public PresetEditor(PresetManager presetManager, TimerPane parentPane) {
+    public PresetEditor(PresetManager presetManager, TimerPane parentPane, EditorMode mode) {
         this.presetManager = presetManager;
         this.parentPane = parentPane;
+        this.mode = mode;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PresetEditor.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -46,11 +49,24 @@ public class PresetEditor extends BorderPane {
     private void initialize() {
         closeBtn.setOnAction(e -> parentPane.refreshUI());
         saveBtn.setOnAction(e -> this.savePresetConfiguration());
-        configureTimeField(focusTimeField, "25:00");
-        configureTimeField(shortBreakField, "05:00");
-        configureTimeField(longBreakField, "15:00");
-        configureTextField(nameField, "preset" + (presetManager.getPresetCount()+1));
 
+        switch(mode) {
+            case ADD_NEW:
+                configureTimeField(focusTimeField, "25:00");
+                configureTimeField(shortBreakField, "05:00");
+                configureTimeField(longBreakField, "15:00");
+                configureTextField(nameField, "preset" + (presetManager.getPresetCount()+1));
+                break;
+
+            case EDIT_OLD:
+                presetManager.getCurrentPreset().ifPresent(pr -> {
+                    configureTimeField(focusTimeField, String.format("%02d:%02d", pr.getDurationFocus() / 60, pr.getDurationFocus() % 60));
+                    configureTimeField(shortBreakField, String.format("%02d:%02d", pr.getDurationShortBreak() / 60, pr.getDurationShortBreak() % 60));
+                    configureTimeField(longBreakField, String.format("%02d:%02d", pr.getDurationLongBreak() / 60, pr.getDurationLongBreak() % 60));
+                    configureTextField(nameField, pr.getName());
+                });
+                break;
+        }
     }
 
     private void configureTimeField(TextField field, String initialValue) {
@@ -92,9 +108,21 @@ public class PresetEditor extends BorderPane {
             AlertFactory.createEmptyNameFieldAlert("Preset Name Field").showAndWait();
             return;
         }
-        Preset p = new Preset(nameField.getText(), focusSecs, shortBrSecs, longBrSecs);
-        presetManager.addPreset(p);
-        presetManager.setCurrentPreset(p);
+        switch(mode) {
+            case ADD_NEW:
+                Preset p = new Preset(nameField.getText(), focusSecs, shortBrSecs, longBrSecs);
+                presetManager.addPreset(p);
+                presetManager.setCurrentPreset(p);
+                break;
+            case EDIT_OLD:
+                presetManager.getCurrentPreset().ifPresent(pr -> {
+                    pr.setName(nameField.getText());
+                    pr.setDurationFocus(focusSecs);
+                    pr.setDurationShortBreak(shortBrSecs);
+                    pr.setDurationLongBreak(longBrSecs);
+                });
+        }
+
         presetManager.scheduleSave();
         parentPane.refreshTopBar();
         parentPane.refreshTaskListView();
