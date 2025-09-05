@@ -13,6 +13,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 
@@ -49,6 +50,11 @@ public class TaskPane extends BorderPane {
     private void initialize(){
         addTaskButton.setOnAction(e -> addTask());
         taskInput.setOnAction(e -> addTaskButton.fire());
+        taskListView.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DELETE) {
+                removeTaskItem(taskListView.getSelectionModel().getSelectedItem());
+            }
+        });
         enableCellFactory();
         presetManager.getCurrentPreset().ifPresent(pr -> {
                 taskListView.getItems().setAll(pr.getTasks());
@@ -94,12 +100,7 @@ public class TaskPane extends BorderPane {
 
             deleteItem.setOnAction(e -> {
                 Task task = cell.getItem();
-                if (task != null) {
-                    taskListView.getItems().remove(task);
-                    presetManager.getCurrentPreset().ifPresent(pr -> pr.removeTask(task));
-                    presetManager.scheduleSave();
-                    logger.info("Deleted: {}", task);
-                }
+                removeTaskItem(task);
             });
 
             menu.getItems().add(deleteItem);
@@ -181,6 +182,15 @@ public class TaskPane extends BorderPane {
 
             return cell;
         });
+    }
+
+    private void removeTaskItem(Task task) {
+        if (task != null) {
+            taskListView.getItems().remove(task);
+            presetManager.getCurrentPreset().ifPresent(pr -> pr.removeTask(task));
+            presetManager.scheduleSave();
+            logger.info("Deleted: {}", task);
+        }
     }
 
 }
