@@ -26,7 +26,7 @@ public class TaskPane extends BorderPane {
     @FXML private ListView<Task> taskListView;
     @FXML private TextField taskInput;
     @FXML private Button addTaskButton;
-    private PresetManager presetManager;
+    private final PresetManager presetManager;
     private final Logger logger = LoggerFactory.getLogger(TaskPane.class);
 
     public TaskPane(PresetManager presetManager) {
@@ -46,6 +46,9 @@ public class TaskPane extends BorderPane {
     private void initialize(){
         addTaskButton.setOnAction(e -> addTask());
         enableDragAndDrop();
+        presetManager.getCurrentPreset().ifPresent(pr -> {
+                taskListView.getItems().setAll(pr.getTasks());
+        });
 
     }
 
@@ -60,6 +63,7 @@ public class TaskPane extends BorderPane {
             pr.addTask(t);
             taskListView.getItems().add(t);
             logger.info("Task added: " + t);
+            presetManager.scheduleSave();
             taskInput.clear();
         } else {
             AlertFactory.createAlert(Alert.AlertType.WARNING, "No Preset Selected",
@@ -140,7 +144,7 @@ public class TaskPane extends BorderPane {
 
                         logger.info("Dragged task (after prio adjustment): " + draggedTask);
                         logger.info("Target task (after prio adjustment): " + targetTask);
-
+                        presetManager.scheduleSave();
                         taskListView.refresh();
                         taskListView.getSelectionModel().select(thisIdx);
                     }

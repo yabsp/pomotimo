@@ -1,17 +1,27 @@
 package org.pomotimo.logic;
 
+import com.google.gson.Gson;
+
 /**
  * Represents a task that is to be done. A task has a name and a priority.
  */
 public class Task {
-    private final String name;
+    private String name;
     /**
      * Priority is used as a number to sort tasks. Value 1 means that the priority is the highest.
      * In the task list the numbers refer to the placement in the list and can be used to sort tasks.
      */
     private int priority;
 
-    public final int DEFAULT_PRIO = 0;
+    public final int DEFAULT_PRIO = 1;
+
+    /**
+     * no-args constructor required by Gson
+     */
+    public Task() {
+        this.name = "";
+        this.priority = DEFAULT_PRIO;
+    }
 
     /**
      * Constructs a task with custom priority.

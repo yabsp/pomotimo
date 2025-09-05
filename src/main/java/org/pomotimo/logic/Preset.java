@@ -17,7 +17,7 @@ public class Preset {
     /* sound and image file location */
     private String soundFile;
     private String imageFile;
-    private List tasks;
+    private ArrayList<Task> tasks;
 
     /* Default for paths is empty path */
     public final String DEFAULT_PATH = "";
@@ -28,6 +28,12 @@ public class Preset {
     /* 15 minutes in seconds */
     public final int DEFAULT_LONG_BR_TIME = 900;
 
+    /**
+     * No-arg constructor for Gson deserialization.
+     */
+    public Preset() {
+        this.tasks = new ArrayList<>();
+    }
 
     /**
      * Construct a Preset instance with new values.
@@ -39,7 +45,7 @@ public class Preset {
      * @param imageFile path to the user profile picture
      * @param tasks List of {@link org.pomotimo.logic.Task} objects
      */
-    public Preset(String name, int durationFocus, int durationShortBreak, int durationLongBreak, String soundFile, String imageFile, List<Task> tasks) {
+    public Preset(String name, int durationFocus, int durationShortBreak, int durationLongBreak, String soundFile, String imageFile, ArrayList<Task> tasks) {
         this.name = name;
         this.durationFocus = durationFocus;
         this.durationShortBreak = durationShortBreak;
@@ -131,6 +137,10 @@ public class Preset {
 
     public int getTaskAmount() {
         return tasks.size();
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
     }
 
     /**
