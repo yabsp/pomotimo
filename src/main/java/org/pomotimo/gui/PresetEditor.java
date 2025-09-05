@@ -97,6 +97,7 @@ public class PresetEditor extends BorderPane {
         presetManager.setCurrentPreset(p);
         presetManager.scheduleSave();
         parentPane.refreshTopBar();
+        parentPane.refreshTaskListView();
         parentPane.refreshUI();
     }
 

@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
@@ -24,12 +23,12 @@ import javafx.stage.StageStyle;
 
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
-import org.pomotimo.gui.utils.TopBarRefreshable;
+import org.pomotimo.gui.utils.UIRefreshable;
 import org.pomotimo.logic.PresetManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PomotimoGUI extends Application implements TopBarRefreshable {
+public class PomotimoGUI extends Application implements UIRefreshable {
 
     private double xOffset = 0;
     private double yOffset = 0;
@@ -271,5 +270,20 @@ public class PomotimoGUI extends Application implements TopBarRefreshable {
     @Override
     public void refreshTopBar() {
         initTopBar();
+    }
+
+    @Override
+    public void refreshTimerPane() {
+        timerPane.refreshUI();
+    }
+
+    @Override
+    public void refreshTaskPane() {
+        taskPane.refreshUI();
+    }
+
+    @Override
+    public void refreshTaskListView() {
+        taskPane.refreshTaskListView();
     }
 }

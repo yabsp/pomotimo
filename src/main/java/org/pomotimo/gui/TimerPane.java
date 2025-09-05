@@ -13,11 +13,10 @@ import java.io.IOException;
 
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
-import org.pomotimo.gui.utils.TopBarRefreshable;
+import org.pomotimo.gui.utils.UIRefreshable;
 import org.pomotimo.logic.PomoState;
 import org.pomotimo.logic.PomoTimer;
 import org.pomotimo.logic.PresetManager;
-import org.pomotimo.logic.audio.AlarmPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,14 +36,14 @@ public class TimerPane extends BorderPane {
     @FXML private VBox timerContainer;
     private final PomoTimer timer = new PomoTimer();
     private final PresetManager presetManager;
-    private final TopBarRefreshable refresher;
+    private final UIRefreshable refresher;
     private int cycleCounter;
     private PomoState state;
     private int focusSec;
     private int shortBrSec;
     private int longBrSec;
 
-    public TimerPane(PresetManager presetManager, TopBarRefreshable refresher) {
+    public TimerPane(PresetManager presetManager, UIRefreshable refresher) {
         this.presetManager = presetManager;
         this.refresher = refresher;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TimerPane.fxml"));
@@ -177,6 +176,10 @@ public class TimerPane extends BorderPane {
 
     public void refreshTopBar() {
         refresher.refreshTopBar();
+    }
+
+    public void refreshTaskListView() {
+        refresher.refreshTaskListView();
     }
 
 }

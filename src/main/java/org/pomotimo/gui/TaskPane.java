@@ -48,17 +48,7 @@ public class TaskPane extends BorderPane {
 
     @FXML
     private void initialize(){
-        addTaskButton.setOnAction(e -> addTask());
-        taskInput.setOnAction(e -> addTaskButton.fire());
-        taskListView.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.DELETE) {
-                removeTaskItem(taskListView.getSelectionModel().getSelectedItem());
-            }
-        });
-        enableCellFactory();
-        presetManager.getCurrentPreset().ifPresent(pr -> {
-                taskListView.getItems().setAll(pr.getTasks());
-        });
+        refreshUI();
     }
 
     private void addTask() {
@@ -193,6 +183,20 @@ public class TaskPane extends BorderPane {
     }
 
     public void refreshTaskListView() {
+        presetManager.getCurrentPreset().ifPresent(pr -> {
+            taskListView.getItems().setAll(pr.getTasks());
+        });
+    }
+
+    public void refreshUI() {
+        addTaskButton.setOnAction(e -> addTask());
+        taskInput.setOnAction(e -> addTaskButton.fire());
+        taskListView.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DELETE) {
+                removeTaskItem(taskListView.getSelectionModel().getSelectedItem());
+            }
+        });
+        enableCellFactory();
         presetManager.getCurrentPreset().ifPresent(pr -> {
             taskListView.getItems().setAll(pr.getTasks());
         });
