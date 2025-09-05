@@ -16,6 +16,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import org.pomotimo.logic.PomoState;
 import org.pomotimo.logic.PomoTimer;
 import org.pomotimo.logic.PresetManager;
+import org.pomotimo.logic.audio.AlarmPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,7 +94,7 @@ public class TimerPane extends BorderPane {
     private void setUIFromPreset(){
         state = PomoState.FOCUS;
         cycleCounter = 1;
-        presetManager.getFirst().ifPresent(pr -> {
+        presetManager.getCurrentPreset().ifPresent(pr -> {
             focusSec = pr.getDurationFocus();
             shortBrSec = pr.getDurationShortBreak();
             longBrSec = pr.getDurationLongBreak();
@@ -105,13 +106,21 @@ public class TimerPane extends BorderPane {
                     timer.pause();
                     startBtn.setText("Start");
                 } else {
+                    if(presetManager.player.isPlaying()) {
+                        presetManager.player.stop();
+                    }
                     timer.start( seconds -> {
                         int min = seconds / 60;
                         int sec = seconds % 60;
                         String time = String.format("%02d:%02d", min, sec);
                         Platform.runLater(() -> timerLabel.setText(time));
                         if (seconds <= 0) {
-                            Platform.runLater(this::setNewPomoState);
+                            timer.pause();
+                            Platform.runLater(() -> {
+                                presetManager.player.play();
+                                setNewPomoState();
+                                startBtn.setText("Start");
+                            });
                         }
                     });
                     startBtn.setText("Stop");

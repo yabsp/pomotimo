@@ -9,6 +9,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.pomotimo.logic.audio.AlarmPlayer;
 import org.pomotimo.logic.utils.PersistenceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,7 @@ public class PresetManager {
     private List<Preset> presets;
     private Preset currentPreset;
     private final PersistenceManager persistenceManager;
+    public final AlarmPlayer player;
     private static final Logger logger = LoggerFactory.getLogger(PresetManager.class);
 
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -32,6 +34,7 @@ public class PresetManager {
     public PresetManager() {
         this.presets = new ArrayList<Preset>();
         this.persistenceManager = new PersistenceManager();
+        this.player = new AlarmPlayer();
         loadPresetsAsync();
     }
 
