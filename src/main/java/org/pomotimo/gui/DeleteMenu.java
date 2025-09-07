@@ -6,8 +6,8 @@ import java.util.Optional;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 
 import org.pomotimo.gui.utils.UIRefreshable;
@@ -41,15 +41,24 @@ public class DeleteMenu extends BorderPane {
     @FXML
     public void initialize() {
         refreshPresetList();
-        deleteBtn.setOnAction(e -> {
-            Preset pr = checkList.getSelectionModel().getSelectedItem();
-            presetManager.removePreset(pr);
-            checkList.getItems().remove(pr);
-            refresher.refreshTimerPane();
-            refresher.refreshTaskPane();
-            refresher.refreshTopBar();
-            presetManager.scheduleSave();
+        checkList.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DELETE) {
+                deletePreset(checkList.getSelectionModel().getSelectedItem());
+            }
         });
+        deleteBtn.setOnAction(e -> {
+            deletePreset(checkList.getSelectionModel().getSelectedItem());
+        });
+    }
+
+    private void deletePreset(Preset p) {
+        Preset pr = checkList.getSelectionModel().getSelectedItem();
+        presetManager.removePreset(pr);
+        checkList.getItems().remove(pr);
+        refresher.refreshTimerPane();
+        refresher.refreshTaskPane();
+        refresher.refreshTopBar();
+        presetManager.scheduleSave();
     }
 
     public void refreshPresetList() {
