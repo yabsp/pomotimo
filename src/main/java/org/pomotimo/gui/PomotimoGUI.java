@@ -27,6 +27,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -216,11 +217,13 @@ public class PomotimoGUI extends Application implements UIRefreshable {
             Stage stage = new Stage();
             stage.setTitle("Delete Profiles");
             stage.initStyle(StageStyle.TRANSPARENT);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(primaryStage);
             stage.getIcons().add(new Image("icons/logo_tomato_removebg.png"));
 
             BorderPane parent = new BorderPane();
             HBox bar = new HBox();
-            bar.setMinHeight(20);
+            bar.setId("custom-title-bar");
             initWindowControl(stage, bar, parent, WindowFactory.WindowType.MENU_WINDOW, new ArrayList<>());
             parent.setCenter(deleteMenu);
             initPane(parent);
