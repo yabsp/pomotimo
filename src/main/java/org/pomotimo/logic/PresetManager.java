@@ -99,10 +99,11 @@ public class PresetManager {
         boolean removed;
         synchronized (this) {
             removed = presets.remove(p);
-        }
-        if(p.equals(currentPreset)) {
-            if(!presets.isEmpty()) {
-                currentPreset = presets.getFirst();
+            if(p.equals(currentPreset)) {
+                currentPreset = null;
+                if(!presets.isEmpty()) {
+                    currentPreset = presets.getFirst();
+                }
             }
         }
         if (removed) scheduleSave();

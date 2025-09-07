@@ -2,6 +2,7 @@ package org.pomotimo.gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -59,12 +60,17 @@ public class PresetEditor extends BorderPane {
                 break;
 
             case EDIT_OLD:
-                presetManager.getCurrentPreset().ifPresent(pr -> {
+                if((presetManager.getCurrentPreset().isPresent())) {
+                    Preset pr = presetManager.getCurrentPreset().get();
                     configureTimeField(focusTimeField, String.format("%02d:%02d", pr.getDurationFocus() / 60, pr.getDurationFocus() % 60));
                     configureTimeField(shortBreakField, String.format("%02d:%02d", pr.getDurationShortBreak() / 60, pr.getDurationShortBreak() % 60));
                     configureTimeField(longBreakField, String.format("%02d:%02d", pr.getDurationLongBreak() / 60, pr.getDurationLongBreak() % 60));
                     configureTextField(nameField, pr.getName());
-                });
+                } else {
+                    AlertFactory.createAlert(Alert.AlertType.WARNING, "No Profile Selected",
+                            "No Current Profile",
+                            "Please select or create a profile in order to add a task!").showAndWait();
+                }
                 break;
         }
     }

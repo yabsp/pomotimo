@@ -44,11 +44,11 @@ public class DeleteMenu extends BorderPane {
         deleteBtn.setOnAction(e -> {
             Preset pr = checkList.getSelectionModel().getSelectedItem();
             presetManager.removePreset(pr);
-            presetManager.scheduleSave();
             checkList.getItems().remove(pr);
             refresher.refreshTimerPane();
-            refresher.refreshTaskListView();
+            refresher.refreshTaskPane();
             refresher.refreshTopBar();
+            presetManager.scheduleSave();
         });
     }
 

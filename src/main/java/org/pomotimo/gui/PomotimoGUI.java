@@ -10,6 +10,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuButton;
@@ -31,6 +32,7 @@ import javafx.stage.StageStyle;
 
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
+import org.pomotimo.gui.utils.AlertFactory;
 import org.pomotimo.gui.utils.UIRefreshable;
 import org.pomotimo.gui.utils.WindowFactory;
 import org.pomotimo.logic.PresetManager;
@@ -192,14 +194,21 @@ public class PomotimoGUI extends Application implements UIRefreshable {
 
         Menu manageMenu = new Menu("Manage");
         MenuItem createItem = new MenuItem("Create New");
-        MenuItem editItem = new MenuItem("Edit Current Profile");
+        MenuItem editItem = new MenuItem("Edit Current");
         MenuItem deleteItem = new MenuItem("Delete");
         createItem.setOnAction(e -> {
             timerPane.showPresetEditor(EditorMode.ADD_NEW);
         });
 
         editItem.setOnAction(e -> {
-            timerPane.showPresetEditor(EditorMode.EDIT_OLD);
+            if(presetManager.getCurrentPreset().isPresent()){
+                timerPane.showPresetEditor(EditorMode.EDIT_OLD);
+            } else {
+                AlertFactory.createAlert(Alert.AlertType.WARNING, "Edit Not Possible",
+                        "No Current Profile",
+                        "Please select or create a profile in order to edit it!").showAndWait();
+            }
+
         });
 
         deleteItem.setOnAction(ev -> {
