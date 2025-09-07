@@ -168,6 +168,26 @@ public class Preset {
 
     @Override
     public String toString() {
-        return name + " (focus: " + durationFocus + "s, short break: " + durationShortBreak + "s, long break: " + durationLongBreak + "s)";
+        return name + " (focus: " + String.format("%02d:%02d", durationFocus / 60, durationFocus % 60)
+                + ", short break: " + String.format("%02d:%02d", durationShortBreak / 60, durationShortBreak % 60)
+                + ", long break: " + String.format("%02d:%02d", durationLongBreak / 60, durationLongBreak % 60) + ")";
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (o == this) {
+            return true;
+        }
+
+        if(!(o instanceof Preset p)) {
+            return false;
+        }
+
+        return p.getName().equals(name) && p.getDurationFocus() == durationFocus
+                && p.getDurationShortBreak() == durationShortBreak
+                && p.getDurationLongBreak() == durationLongBreak
+                && p.getImageFile().equals(imageFile)
+                && p.getSoundFile().equals(soundFile)
+                && tasks.containsAll(p.getTasks());
     }
 }

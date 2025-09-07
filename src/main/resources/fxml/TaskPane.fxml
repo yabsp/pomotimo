@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.BorderPane?>
 
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.geometry.Insets?>
+
+
+<?import javafx.scene.control.ListView?>
 <fx:root maxHeight="Infinity" maxWidth="Infinity" style="-fx-background-color: #1e1f22;" stylesheets="@../css/generalstyle.css, @../css/titlebar.css" type="BorderPane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
     <top>
         <HBox>

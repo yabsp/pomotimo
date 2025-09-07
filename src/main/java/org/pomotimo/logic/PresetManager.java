@@ -62,7 +62,7 @@ public class PresetManager {
         if (pendingSave != null && !pendingSave.isDone()) {
             pendingSave.cancel(false);
         }
-        pendingSave = scheduler.schedule(this::savePresetsSafe, 500, TimeUnit.MILLISECONDS);
+        pendingSave = scheduler.schedule(this::savePresetsSafe, 1, TimeUnit.SECONDS);
     }
 
     /**
@@ -99,6 +99,11 @@ public class PresetManager {
         boolean removed;
         synchronized (this) {
             removed = presets.remove(p);
+        }
+        if(p.equals(currentPreset)) {
+            if(!presets.isEmpty()) {
+                currentPreset = presets.getFirst();
+            }
         }
         if (removed) scheduleSave();
         return removed;

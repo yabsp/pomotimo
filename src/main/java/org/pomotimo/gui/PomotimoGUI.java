@@ -1,9 +1,14 @@
 package org.pomotimo.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
@@ -16,6 +21,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
@@ -26,6 +32,7 @@ import javafx.stage.StageStyle;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.pomotimo.gui.utils.UIRefreshable;
+import org.pomotimo.gui.utils.WindowFactory;
 import org.pomotimo.logic.PresetManager;
 import org.pomotimo.logic.utils.EditorMode;
 import org.slf4j.Logger;
@@ -48,30 +55,16 @@ public class PomotimoGUI extends Application implements UIRefreshable {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        primaryStage.initStyle(StageStyle.TRANSPARENT);
+        this.primaryStage.initStyle(StageStyle.TRANSPARENT);
 
-        primaryStage.setTitle("Pomotimo");
-        primaryStage.getIcons().add(new Image("icons/logo_tomato_removebg.png"));
+        this.primaryStage.setTitle("Pomotimo");
+        this.primaryStage.getIcons().add(new Image("icons/logo_tomato_removebg.png"));
 
-        /* Smooth window corners */
         this.root = new BorderPane();
-        Rectangle clip = new Rectangle(800, 400);
-        clip.setArcWidth(15);
-        clip.setArcHeight(15);
-        clip.widthProperty().bind(root.widthProperty());
-        clip.heightProperty().bind(root.heightProperty());
-        root.setClip(clip);
-        root.setStyle("-fx-background-color: #383736;");
+        initPane(root);
 
         /* Window snap and resizable window */
-        makeWindowResizable();
-
-
-        /* Shadow effect for better window appearance */
-        DropShadow shadow = new DropShadow();
-        shadow.setRadius(12);
-        shadow.setColor(Color.rgb(0, 0, 0, 0.4));
-        root.setEffect(shadow);
+        makeWindowResizable(this.primaryStage, root);
 
         /* Add the timer pane and the task pane */
         this.timerPane = new TimerPane(presetManager, this);
@@ -92,12 +85,12 @@ public class PomotimoGUI extends Application implements UIRefreshable {
         /* Show the window */
         Scene scene = new Scene(root, 900, 500);
         scene.setFill(Color.TRANSPARENT);
-        primaryStage.setScene(scene);
-        primaryStage.getScene().getStylesheets().addAll("css/titlebar.css", "css/generalstyle.css");
-        primaryStage.show();
+        this.primaryStage.setScene(scene);
+        this.primaryStage.getScene().getStylesheets().addAll("css/titlebar.css", "css/generalstyle.css");
+        this.primaryStage.show();
     }
 
-    private void makeWindowResizable() {
+    private void makeWindowResizable(Stage stage, Parent parent) {
         final int RESIZE_MARGIN = 6;
 
         root.setOnMouseMoved(event -> {
@@ -135,50 +128,50 @@ public class PomotimoGUI extends Application implements UIRefreshable {
 
             double mouseX = event.getScreenX();
             double mouseY = event.getScreenY();
-            double stageX = primaryStage.getX();
-            double stageY = primaryStage.getY();
-            double stageW = primaryStage.getWidth();
-            double stageH = primaryStage.getHeight();
+            double stageX = stage.getX();
+            double stageY = stage.getY();
+            double stageW = stage.getWidth();
+            double stageH = stage.getHeight();
 
             switch (resizeCursor.toString()) {
                 case "NW_RESIZE":
-                    primaryStage.setX(mouseX);
-                    primaryStage.setY(mouseY);
-                    primaryStage.setWidth(stageW - (mouseX - stageX));
-                    primaryStage.setHeight(stageH - (mouseY - stageY));
+                    stage.setX(mouseX);
+                    stage.setY(mouseY);
+                    stage.setWidth(stageW - (mouseX - stageX));
+                    stage.setHeight(stageH - (mouseY - stageY));
                     break;
                 case "NE_RESIZE":
-                    primaryStage.setY(mouseY);
-                    primaryStage.setWidth(mouseX - stageX);
-                    primaryStage.setHeight(stageH - (mouseY - stageY));
+                    stage.setY(mouseY);
+                    stage.setWidth(mouseX - stageX);
+                    stage.setHeight(stageH - (mouseY - stageY));
                     break;
                 case "SW_RESIZE":
-                    primaryStage.setX(mouseX);
-                    primaryStage.setWidth(stageW - (mouseX - stageX));
-                    primaryStage.setHeight(mouseY - stageY);
+                    stage.setX(mouseX);
+                    stage.setWidth(stageW - (mouseX - stageX));
+                    stage.setHeight(mouseY - stageY);
                     break;
                 case "SE_RESIZE":
-                    primaryStage.setWidth(mouseX - stageX);
-                    primaryStage.setHeight(mouseY - stageY);
+                    stage.setWidth(mouseX - stageX);
+                    stage.setHeight(mouseY - stageY);
                     break;
                 case "W_RESIZE":
-                    primaryStage.setX(mouseX);
-                    primaryStage.setWidth(stageW - (mouseX - stageX));
+                    stage.setX(mouseX);
+                    stage.setWidth(stageW - (mouseX - stageX));
                     break;
                 case "E_RESIZE":
-                    primaryStage.setWidth(mouseX - stageX);
+                    stage.setWidth(mouseX - stageX);
                     break;
                 case "N_RESIZE":
-                    primaryStage.setY(mouseY);
-                    primaryStage.setHeight(stageH - (mouseY - stageY));
+                    stage.setY(mouseY);
+                    stage.setHeight(stageH - (mouseY - stageY));
                     break;
                 case "S_RESIZE":
-                    primaryStage.setHeight(mouseY - stageY);
+                    stage.setHeight(mouseY - stageY);
                     break;
             }
         });
 
-        root.setOnMouseReleased(event -> {
+        parent.setOnMouseReleased(event -> {
             resizing = false;
         });
     }
@@ -208,6 +201,27 @@ public class PomotimoGUI extends Application implements UIRefreshable {
         editItem.setOnAction(e -> {
             timerPane.showPresetEditor(EditorMode.EDIT_OLD);
         });
+
+        deleteItem.setOnAction(ev -> {
+            DeleteMenu deleteMenu = new DeleteMenu(presetManager, this);
+            Stage stage = new Stage();
+            stage.setTitle("Delete Profiles");
+            stage.initStyle(StageStyle.TRANSPARENT);
+            stage.getIcons().add(new Image("icons/logo_tomato_removebg.png"));
+
+            BorderPane parent = new BorderPane();
+            HBox bar = new HBox();
+            bar.setMinHeight(20);
+            initWindowControl(stage, bar, parent, WindowFactory.WindowType.MENU_WINDOW, new ArrayList<>());
+            parent.setCenter(deleteMenu);
+            initPane(parent);
+            Scene scene = new Scene(parent, 600, 300);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
+            stage.getScene().getStylesheets().addAll("css/titlebar.css", "css/generalstyle.css");
+            stage.show();
+        });
+
         manageMenu.getItems().addAll(createItem, editItem, deleteItem);
         Menu switchMenu = new Menu("Select");
         ToggleGroup presetsGroup = new ToggleGroup();
@@ -232,9 +246,28 @@ public class PomotimoGUI extends Application implements UIRefreshable {
         profileButton.getItems().addAll(importItem, exportItem, switchMenu, manageMenu);
         profileButton.getStyleClass().add("topbar-button");
 
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
+        initWindowControl(primaryStage, topBar, root, WindowFactory.WindowType.MAIN_WINDOW,
+                List.of(settingsButton, profileButton));
+    }
 
+    private void initPane(Pane pane) {
+        /* Smooth Window Corners*/
+        Rectangle clip = new Rectangle(800, 400);
+        clip.setArcWidth(15);
+        clip.setArcHeight(15);
+        clip.widthProperty().bind(pane.widthProperty());
+        clip.heightProperty().bind(pane.heightProperty());
+        pane.setClip(clip);
+        pane.setStyle("-fx-background-color: #383736;");
+
+        /* Shadow effect for better window appearance */
+        DropShadow shadow = new DropShadow();
+        shadow.setRadius(12);
+        shadow.setColor(Color.rgb(0, 0, 0, 0.4));
+        pane.setEffect(shadow);
+    }
+
+    private void initWindowControl(Stage stage, HBox bar, BorderPane pane, WindowFactory.WindowType windowType, List<Node> topBarElements) {
         Button minimizeBtn = new Button();
         FontIcon minimizeIcon = new FontIcon(FontAwesomeSolid.WINDOW_MINIMIZE);
         minimizeIcon.setIconColor(Color.WHITE);
@@ -254,35 +287,50 @@ public class PomotimoGUI extends Application implements UIRefreshable {
         maximizeBtn.getStyleClass().add("topbar-button");
         closeBtn.getStyleClass().add("topbar-button");
 
-        minimizeBtn.setOnAction(e -> primaryStage.setIconified(true));
-        maximizeBtn.setOnAction(e -> primaryStage.setMaximized(!primaryStage.isMaximized()));
+        minimizeBtn.setOnAction(e -> stage.setIconified(true));
+        maximizeBtn.setOnAction(e -> stage.setMaximized(!stage.isMaximized()));
         closeBtn.setOnAction(e -> {
-            presetManager.shutDownScheduler();
-            Platform.exit();
-        });
+            switch (windowType) {
+                case MAIN_WINDOW -> {
+                    presetManager.shutDownScheduler();
+                    Platform.exit();
+                }
+                case MENU_WINDOW -> stage.close();
+            }
 
-        topBar.setOnMousePressed(e -> {
-            xOffset = e.getSceneX();
-            yOffset = e.getSceneY();
         });
+        if (windowType == WindowFactory.WindowType.MAIN_WINDOW) {
+            bar.setOnMousePressed(e -> {
+                xOffset = e.getSceneX();
+                yOffset = e.getSceneY();
+            });
 
-        topBar.setOnMouseDragged(e -> {
-            if(resizing) return;
-            primaryStage.setX(e.getScreenX() - xOffset);
-            primaryStage.setY(e.getScreenY() - yOffset);
-        });
+            bar.setOnMouseDragged(e -> {
+                if(resizing) return;
+                primaryStage.setX(e.getScreenX() - xOffset);
+                primaryStage.setY(e.getScreenY() - yOffset);
+            });
+        }
 
         ImageView appIcon = new ImageView(new Image("icons/logo_24x24.png"));
         appIcon.setFitHeight(18);
         appIcon.setFitWidth(18);
         HBox.setMargin(appIcon, new Insets(0, 5, 0, 10));
 
-        topBar.getChildren().addAll(appIcon, settingsButton, profileButton, spacer, minimizeBtn, maximizeBtn, closeBtn);
-        root.setTop(topBar);
+        bar.getChildren().addAll(appIcon);
 
-        topBar.setOnMouseClicked(e -> {
+        topBarElements.forEach(node -> bar.getChildren().add(node));
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        bar.getChildren().add(spacer);
+
+        bar.getChildren().addAll(minimizeBtn, maximizeBtn, closeBtn);
+        pane.setTop(bar);
+
+        bar.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
-                primaryStage.setMaximized(!primaryStage.isMaximized());
+                stage.setMaximized(!stage.isMaximized());
             }
         });
     }

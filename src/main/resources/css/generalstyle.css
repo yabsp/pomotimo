@@ -29,11 +29,9 @@
 }
 
 .list-cell:filled:selected:focused, .list-cell:filled:selected {
-    -fx-background-color: linear-gradient(#fb3838 0%, #ec2222 25%, #da0b0b 75%, #c50101 100%);
+    -fx-background-color: linear-gradient(#ff4d41 0%, #ff2c26 25%, #f81418 75%, #e00313 100%);
     -fx-text-fill: white;
 }
-
-
 
 .window-close-btn {
     -fx-background-color: #2e2e2e;
@@ -58,48 +56,10 @@
     -fx-cursor: hand;
 }
 
-.tab-pane {
-    fx-background-color: #383736;
-}
-
-.tab-pane .tab-content-area {
-    -fx-background-color: #4e4d4b;
-}
-
-.tab-pane .tab-header-area .tab-header-background{
-    -fx-background-color: #383736;
-}
-
-.tab-pane .tab-header-area {
-    -fx-padding: 7 7;
-}
-
-.tab-pane .tab-header-area .tab {
-    -fx-background-color: linear-gradient(#fb3838 0%, #ec2222 25%, #da0b0b 75%, #c50101 100%);
-    -fx-text-fill: white;
-    -fx-font-size: 1.3em;
-    -fx-text-base-color: white;
-    -fx-font-weight: bold;
-    -fx-background-radius: 6;
-    -fx-border-radius: 6;
-    -fx-padding: 6 9;
-}
-
-.tab-pane .tab-header-area .tab:hover {
-    -fx-background-color: linear-gradient(#fb3838 0%, #ec2222 25%, #da0b0b 75%, #c50101 100%);
-    -fx-cursor: hand;
-}
-
-.tab-pane .tab-header-area .tab:selected {
-    -fx-background-color: linear-gradient(#fb5c5c 0%, #dc4444 25%, #da2a2a 75%, #c31a1a 100%);
-    -fx-text-fill: white;
-}
-
 .save-btn {
-    -fx-background-color: linear-gradient(#fb3838 0%, #ec2222 25%, #da0b0b 75%, #c50101 100%);
+    -fx-background-color: linear-gradient(#ff4d41 0%, #ff2c26 25%, #f81418 75%, #e00313 100%);
     -fx-text-fill: white;
     -fx-font-size: 1.3em;
-    -fx-font-weight: bold;
     -fx-padding: 0 8; /* Top/Bottom, Left/Right*/
     -fx-background-radius: 4;
     -fx-border-color: transparent;
@@ -115,7 +75,7 @@
 }
 
 .save-btn:hover {
-    -fx-background-color: #ff794d;
+    -fx-background-color: linear-gradient(#ff6f65 0%, #ff4943 25%, #ff2e31 75%, #c81e29 100%);
     -fx-cursor: hand;
 }
 
@@ -129,7 +89,7 @@
     -fx-max-width: 5em;
     -fx-max-height: 2.5em;
 
-    -fx-background-color: linear-gradient(#fb3838 0%, #ec2222 25%, #da0b0b 75%, #c50101 100%);
+    -fx-background-color: linear-gradient(#ff4d41 0%, #ff2c26 25%, #f81418 75%, #e00313 100%);
     -fx-text-fill: white;
     -fx-font-size: 1.5em;
     -fx-font-weight: bold;
@@ -140,13 +100,8 @@
 
 .tomato-button:hover {
     -fx-cursor: hand;
-    -fx-background-color: linear-gradient(#fb5c5c 0%, #dc4444 25%, #da2a2a 75%, #c31a1a 100%);
+    -fx-background-color: linear-gradient(#ff6f65 0%, #ff4943 25%, #ff2e31 75%, #c81e29 100%);
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0.3, 2, 2);
-}
-
-.tomato-button:pressed {
-    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #d94730, #b33b28);
-    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.5), 6, 0.0, 0, 2);
 }
 
 .create-preset-button {
@@ -155,8 +110,17 @@
     -fx-font-size: 1.3em;
 }
 
+.create-preset-button:hover {
+    -fx-background-color: #3a3a3a;
+    -fx-cursor: hand;
+}
+
 .focus-task-title {
     -fx-font-size: 1.5em;
     -fx-font-weight: bold;
+}
+
+.list-view {
+    -fx-background-color: #202020;
 }
 

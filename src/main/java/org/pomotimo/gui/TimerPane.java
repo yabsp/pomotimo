@@ -54,7 +54,7 @@ public class TimerPane extends BorderPane {
         try {
             loader.load();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load TimerPane.fxml", e);
+            logger.error("Failed to load TimerPane.fxml", e);
         }
     }
 
