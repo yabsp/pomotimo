@@ -1,7 +1,6 @@
 package org.pomotimo.gui;
 
 import java.io.IOException;
-import java.util.Optional;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

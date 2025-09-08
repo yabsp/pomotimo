@@ -1,5 +1,5 @@
 /* Style custom title bar */
-#custom-title-bar {
+.custom-title-bar {
     -fx-background-color: #2e2e2e; /* Dark grey */
     -fx-border-color: #444;
     -fx-border-width: 0 0 1px 0; /* Bottom border only */
