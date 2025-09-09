@@ -71,11 +71,11 @@ public class MenuFrame extends PomoFrame {
         switch(viewType) {
             case DELETE_VIEW -> {
                 view = new DeletePresetView(presetManager, this);
-                mainStage.setTitle("Delete Profiles");
+                mainStage.setTitle("Delete Presets");
             }
             case EXPORT_VIEW -> {
                 view = new ExportPresetView(presetManager, importerExporter, this);
-                mainStage.setTitle("Export Profiles");
+                mainStage.setTitle("Export Presets");
             }
             default -> view = new BorderPane();
         }

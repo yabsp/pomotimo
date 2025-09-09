@@ -68,10 +68,10 @@ public class ExportPresetView extends BorderPane {
         }
 
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Export Profile");
+        fileChooser.setTitle("Export Preset");
         fileChooser.setInitialFileName(pr.getName().replaceAll("\\s+", "_") + ".pomo");
         fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Pomotimo Profile Files", "*.pomo")
+                new FileChooser.ExtensionFilter("Pomotimo Preset Files", "*.pomo")
         );
 
         Stage stage = (Stage) exportBtn.getScene().getWindow();

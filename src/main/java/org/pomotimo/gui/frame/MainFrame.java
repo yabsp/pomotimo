@@ -1,6 +1,5 @@
 package org.pomotimo.gui.frame;
 
-
 import java.io.File;
 import java.util.Optional;
 
@@ -73,8 +72,8 @@ public class MainFrame extends PomoFrame {
                 timerPane.showPresetEditor(EditorMode.EDIT_OLD);
             } else {
                 AlertFactory.alert(Alert.AlertType.WARNING, "Edit Not Possible",
-                        "No Current Profile",
-                        "Please select or create a profile in order to edit it!").showAndWait();
+                        "No Current Preset",
+                        "Please select or create a preset in order to edit it!").showAndWait();
             }
 
         });
@@ -105,9 +104,9 @@ public class MainFrame extends PomoFrame {
             switchMenu.getItems().add(prItem);
         });
 
-        MenuButton profileButton = new MenuButton("Profile");
-        profileButton.getItems().addAll(importItem, exportItem, switchMenu, manageMenu);
-        profileButton.getStyleClass().add("topbar-button");
+        MenuButton presetButton = new MenuButton("Preset");
+        presetButton.getItems().addAll(importItem, exportItem, switchMenu, manageMenu);
+        presetButton.getStyleClass().add("topbar-button");
 
         Button minimizeBtn = ElementsFactory.minimizeBtn();
         Button maximizeBtn = ElementsFactory.maximizeBtn();
@@ -123,7 +122,7 @@ public class MainFrame extends PomoFrame {
         makeWindowDraggable();
 
         topBar.getChildren().addAll(ElementsFactory.appIcon(),
-                settingsButton, profileButton,
+                settingsButton, presetButton,
                 ElementsFactory.spacer(),
                 minimizeBtn, maximizeBtn, closeBtn);
         this.setTop(topBar);
