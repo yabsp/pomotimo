@@ -1,6 +1,4 @@
-package org.pomotimo.logic;
-
-import com.google.gson.Gson;
+package org.pomotimo.logic.preset;
 
 /**
  * Represents a task that is to be done. A task has a name and a priority.

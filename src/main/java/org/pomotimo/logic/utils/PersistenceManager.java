@@ -3,7 +3,7 @@ package org.pomotimo.logic.utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import org.pomotimo.logic.Preset;
+import org.pomotimo.logic.preset.Preset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -11,7 +11,8 @@ import javafx.stage.Stage;
 import org.pomotimo.gui.TaskPane;
 import org.pomotimo.gui.TimerPane;
 import org.pomotimo.gui.utils.UIRefreshable;
-import org.pomotimo.logic.PresetManager;
+import org.pomotimo.logic.preset.PresetManager;
+import org.pomotimo.logic.utils.PresetImporterExporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,26 +27,27 @@ public abstract class PomoFrame extends BorderPane implements UIRefreshable {
     TaskPane taskPane;
     HBox topBar;
     PresetManager presetManager;
+    PresetImporterExporter importerExporter;
     final String ICON_PATH = "icons/logo_tomato_removebg.png";
-    final String ICON_SM_PATH = "icons/logo_24x24.png";
-
 
     public PomoFrame (PresetManager presetManager,
+                      PresetImporterExporter importerExporter,
                       TimerPane timerPane,
                       TaskPane taskPane,
                       Stage mainStage) {
         this.presetManager = presetManager;
+        this.importerExporter = importerExporter;
         this.taskPane = taskPane;
         this.timerPane = timerPane;
         this.mainStage = mainStage;
-        initialize();
     }
 
-    public PomoFrame (PresetManager presetManager,
-                      Stage mainStage) {
+    public PomoFrame(PresetManager presetManager,
+                     PresetImporterExporter importerExporter,
+                     Stage mainStage) {
         this.presetManager = presetManager;
+        this.importerExporter = importerExporter;
         this.mainStage = mainStage;
-        initialize();
     }
 
     protected abstract void createTopBar();
@@ -172,6 +174,11 @@ public abstract class PomoFrame extends BorderPane implements UIRefreshable {
         mainStage.show();
     }
 
+    public enum ViewType {
+        DELETE_VIEW,
+        EXPORT_VIEW
+    }
+
     @Override
     public void refreshTopBar() {
         createTopBar();
@@ -191,11 +198,4 @@ public abstract class PomoFrame extends BorderPane implements UIRefreshable {
     public void refreshTaskListView() {
         taskPane.refreshTaskListView();
     }
-
-    public enum FrameType {
-        MAIN_FRAME,
-        DIALOG_FRAME,
-        MENU_FRAME
-    }
-
 }

@@ -1,6 +1,5 @@
-package org.pomotimo.logic;
+package org.pomotimo.logic.preset;
 
-import javafx.concurrent.Task;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

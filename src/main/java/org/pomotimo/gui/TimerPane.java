@@ -17,7 +17,7 @@ import org.pomotimo.gui.utils.UIRefreshable;
 import org.pomotimo.logic.utils.EditorMode;
 import org.pomotimo.logic.utils.PomoState;
 import org.pomotimo.logic.PomoTimer;
-import org.pomotimo.logic.PresetManager;
+import org.pomotimo.logic.preset.PresetManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

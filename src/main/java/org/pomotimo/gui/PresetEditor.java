@@ -10,12 +10,12 @@ import javafx.scene.layout.BorderPane;
 import java.io.IOException;
 
 import org.pomotimo.gui.utils.AlertFactory;
-import org.pomotimo.logic.Preset;
+import org.pomotimo.logic.preset.Preset;
 import org.pomotimo.logic.utils.EditorMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.pomotimo.logic.PresetManager;
+import org.pomotimo.logic.preset.PresetManager;
 
 public class PresetEditor extends BorderPane {
     private static final Logger logger = LoggerFactory.getLogger(PresetEditor.class);
@@ -67,7 +67,7 @@ public class PresetEditor extends BorderPane {
                     configureTimeField(longBreakField, String.format("%02d:%02d", pr.getDurationLongBreak() / 60, pr.getDurationLongBreak() % 60));
                     configureTextField(nameField, pr.getName());
                 } else {
-                    AlertFactory.createAlert(Alert.AlertType.WARNING, "No Profile Selected",
+                    AlertFactory.alert(Alert.AlertType.WARNING, "No Profile Selected",
                             "No Current Profile",
                             "Please select or create a profile in order to add a task!").showAndWait();
                 }
@@ -98,20 +98,20 @@ public class PresetEditor extends BorderPane {
     public void savePresetConfiguration() {
         logger.info("Saving preset");
         if(fieldEmpty(focusTimeField)){
-            AlertFactory.createEmptyTimeFieldAlert("Focus Time Field").showAndWait();
+            AlertFactory.emptyTimeFieldAlert("Focus Time Field").showAndWait();
             return;
         } else if(fieldEmpty(shortBreakField)) {
-            AlertFactory.createEmptyTimeFieldAlert("Short Break Field").showAndWait();
+            AlertFactory.emptyTimeFieldAlert("Short Break Field").showAndWait();
             return;
         } else if(fieldEmpty(longBreakField)) {
-            AlertFactory.createEmptyTimeFieldAlert("Long Break Field").showAndWait();
+            AlertFactory.emptyTimeFieldAlert("Long Break Field").showAndWait();
             return;
         }
         int focusSecs = extractTimeInSeconds(focusTimeField);
         int shortBrSecs = extractTimeInSeconds(shortBreakField);
         int longBrSecs = extractTimeInSeconds(longBreakField);
         if(nameField.getText() == null || nameField.getText().trim().isEmpty()) {
-            AlertFactory.createEmptyNameFieldAlert("Preset Name Field").showAndWait();
+            AlertFactory.emptyNameFieldAlert("Preset Name Field").showAndWait();
             return;
         }
         switch(mode) {

@@ -1,6 +1,9 @@
 package org.pomotimo.gui.frame;
 
 
+import java.io.File;
+import java.util.Optional;
+
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -14,15 +17,19 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import org.pomotimo.gui.ExportPresetView;
 import org.pomotimo.gui.TaskPane;
 import org.pomotimo.gui.TimerPane;
 import org.pomotimo.gui.utils.AlertFactory;
 import org.pomotimo.gui.utils.ElementsFactory;
-import org.pomotimo.logic.PresetManager;
+import org.pomotimo.logic.preset.Preset;
+import org.pomotimo.logic.preset.PresetManager;
 import org.pomotimo.logic.utils.EditorMode;
+import org.pomotimo.logic.utils.PresetImporterExporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,8 +37,10 @@ public class MainFrame extends PomoFrame {
     private static final Logger logger = LoggerFactory.getLogger(MainFrame.class);
 
     public MainFrame(PresetManager presetManager,
+                     PresetImporterExporter importerExporter,
                      Stage mainStage) {
-        super(presetManager, mainStage);
+        super(presetManager, importerExporter, mainStage);
+        initialize();
     }
 
     @Override
@@ -56,11 +65,14 @@ public class MainFrame extends PomoFrame {
             timerPane.showPresetEditor(EditorMode.ADD_NEW);
         });
 
+        importItem.setOnAction(e -> handleImportPreset());
+        exportItem.setOnAction(e -> handleExportPreset());
+
         editItem.setOnAction(e -> {
             if(presetManager.getCurrentPreset().isPresent()){
                 timerPane.showPresetEditor(EditorMode.EDIT_OLD);
             } else {
-                AlertFactory.createAlert(Alert.AlertType.WARNING, "Edit Not Possible",
+                AlertFactory.alert(Alert.AlertType.WARNING, "Edit Not Possible",
                         "No Current Profile",
                         "Please select or create a profile in order to edit it!").showAndWait();
             }
@@ -68,7 +80,8 @@ public class MainFrame extends PomoFrame {
         });
 
         deleteItem.setOnAction(ev -> {
-            MenuFrame menuFrame = new MenuFrame(presetManager, timerPane, taskPane, mainStage);
+            MenuFrame menuFrame = new MenuFrame(presetManager, importerExporter,
+                    timerPane, taskPane, mainStage, ViewType.DELETE_VIEW);
             menuFrame.show();
         });
 
@@ -120,6 +133,36 @@ public class MainFrame extends PomoFrame {
                 mainStage.setMaximized(!mainStage.isMaximized());
             }
         });
+    }
+
+    private void handleExportPreset() {
+        MenuFrame exportFrame = new MenuFrame(presetManager, importerExporter,
+                timerPane, taskPane, mainStage, ViewType.EXPORT_VIEW);
+        exportFrame.show();
+    }
+
+    private void handleImportPreset() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Import Preset");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("PomoTimo Preset Files", "*.pomo")
+        );
+
+        File file = fileChooser.showOpenDialog(mainStage);
+
+        if (file != null) {
+            Optional<Preset> importedPreset = importerExporter.importPreset(file);
+            if (importedPreset.isPresent()) {
+                refreshTimerPane();
+                refreshTaskPane();
+                refreshTopBar();
+                AlertFactory.alert(Alert.AlertType.INFORMATION, "Import Successful", "",
+                        "Preset '" + importedPreset.get().getName() + "' was imported.").showAndWait();
+            } else {
+                AlertFactory.alert(Alert.AlertType.ERROR, "Import Failed", "",
+                        "Could not import the preset from the selected file.").showAndWait();
+            }
+        }
     }
 
     @Override

@@ -1,7 +1,5 @@
 package org.pomotimo.gui.utils;
 
-import javax.swing.Icon;
-
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
@@ -13,7 +11,7 @@ public class AlertFactory {
     private static final Image ICON = new Image(AlertFactory.class.getResourceAsStream("/icons/logo_24x24.png"));
 
     /** Generic alert creation */
-    public static Alert createAlert(Alert.AlertType type, String title, String header, String content) {
+    public static Alert alert(Alert.AlertType type, String title, String header, String content) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(header);
@@ -31,8 +29,8 @@ public class AlertFactory {
     }
 
     /** Create alert for informing about an empty time field*/
-    public static Alert createEmptyTimeFieldAlert(String field) {
-        return createAlert(
+    public static Alert emptyTimeFieldAlert(String field) {
+        return alert(
                 Alert.AlertType.WARNING,
                 "Input required",
                 field,
@@ -40,8 +38,8 @@ public class AlertFactory {
         );
     }
 
-    public static Alert createEmptyNameFieldAlert(String field) {
-        return createAlert(
+    public static Alert emptyNameFieldAlert(String field) {
+        return alert(
                 Alert.AlertType.WARNING,
                 "Input required",
                 "Missing Name",

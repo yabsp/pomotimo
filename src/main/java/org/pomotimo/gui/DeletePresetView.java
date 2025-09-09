@@ -10,30 +10,30 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 
 import org.pomotimo.gui.utils.UIRefreshable;
-import org.pomotimo.logic.Preset;
-import org.pomotimo.logic.PresetManager;
+import org.pomotimo.logic.preset.Preset;
+import org.pomotimo.logic.preset.PresetManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DeleteMenu extends BorderPane {
-    private static final Logger logger = LoggerFactory.getLogger(DeleteMenu.class);
+public class DeletePresetView extends BorderPane {
+    private static final Logger logger = LoggerFactory.getLogger(DeletePresetView.class);
     private final PresetManager presetManager;
     private final UIRefreshable refresher;
     @FXML private ListView<Preset> checkList;
     @FXML private Button deleteBtn;
 
 
-    public DeleteMenu(PresetManager presetManager, UIRefreshable refresher) {
+    public DeletePresetView(PresetManager presetManager, UIRefreshable refresher) {
         this.presetManager = presetManager;
         this.refresher = refresher;
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DeleteMenu.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DeletePresetView.fxml"));
         loader.setRoot(this);
         loader.setController(this);
 
         try {
             loader.load();
         } catch (IOException e) {
-            logger.error("Failed to load DeleteMenu.fxml", e);
+            logger.error("Failed to load DeletePresetView.fxml", e);
         }
     }
 

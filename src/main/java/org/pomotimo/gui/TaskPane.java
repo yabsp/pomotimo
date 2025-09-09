@@ -16,9 +16,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 
-import org.pomotimo.logic.Preset;
-import org.pomotimo.logic.PresetManager;
-import org.pomotimo.logic.Task;
+import org.pomotimo.logic.preset.Preset;
+import org.pomotimo.logic.preset.PresetManager;
+import org.pomotimo.logic.preset.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
