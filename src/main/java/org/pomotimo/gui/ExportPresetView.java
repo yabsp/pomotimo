@@ -49,7 +49,7 @@ public class ExportPresetView extends BorderPane {
     public void initialize() {
         refreshPresetList();
         checkList.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.DELETE) {
+            if (event.getCode() == KeyCode.ENTER) {
                 exportPreset(checkList.getSelectionModel().getSelectedItem());
             }
         });
