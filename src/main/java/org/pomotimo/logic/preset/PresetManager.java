@@ -97,6 +97,7 @@ public class PresetManager {
     public boolean removePreset(Preset p) {
         boolean removed;
         synchronized (this) {
+            logger.debug("Removing preset: {}", p);
             removed = presets.remove(p);
             if(p.equals(currentPreset)) {
                 currentPreset = null;

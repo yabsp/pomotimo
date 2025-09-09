@@ -7,7 +7,12 @@ plugins {
 }
 
 group = 'org.pomotimo'
-version = '1.0'
+version = '1.1'
+
+ext {
+    appName = "Pomotimo"
+    appVersion = version
+}
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
@@ -86,8 +91,8 @@ jar {
     }
 }
 shadowJar {
-    archiveBaseName.set('pomotimo')
-    archiveVersion.set('1.0')
+    archiveBaseName.set(appName.toLowerCase())
+    archiveVersion.set(appVersion)
     archiveClassifier.set('')
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
@@ -97,7 +102,7 @@ shadowJar {
 
 task jpackageApp(type: Exec) {
     dependsOn shadowJar
-    def jarName = "pomotimo-1.0.jar"
+    def jarName = "${appName.toLowerCase()}-${appVersion}.jar"
     def appName = "Pomotimo"
 
     commandLine "jpackage",

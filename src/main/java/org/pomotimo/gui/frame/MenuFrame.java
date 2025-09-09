@@ -70,7 +70,7 @@ public class MenuFrame extends PomoFrame {
         BorderPane view;
         switch(viewType) {
             case DELETE_VIEW -> {
-                view = new DeletePresetView(presetManager, this);
+                view = new DeletePresetView(presetManager, (MainFrame) parentStage.getScene().getRoot());
                 mainStage.setTitle("Delete Presets");
             }
             case EXPORT_VIEW -> {

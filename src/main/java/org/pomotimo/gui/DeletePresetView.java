@@ -1,11 +1,13 @@
 package org.pomotimo.gui;
 
 import java.io.IOException;
+import java.util.List;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 
@@ -39,21 +41,23 @@ public class DeletePresetView extends BorderPane {
 
     @FXML
     public void initialize() {
+        checkList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         refreshPresetList();
         checkList.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.DELETE) {
-                deletePreset(checkList.getSelectionModel().getSelectedItem());
+                deletePreset(List.copyOf(checkList.getSelectionModel().getSelectedItems()));
             }
         });
         deleteBtn.setOnAction(e -> {
-            deletePreset(checkList.getSelectionModel().getSelectedItem());
+            deletePreset(checkList.getSelectionModel().getSelectedItems());
         });
     }
 
-    private void deletePreset(Preset p) {
-        Preset pr = checkList.getSelectionModel().getSelectedItem();
-        presetManager.removePreset(pr);
-        checkList.getItems().remove(pr);
+    private void deletePreset(List<Preset> pList) {
+        pList.forEach(pr -> {
+            presetManager.removePreset(pr);
+            checkList.getItems().remove(pr);
+        });
         refresher.refreshTimerPane();
         refresher.refreshTaskPane();
         refresher.refreshTopBar();
