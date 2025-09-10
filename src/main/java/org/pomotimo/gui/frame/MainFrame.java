@@ -32,9 +32,21 @@ import org.pomotimo.logic.utils.PresetImporterExporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Represents the main application window (frame) for Pomotimo.
+ * This class is responsible for constructing and managing the primary UI components,
+ * including the custom title bar, timer pane, and task pane.
+ */
 public class MainFrame extends PomoFrame {
     private static final Logger logger = LoggerFactory.getLogger(MainFrame.class);
 
+    /**
+     * Constructs the main application frame.
+     *
+     * @param presetManager The manager for handling application presets.
+     * @param importerExporter The utility for importing and exporting presets.
+     * @param mainStage The primary stage (window) of the application.
+     */
     public MainFrame(PresetManager presetManager,
                      PresetImporterExporter importerExporter,
                      Stage mainStage) {
@@ -42,6 +54,11 @@ public class MainFrame extends PomoFrame {
         initialize();
     }
 
+    /**
+     * Creates and configures the custom top bar for the main application window.
+     * This method builds the settings and preset menus, window control buttons (minimize, maximize, close),
+     * and attaches their respective event handlers. Overrides the method from {@link PomoFrame}.
+     */
     @Override
     protected void createTopBar() {
         this.topBar = new HBox();
@@ -164,6 +181,12 @@ public class MainFrame extends PomoFrame {
         }
     }
 
+    /**
+     * Initializes the main application frame's structure and appearance.
+     * This involves setting up the stage style, title, icon, creating the main content panes
+     * (TimerPane and TaskPane), and applying the necessary CSS stylesheets.
+     * Overrides the method from {@link PomoFrame}.
+     */
     @Override
     protected void initialize() {
         this.mainStage.initStyle(StageStyle.TRANSPARENT);

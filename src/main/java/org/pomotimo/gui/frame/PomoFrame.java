@@ -30,6 +30,11 @@ public abstract class PomoFrame extends BorderPane implements UIRefreshable {
     PresetImporterExporter importerExporter;
     final String ICON_PATH = "icons/logo_tomato_removebg.png";
 
+    public enum ViewType {
+        DELETE_VIEW,
+        EXPORT_VIEW
+    }
+
     public PomoFrame (PresetManager presetManager,
                       PresetImporterExporter importerExporter,
                       TimerPane timerPane,
@@ -172,11 +177,6 @@ public abstract class PomoFrame extends BorderPane implements UIRefreshable {
 
     public void show() {
         mainStage.show();
-    }
-
-    public enum ViewType {
-        DELETE_VIEW,
-        EXPORT_VIEW
     }
 
     @Override

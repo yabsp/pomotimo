@@ -21,21 +21,43 @@ import org.pomotimo.gui.utils.ElementsFactory;
 import org.pomotimo.logic.preset.PresetManager;
 import org.pomotimo.logic.utils.PresetImporterExporter;
 
+/**
+ * Represents a secondary, modal frame used for various menu dialogs like
+ * deleting or exporting presets. The specific content displayed is determined
+ * by a {@link ViewType} passed during construction.
+ */
 public class MenuFrame extends PomoFrame {
     private final Stage parentStage;
     private final ViewType viewType;
+
+    /**
+     * Constructs a new menu frame, which acts as a modal dialog window.
+     * The content of this frame is determined by the provided ViewType.
+     *
+     * @param presetManager The manager for handling application presets.
+     * @param importerExporter The utility for importing and exporting presets.
+     * @param timerPane A reference to the main application's TimerPane.
+     * @param taskPane A reference to the main application's TaskPane.
+     * @param parentStage The primary stage that owns this menu frame.
+     * @param viewType The type of view to display within this frame (e.g., {@link PomoFrame.ViewType#DELETE_VIEW}).
+     */
     public MenuFrame(PresetManager presetManager,
                      PresetImporterExporter importerExporter,
-                     TimerPane timerpane,
+                     TimerPane timerPane,
                      TaskPane taskPane,
                      Stage parentStage,
                      ViewType viewType) {
-        super(presetManager, importerExporter, timerpane, taskPane, new Stage());
+        super(presetManager, importerExporter, timerPane, taskPane, new Stage());
         this.parentStage = parentStage;
         this.viewType = viewType;
         initialize();
     }
 
+    /**
+     * Creates and configures the custom top bar for the menu window.
+     * This bar includes standard window controls and enables dragging.
+     * Overrides the method from {@link PomoFrame}.
+     */
     @Override
     protected void createTopBar() {
         this.topBar = new HBox();
@@ -65,6 +87,12 @@ public class MenuFrame extends PomoFrame {
 
     }
 
+    /**
+     * Initializes the menu frame based on the specified {@link ViewType}.
+     * This method sets up the window as a transparent, modal dialog, creates the
+     * appropriate content view (e.g., for deleting or exporting presets),
+     * and applies the necessary styles. Overrides the method from {@link PomoFrame}.
+     */
     @Override
     protected void initialize() {
         BorderPane view;

@@ -21,6 +21,11 @@ import org.pomotimo.logic.utils.PresetImporterExporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * A JavaFX view component that provides a user view for selecting a single
+ * {@link Preset} and exporting it to a file. This view is typically displayed
+ * in a secondary window or dialog.
+ */
 public class ExportPresetView extends BorderPane {
     private static final Logger logger = LoggerFactory.getLogger(ExportPresetView.class);
     private final PresetManager presetManager;
@@ -29,6 +34,13 @@ public class ExportPresetView extends BorderPane {
     @FXML private ListView<Preset> checkList;
     @FXML private Button exportBtn;
 
+    /**
+     * Constructs the ExportPresetView.
+     *
+     * @param presetManager The manager responsible for preset data logic, used to retrieve presets.
+     * @param importerExporter The utility for handling the preset export process.
+     * @param refresher An interface implementation for refreshing other UI components.
+     */
     public ExportPresetView(PresetManager presetManager,
                             PresetImporterExporter importerExporter, UIRefreshable refresher) {
         this.presetManager = presetManager;
@@ -45,6 +57,11 @@ public class ExportPresetView extends BorderPane {
         }
     }
 
+    /**
+     * Initializes the view after its root element has been processed.
+     * This method is automatically called by the FXML loader. It populates the preset list
+     * and sets up event handlers for the export button and keyboard shortcuts.
+     */
     @FXML
     public void initialize() {
         refreshPresetList();
@@ -58,6 +75,13 @@ public class ExportPresetView extends BorderPane {
         });
     }
 
+    /**
+     * Handles the logic for exporting the selected preset.
+     * It opens a file chooser dialog for the user to select a save location and
+     * then initiates the export process, showing a confirmation or error alert.
+     *
+     * @param p The preset selected in the list view.
+     */
     private void exportPreset(Preset p) {
         Preset pr = checkList.getSelectionModel().getSelectedItem();
         if (pr == null) {
@@ -91,9 +115,11 @@ public class ExportPresetView extends BorderPane {
 
     }
 
+    /**
+     * Clears and repopulates the list view with the current presets from the PresetManager.
+     */
     public void refreshPresetList() {
-        presetManager.getPresets().forEach(pr -> {
-            checkList.getItems().add(pr);
-        });
+        checkList.getItems().clear();
+        checkList.getItems().addAll(presetManager.getPresets());
     }
 }

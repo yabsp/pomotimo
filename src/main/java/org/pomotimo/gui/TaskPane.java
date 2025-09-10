@@ -22,6 +22,11 @@ import org.pomotimo.logic.preset.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * A JavaFX view component for managing the list of tasks associated with a preset.
+ * It allows users to add new tasks, delete existing ones, and reorder them
+ * using drag-and-drop functionality.
+ */
 public class TaskPane extends BorderPane {
 
     @FXML private ListView<Task> taskListView;
@@ -31,6 +36,11 @@ public class TaskPane extends BorderPane {
     private final PresetManager presetManager;
     private final Logger logger = LoggerFactory.getLogger(TaskPane.class);
 
+    /**
+     * Constructs the TaskPane.
+     *
+     * @param presetManager The manager for accessing and modifying the task list of the current preset.
+     */
     public TaskPane(PresetManager presetManager) {
         this.presetManager = presetManager;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TaskPane.fxml"));
@@ -177,12 +187,21 @@ public class TaskPane extends BorderPane {
         }
     }
 
+    /**
+     * Refreshes the task list view to display the tasks from the currently active preset.
+     */
     public void refreshTaskListView() {
         presetManager.getCurrentPreset().ifPresent(pr -> {
             taskListView.getItems().setAll(pr.getTasks());
         });
     }
 
+    /**
+     * Initializes or refreshes the entire UI of the task pane.
+     * This method sets up event handlers for the input field and add button,
+     * configures the list view's cell factory for context menus and drag-and-drop,
+     * and populates the list with tasks from the current preset.
+     */
     public void refreshUI() {
         addTaskButton.setOnAction(e -> addTask());
         taskInput.setOnAction(e -> addTaskButton.fire());

@@ -40,18 +40,40 @@ public class Task {
         this.priority = DEFAULT_PRIO;
     }
 
+    /**
+     * Gets the name of the task.
+     *
+     * @return The name of the task.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets the priority of the task.
+     *
+     * @return The priority value, where a lower number indicates higher priority.
+     */
     public int getPriority() {
         return priority;
     }
 
+    /**
+     * Sets the priority of the task.
+     *
+     * @param priority The new priority value. A lower number indicates higher priority.
+     */
     public void setPriority(int priority) {
         this.priority = priority;
     }
 
+    /**
+     * Compares this task to another object for equality.
+     * Two tasks are considered equal if they have the same name and priority.
+     *
+     * @param o The object to compare with this task.
+     * @return {@code true} if the objects are equal, {@code false} otherwise.
+     */
     @Override
     public boolean equals(Object o) {
         if (o == this) {
@@ -65,6 +87,11 @@ public class Task {
         return t.getName().equals(name) && t.getPriority() == priority;
     }
 
+    /**
+     * Returns a string representation of the task, including its name and priority.
+     *
+     * @return A formatted string, e.g., "My Task(1)".
+     */
     @Override
     public String toString() {
         return name + "(" + priority + ")";

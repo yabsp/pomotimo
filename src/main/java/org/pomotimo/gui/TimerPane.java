@@ -20,6 +20,11 @@ import org.pomotimo.logic.preset.PresetManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * A JavaFX view component that serves as the main timer display and control panel.
+ * It manages the visual representation of the countdown timer, provides user controls
+ * (start, pause, reset, skip), and handles the Pomodoro state logic (Focus, Short Break, Long Break).
+ */
 public class TimerPane extends BorderPane {
 
     private Logger logger = LoggerFactory.getLogger(TimerPane.class);
@@ -45,6 +50,12 @@ public class TimerPane extends BorderPane {
         LONGBR
     }
 
+    /**
+     * Constructs the TimerPane.
+     *
+     * @param presetManager The manager for accessing preset data, such as timer durations.
+     * @param refresher     An interface implementation used to refresh other UI components like the top bar.
+     */
     public TimerPane(PresetManager presetManager, UIRefreshable refresher) {
         this.presetManager = presetManager;
         this.refresher = refresher;
@@ -64,14 +75,20 @@ public class TimerPane extends BorderPane {
         refreshUI();
     }
 
+    /**
+     * Displays the {@link PresetEditor} within this pane, allowing the user to create or edit a preset.
+     *
+     * @param mode The mode for the editor, either {@link EditorMode#ADD_NEW} or {@link EditorMode#EDIT_OLD}.
+     */
     public void showPresetEditor(EditorMode mode){
         PresetEditor presetEditor = new PresetEditor(presetManager, this, mode);
         this.setCenter(presetEditor);
     }
 
     /**
-     * Sets up the UI of the timer if the {@link PresetManager} contains a Preset.
-     * Otherwise, show a "Create Preset" Button.
+     * Refreshes the user interface of the timer pane.
+     * If no presets exist, it displays a button to create a new one. Otherwise, it
+     * configures the timer display based on the currently selected preset.
      */
     public void refreshUI () {
         if(!presetManager.hasPresets()) {
@@ -169,10 +186,16 @@ public class TimerPane extends BorderPane {
         }
     }
 
+    /**
+     * Triggers a refresh of the main application's top bar via the refresher interface.
+     */
     public void refreshTopBar() {
         refresher.refreshTopBar();
     }
 
+    /**
+     * Triggers a refresh of the task list view via the refresher interface.
+     */
     public void refreshTaskListView() {
         refresher.refreshTaskListView();
     }

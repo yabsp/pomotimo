@@ -17,6 +17,11 @@ import org.pomotimo.logic.preset.PresetManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * A JavaFX view component that provides a user interface for selecting and deleting
+ * one or more {@link Preset} objects. This view is typically displayed in a
+ * secondary window or dialog.
+ */
 public class DeletePresetView extends BorderPane {
     private static final Logger logger = LoggerFactory.getLogger(DeletePresetView.class);
     private final PresetManager presetManager;
@@ -24,7 +29,12 @@ public class DeletePresetView extends BorderPane {
     @FXML private ListView<Preset> checkList;
     @FXML private Button deleteBtn;
 
-
+    /**
+     * Constructs the DeletePresetView.
+     *
+     * @param presetManager The manager responsible for preset data logic, used to delete presets.
+     * @param refresher     An interface implementation used to refresh the main application UI after deletion.
+     */
     public DeletePresetView(PresetManager presetManager, UIRefreshable refresher) {
         this.presetManager = presetManager;
         this.refresher = refresher;
@@ -39,6 +49,11 @@ public class DeletePresetView extends BorderPane {
         }
     }
 
+    /**
+     * Initializes the view after its root element has been processed.
+     * This method is automatically called by the FXML loader. It sets up the selection mode
+     * for the list view and wires up the event handlers for the delete button and keyboard shortcuts.
+     */
     @FXML
     public void initialize() {
         checkList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -53,6 +68,13 @@ public class DeletePresetView extends BorderPane {
         });
     }
 
+    /**
+     * Deletes the given list of presets from the application.
+     * It removes them from the PresetManager and the UI, then triggers a refresh
+     * of other UI components and schedules a save of the preset data.
+     *
+     * @param pList The list of {@link Preset} objects to be deleted.
+     */
     private void deletePreset(List<Preset> pList) {
         pList.forEach(pr -> {
             presetManager.removePreset(pr);
@@ -64,9 +86,12 @@ public class DeletePresetView extends BorderPane {
         presetManager.scheduleSave();
     }
 
+    /**
+     * Populates the list view with the current presets from the PresetManager.
+     * This can be used to initialize or refresh the list.
+     */
     public void refreshPresetList() {
-        presetManager.getPresets().forEach(pr -> {
-            checkList.getItems().add(pr);
-        });
+        checkList.getItems().clear();
+        checkList.getItems().addAll(presetManager.getPresets());
     }
 }

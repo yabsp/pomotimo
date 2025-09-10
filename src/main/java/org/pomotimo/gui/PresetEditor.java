@@ -96,7 +96,7 @@ public class PresetEditor extends BorderPane {
     }
 
     public void savePresetConfiguration() {
-        logger.info("Saving preset");
+        logger.debug("Saving preset");
         if(fieldEmpty(focusTimeField)){
             AlertFactory.emptyTimeFieldAlert("Focus Time Field").showAndWait();
             return;

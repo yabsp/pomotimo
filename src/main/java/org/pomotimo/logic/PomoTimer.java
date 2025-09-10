@@ -5,10 +5,9 @@ import java.util.TimerTask;
 import java.util.function.Consumer;
 
 /**
- * Provides timer functionality.
- * Start, pause and reset the timer.
+ * Provides basic countdown timer functionality using a {@link java.util.Timer}.
+ * This class allows for starting, pausing, and resetting a timer that ticks every second.
  */
-
 public class PomoTimer {
 
     private Timer timer;
@@ -57,7 +56,6 @@ public class PomoTimer {
     /**
      * Stops the current timer. If no timer exists does nothing.
      */
-
     private void stop() {
         if (timer != null) {
             timer.cancel();
@@ -75,14 +73,31 @@ public class PomoTimer {
             stop();
         }
     }
+
+    /**
+     * Gets the number of seconds currently remaining on the timer.
+     *
+     * @return The remaining time in seconds.
+     */
     public int getRemainingSeconds() {
         return this.remainingSeconds;
     }
 
+    /**
+     * Sets the total duration of the timer. This should be called before starting the timer
+     * to define its countdown period.
+     *
+     * @param seconds The total time in seconds for the countdown.
+     */
     public void setRemainingSeconds(int seconds) {
         this.remainingSeconds = seconds;
     }
 
+    /**
+     * Checks if the timer is currently active and counting down.
+     *
+     * @return {@code true} if the timer is running, {@code false} otherwise.
+     */
     public boolean isRunning(){
         return running;
     }

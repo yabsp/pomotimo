@@ -87,58 +87,114 @@ public class Preset {
     }
 
     // --- Getters & Setters ---
+    /**
+     * Gets the name of the preset.
+     * @return The name of the preset.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the name of the preset.
+     * @param name The new name for the preset.
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Gets the duration of the focus period in seconds.
+     * @return The focus duration in seconds.
+     */
     public int getDurationFocus() {
         return durationFocus;
     }
 
+    /**
+     * Sets the duration of the focus period.
+     * @param duration The new focus duration in seconds.
+     */
     public void setDurationFocus(int duration) {
         this.durationFocus = duration;
     }
 
+    /**
+     * Gets the duration of the short break period in seconds.
+     * @return The short break duration in seconds.
+     */
     public int getDurationShortBreak() {
         return durationShortBreak;
     }
 
+    /**
+     * Sets the duration of the short break period.
+     * @param duration The new short break duration in seconds.
+     */
     public void setDurationShortBreak(int duration) {
         this.durationShortBreak = duration;
     }
 
+    /**
+     * Gets the duration of the long break period in seconds.
+     * @return The long break duration in seconds.
+     */
     public int getDurationLongBreak() {
         return durationLongBreak;
     }
 
+    /**
+     * Sets the duration of the long break period.
+     * @param duration The new long break duration in seconds.
+     */
     public void setDurationLongBreak(int duration) {
         this.durationLongBreak = duration;
     }
 
+    /**
+     * Gets the file path for the alarm sound.
+     * @return The path to the sound file.
+     */
     public String getSoundFile() {
         return soundFile;
     }
 
+    /**
+     * Sets the file path for the alarm sound.
+     * @param soundFile The new path to the sound file.
+     */
     public void setSoundFile(String soundFile) {
         this.soundFile = soundFile;
     }
 
+    /**
+     * Gets the file path for the user image.
+     * @return The path to the image file.
+     */
     public String getImageFile() {
         return imageFile;
     }
 
+    /**
+     * Sets the file path for the user image.
+     * @param imageFile The new path to the image file.
+     */
     public void setImageFile(String imageFile) {
         this.imageFile = imageFile;
     }
 
+    /**
+     * Gets the number of tasks associated with this preset.
+     * @return The total count of tasks.
+     */
     public int getTaskAmount() {
         return tasks.size();
     }
 
+    /**
+     * Gets the list of tasks associated with this preset.
+     * @return The list of {@link Task} objects.
+     */
     public List<Task> getTasks() {
         return tasks;
     }
@@ -166,6 +222,11 @@ public class Preset {
         return tasks.remove(t);
     }
 
+    /**
+     * Returns a string representation of the preset, including its name and timer durations.
+     *
+     * @return A formatted string summarizing the preset's configuration.
+     */
     @Override
     public String toString() {
         return name + " (focus: " + String.format("%02d:%02d", durationFocus / 60, durationFocus % 60)
@@ -173,6 +234,13 @@ public class Preset {
                 + ", long break: " + String.format("%02d:%02d", durationLongBreak / 60, durationLongBreak % 60) + ")";
     }
 
+    /**
+     * Compares this preset to another object for equality.
+     * Two presets are considered equal if their name, durations, file paths, and task lists are all identical.
+     *
+     * @param o The object to compare with this preset.
+     * @return {@code true} if the objects are equal, {@code false} otherwise.
+     */
     @Override
     public boolean equals(Object o){
         if (o == this) {
