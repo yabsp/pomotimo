@@ -99,7 +99,7 @@ public class MainFrame extends PomoFrame {
                 prItem.setSelected(true);
                 timerPane.refreshUI();
                 taskPane.refreshTaskListView();
-                logger.info("Switched to preset: {}", pr);
+                logger.debug("Switched to preset: {}", pr);
             });
             switchMenu.getItems().add(prItem);
         });

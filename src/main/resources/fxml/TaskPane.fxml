@@ -10,7 +10,7 @@
 
 
 <?import javafx.scene.control.ListView?>
-<fx:root maxHeight="Infinity" maxWidth="Infinity" style="-fx-background-color: #1e1f22;" stylesheets="@../css/generalstyle.css, @../css/titlebar.css" type="BorderPane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="Infinity" maxWidth="Infinity" style="-fx-background-color: #1e1f22;" stylesheets="@../css/generalstyle.css, @../css/titlebar.css" type="BorderPane" xmlns="http://javafx.com/javafx/22.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <top>
         <HBox>
             <Label style="-fx-font-size: 18px; -fx-text-fill: white;" text="Focus Tasks" styleClass="focus-task-title"/>

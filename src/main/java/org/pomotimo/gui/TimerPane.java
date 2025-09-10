@@ -15,15 +15,10 @@ import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.pomotimo.gui.utils.UIRefreshable;
 import org.pomotimo.logic.utils.EditorMode;
-import org.pomotimo.logic.utils.PomoState;
 import org.pomotimo.logic.PomoTimer;
 import org.pomotimo.logic.preset.PresetManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static org.pomotimo.logic.utils.PomoState.FOCUS;
-import static org.pomotimo.logic.utils.PomoState.LONGBR;
-import static org.pomotimo.logic.utils.PomoState.SHORTBR;
 
 public class TimerPane extends BorderPane {
 
@@ -43,6 +38,12 @@ public class TimerPane extends BorderPane {
     private int focusSec;
     private int shortBrSec;
     private int longBrSec;
+
+    private enum PomoState {
+        FOCUS,
+        SHORTBR,
+        LONGBR
+    }
 
     public TimerPane(PresetManager presetManager, UIRefreshable refresher) {
         this.presetManager = presetManager;
@@ -86,7 +87,7 @@ public class TimerPane extends BorderPane {
             createPresetButton.setOnAction(e -> showPresetEditor(EditorMode.ADD_NEW));
             this.setCenter(createPresetButton);
         } else {
-            logger.info("Refreshing UI with a Preset");
+            logger.debug("Refreshing UI with a Preset");
             timerContainer.setVisible(true);
             timerContainer.setManaged(true);
             this.setCenter(timerContainer);
@@ -145,27 +146,20 @@ public class TimerPane extends BorderPane {
         switch (state) {
             case FOCUS:
                 if(cycleCounter >= 4) {
-                    state = LONGBR;
+                    state = PomoState.LONGBR;
                     cycleCounter = 1;
                     timer.setRemainingSeconds(longBrSec);
                     stateLabel.setText("Long Break");
                     timerLabel.setText(String.format("%02d:%02d", longBrSec / 60, longBrSec % 60));
                 } else {
-                    state = SHORTBR;
+                    state = PomoState.SHORTBR;
                     cycleCounter += 1;
                     timer.setRemainingSeconds(shortBrSec);
                     stateLabel.setText("Short Break");
                     timerLabel.setText(String.format("%02d:%02d", shortBrSec / 60, shortBrSec % 60));
                 }
                 break;
-            case SHORTBR:
-                state = FOCUS;
-                stateLabel.setText("Focus");
-                cycleLabel.setText("Cycle: " + cycleCounter + " / 4");
-                timer.setRemainingSeconds(focusSec);
-                timerLabel.setText(String.format("%02d:%02d", focusSec / 60, focusSec % 60));
-                break;
-            case LONGBR:
+            case SHORTBR, LONGBR:
                 state = PomoState.FOCUS;
                 stateLabel.setText("Focus");
                 cycleLabel.setText("Cycle: " + cycleCounter + " / 4");

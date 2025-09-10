@@ -10,7 +10,7 @@
 
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<fx:root maxHeight="Infinity" maxWidth="Infinity" style="-fx-background-color: #1e1f22;" stylesheets="@../css/generalstyle.css" type="BorderPane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="Infinity" maxWidth="Infinity" style="-fx-background-color: #1e1f22;" stylesheets="@../css/generalstyle.css" type="BorderPane" xmlns="http://javafx.com/javafx/22.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <center>
         <VBox fx:id="timerContainer" alignment="CENTER" prefHeight="111.0" prefWidth="202.0" spacing="10" VBox.vgrow="ALWAYS">
             <Label fx:id="stateLabel" style="-fx-font-size: 2em; -fx-text-fill: orange;" text="Focus" />
