@@ -56,6 +56,7 @@ public class TaskPane extends BorderPane {
 
     @FXML
     private void initialize(){
+        this.setOnMousePressed(event -> this.requestFocus());
         refreshUI();
     }
 

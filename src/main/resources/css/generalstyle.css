@@ -1,39 +1,17 @@
+/* --- Root Variables and Base Styles --- */
 .root {
-    -fx-text-fill: white;          /* Default text color */
-    -fx-font-family: "Segoe UI";   /* Default font family */
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-base: #1e1f22; /* Base color for controls */
+    -fx-background: #1e1f22;
+    -fx-accent-color: #ff6347; /* Tomato color */
+    -fx-text-color: #e0e0e0;
 }
 
 .label, .button, .text {
-    -fx-font-smoothing-type: lcd;  /* or gray */
+    -fx-font-smoothing-type: lcd;
 }
 
-.button {
-    -fx-background-color: #2e2e2e;
-    -fx-text-fill: white;
-}
-
-.text-field {
-    -fx-font-size: 1.2em;
-    -fx-background-color: #c5c5c5;
-    -fx-prompt-text-fill: #555555;
-}
-
-.list-view {
-    -fx-background-color: #2e2e2e;
-}
-
-.list-cell {
-    -fx-background-color: #202020;
-    -fx-text-fill: white;
-    -fx-font-size: 1.3em;
-}
-
-.list-cell:filled:selected:focused, .list-cell:filled:selected {
-    -fx-background-color: linear-gradient(#ff4d41 0%, #ff2c26 25%, #f81418 75%, #e00313 100%);
-    -fx-text-fill: white;
-}
-
-.window-close-btn {
+.close-btn {
     -fx-background-color: #2e2e2e;
     -fx-text-fill: white;
     -fx-font-size: 1.3em;
@@ -43,15 +21,15 @@
     -fx-border-radius: 4;
 }
 
-.window-close-btn .label {
+.close-btn .label {
     -fx-text-fill: white;
 }
 
-.window-close-btn .arrow-button {
+.close-btn .arrow-button {
     -fx-background-color: transparent;
 }
 
-.window-close-btn:hover {
+.close-btn:hover {
     -fx-background-color: #3a3a3a;
     -fx-cursor: hand;
 }
@@ -79,31 +57,6 @@
     -fx-cursor: hand;
 }
 
-.tomato-button {
-    -fx-padding: 0;
-    -fx-border-width: 0;
-    -fx-background-radius: 10%;
-
-    -fx-min-width: 3em;
-    -fx-min-height: 2em;
-    -fx-max-width: 5em;
-    -fx-max-height: 2.5em;
-
-    -fx-background-color: linear-gradient(#ff4d41 0%, #ff2c26 25%, #f81418 75%, #e00313 100%);
-    -fx-text-fill: white;
-    -fx-font-size: 1.5em;
-    -fx-font-weight: bold;
-
-    /* Smooth transition for animation */
-    -fx-transition: -fx-background-color 0.3s, -fx-effect 0.3s;
-}
-
-.tomato-button:hover {
-    -fx-cursor: hand;
-    -fx-background-color: linear-gradient(#ff6f65 0%, #ff4943 25%, #ff2e31 75%, #c81e29 100%);
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0.3, 2, 2);
-}
-
 .create-preset-button {
     -fx-min-width: 120;
     -fx-min-height: 35;
@@ -115,12 +68,135 @@
     -fx-cursor: hand;
 }
 
-.focus-task-title {
-    -fx-font-size: 1.5em;
+/* --- Timer Pane Style --- */
+
+/* Style for the root pane */
+.root-pane {
+    -fx-background-color: #2b2d30;
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+}
+
+/* Style for label (timer focus/break) */
+.state-label {
+    -fx-font-size: 2em;
+    -fx-text-fill: #ff6347;
     -fx-font-weight: bold;
 }
 
-.list-view {
-    -fx-background-color: #202020;
+/* Style for the main timer digits */
+.timer-label {
+    -fx-font-size: 4.5em;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e0e0e0;
 }
 
+/* Style for label (timer cycle)*/
+.cycle-label {
+    -fx-font-size: 1.5em;
+    -fx-text-fill: #808080;
+}
+
+/* Primary action button (timer start) */
+.action-button {
+    -fx-background-color: #ff6347;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-padding: 8 15;
+    -fx-cursor: hand;
+
+    -fx-pref-width: 70px;
+    -fx-pref-height: 40px;
+}
+.action-button:hover {
+        -fx-background-color: derive(#ff6347, 20%);
+}
+
+/* Secondary button (timer reset) */
+.secondary-button {
+    -fx-background-color: #5a5d61;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-padding: 8 15;
+    -fx-cursor: hand;
+
+    -fx-pref-width: 70px;
+    -fx-pref-height: 40px;
+}
+.secondary-button:hover {
+    -fx-background-color: #6e7175;
+}
+
+/* Button with only an icon */
+.icon-button {
+    -fx-background-color: transparent;
+    -fx-padding: 8;
+    -fx-background-radius: 50%; /* circle shape */
+    -fx-cursor: hand;
+    -fx-pref-width: 40px;
+    -fx-pref-height: 40px;
+}
+.icon-button:hover {
+    -fx-background-color: #404245;
+}
+
+/* --- Task Pane ---- */
+.pane-title {
+    -fx-font-size: 1.5em;
+    -fx-text-fill: -fx-text-color;
+    -fx-font-weight: bold;
+}
+
+.task-list-view {
+    -fx-background-color: #2b2d30;
+    -fx-border-color: #404245;
+    -fx-border-width: 1 0 1 0;
+}
+
+.task-list-view .list-cell:filled {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-color;
+    -fx-border-color: transparent transparent #404245 transparent;
+    -fx-border-width: 1;
+}
+
+.task-list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-color;
+    -fx-font-size: 1.1em;
+    -fx-padding: 10 15;
+    -fx-border-color: transparent transparent #404245 transparent;
+    -fx-border-width: 1;
+}
+
+/* This rule still works correctly to remove the border from the very last visible item */
+.task-list-view .list-cell {
+    -fx-border-color: transparent;
+}
+
+.task-list-view .list-cell:filled:hover {
+    -fx-background-color: #404245;
+}
+
+.task-list-view .list-cell:filled:selected {
+    -fx-background-color: -fx-accent-color;
+    -fx-text-fill: white;
+}
+
+/* --- Text Fields --- */
+.form-text-field {
+    -fx-background-color: #1e1f22;
+    -fx-text-fill: -fx-text-color;
+    -fx-border-color: #404245;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-font-size: 1.1em;
+    -fx-prompt-text-fill: #707070;
+}
+
+.form-text-field:focused {
+    -fx-border-color: -fx-accent-color;
+}

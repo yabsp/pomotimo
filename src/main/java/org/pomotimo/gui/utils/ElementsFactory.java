@@ -65,7 +65,7 @@ public class ElementsFactory {
         FontIcon closeIcon = new FontIcon(FontAwesomeSolid.WINDOW_CLOSE);
         closeIcon.setIconColor(Color.WHITE);
         closeBtn.setGraphic(closeIcon);
-        closeBtn.getStyleClass().add("topbar-button");
+        closeBtn.getStyleClass().add("topbar-close-button");
 
         return closeBtn;
     }

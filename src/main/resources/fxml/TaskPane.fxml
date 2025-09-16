@@ -1,36 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.BorderPane?>
-
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.geometry.Insets?>
-
-
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<fx:root maxHeight="Infinity" maxWidth="Infinity" style="-fx-background-color: #1e1f22;" stylesheets="@../css/generalstyle.css, @../css/titlebar.css" type="BorderPane" xmlns="http://javafx.com/javafx/22.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<fx:root styleClass="root-pane" stylesheets="@../css/generalstyle.css" type="BorderPane" xmlns="http://javafx.com/javafx/22.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <top>
-        <HBox>
-            <Label style="-fx-font-size: 18px; -fx-text-fill: white;" text="Focus Tasks" styleClass="focus-task-title"/>
-         <padding>
-            <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
-         </padding>
+        <HBox alignment="CENTER">
+            <padding>
+                <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+            </padding>
+            <Label styleClass="pane-title" text="Focus Tasks" />
         </HBox>
     </top>
 
     <center>
-        <ListView fx:id="taskListView" maxHeight="Infinity" maxWidth="Infinity" />
+        <ListView fx:id="taskListView" styleClass="task-list-view" />
     </center>
 
     <bottom>
-        <HBox alignment="CENTER" prefHeight="55.0" prefWidth="248.0" spacing="10" HBox.hgrow="ALWAYS">
-            <TextField fx:id="taskInput" prefHeight="28.0" prefWidth="157.0" promptText="New task..." />
-            <Button fx:id="addTaskButton" prefHeight="23.0" prefWidth="54.0" styleClass="window-close-btn" text="Add" />
-         <padding>
-            <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
-         </padding>
+        <HBox alignment="CENTER" spacing="10">
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
+            </padding>
+            <TextField fx:id="taskInput" HBox.hgrow="ALWAYS" promptText="Add a new task..." styleClass="form-text-field" />
+
+            <Button fx:id="addTaskButton" styleClass="action-button" text="Add" />
         </HBox>
     </bottom>
 </fx:root>

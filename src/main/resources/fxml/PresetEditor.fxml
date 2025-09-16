@@ -15,7 +15,7 @@
 <fx:root style="-fx-background-color: #1e1f22;" stylesheets="@../css/generalstyle.css" type="BorderPane" xmlns="http://javafx.com/javafx/22.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <top>
         <HBox fx:id="topBox" alignment="CENTER_RIGHT">
-            <Button fx:id="closeBtn" styleClass="window-close-btn">
+            <Button fx:id="closeBtn" styleClass="close-btn">
                 <graphic>
                     <FontIcon iconColor="white" iconLiteral="fas-window-close" />
                 </graphic>

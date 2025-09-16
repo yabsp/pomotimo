@@ -9,7 +9,7 @@
     -fx-alignment: center-left;
 }
 
-/* Base styling for buttons and menu buttons in the title bar */
+/* --- Normal Button --- */
 .topbar-button {
     -fx-background-color: #2e2e2e;
     -fx-text-fill: white;
@@ -20,7 +20,6 @@
     -fx-border-radius: 4;
 }
 
-/* Force the text inside MenuButtons to be white */
 .topbar-button .label {
     -fx-text-fill: white;
 }
@@ -31,6 +30,31 @@
 
 .topbar-button:hover {
     -fx-background-color: #3a3a3a;
+    -fx-cursor: hand;
+}
+
+/* --- Close Buton ---*/
+.topbar-close-button {
+    -fx-background-color: #2e2e2e;
+    -fx-text-fill: white;
+    -fx-font-size: 1em;
+    -fx-padding: 0 8; /* Top/Bottom, Left/Right*/
+    -fx-background-radius: 4;
+    -fx-border-color: transparent;
+    -fx-border-radius: 4;
+}
+
+/* Force the text inside MenuButtons to be white */
+.topbar-close-button .label {
+    -fx-text-fill: white;
+}
+
+.topbar-close-button .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.topbar-close-button:hover {
+    -fx-background-color: #c42b1c;
     -fx-cursor: hand;
 }
 
