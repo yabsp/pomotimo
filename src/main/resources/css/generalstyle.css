@@ -74,7 +74,7 @@
 .root-pane {
     -fx-background-color: #2b2d30;
     -fx-background-radius: 8;
-    -fx-padding: 10;
+    -fx-padding: 2;
 }
 
 /* Style for label (timer focus/break) */
@@ -126,6 +126,22 @@
     -fx-pref-height: 40px;
 }
 .secondary-button:hover {
+    -fx-background-color: #6e7175;
+}
+
+/* Wider version */
+.secondary-wide-button {
+    -fx-background-color: #5a5d61;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-padding: 8 15;
+    -fx-cursor: hand;
+
+    -fx-pref-width: 140px;
+    -fx-pref-height: 40px;
+}
+.secondary-wide-button:hover {
     -fx-background-color: #6e7175;
 }
 

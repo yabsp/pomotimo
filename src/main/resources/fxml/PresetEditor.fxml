@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.BorderPane?>
-
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.geometry.Insets?>
-
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<fx:root style="-fx-background-color: #1e1f22;" stylesheets="@../css/generalstyle.css" type="BorderPane" xmlns="http://javafx.com/javafx/22.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root styleClass="root-pane" stylesheets="@../css/generalstyle.css" type="BorderPane" xmlns="http://javafx.com/javafx/22.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <top>
         <HBox fx:id="topBox" alignment="CENTER_RIGHT">
             <Button fx:id="closeBtn" styleClass="close-btn">
@@ -23,43 +22,44 @@
         </HBox>
     </top>
     <center>
-        <VBox spacing="10.0">
-            <HBox spacing="250.0">
-                <Label style="-fx-font-size: 1.3em; -fx-text-fill: white;" text="Focus" />
-                <TextField fx:id="focusTimeField" layoutX="20" layoutY="20" prefHeight="23.0" prefWidth="80.0" promptText="MM:SS" />
-            </HBox>
-            <HBox spacing="210.0">
-                <Label style="-fx-font-size: 1.3em; -fx-text-fill: white;" text="Short Break" />
-                <TextField fx:id="shortBreakField" layoutX="20" layoutY="20" prefWidth="80" promptText="MM:SS" />
-            </HBox>
-            <HBox spacing="213.0">
-                <Label style="-fx-font-size: 1.3em; -fx-text-fill: white;" text="Long Break" />
-                <TextField fx:id="longBreakField" layoutX="20" layoutY="20" prefWidth="80" promptText="MM:SS" />
-            </HBox>
-            <HBox spacing="84.0">
-                <Label style="-fx-font-size: 1.3em; -fx-text-fill: white;" text="Name of your profile" />
-                <TextField fx:id="nameField" layoutX="20" layoutY="20" prefHeight="23.0" prefWidth="142.0" promptText="e.g. New Preset" />
-            </HBox>
-         <padding>
-            <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
-         </padding>
-        </VBox>
+        <GridPane hgap="10" vgap="15">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
+            </padding>
+            <columnConstraints>
+                <ColumnConstraints hgrow="NEVER" minWidth="120.0" />
+                <ColumnConstraints hgrow="ALWAYS" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+            </rowConstraints>
 
+            <Label styleClass="form-label" text="Focus Time" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <TextField fx:id="focusTimeField" promptText="MM:SS" styleClass="form-text-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
+            <Label styleClass="form-label" text="Short Break" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <TextField fx:id="shortBreakField" promptText="MM:SS" styleClass="form-text-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+            <Label styleClass="form-label" text="Long Break" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <TextField fx:id="longBreakField" promptText="MM:SS" styleClass="form-text-field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+            <Label styleClass="form-label" text="Preset Name" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+            <TextField fx:id="nameField" promptText="e.g. Study Session" styleClass="form-text-field" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+        </GridPane>
     </center>
-   <bottom>
-      <HBox fx:id="bottomBox" alignment="CENTER_RIGHT" spacing="15">
-         <children>
-             <Button fx:id="setDefaultsBtn" mnemonicParsing="false" styleClass="save-btn" text="Reset to Defaults" />
-             <Button fx:id="saveBtn" mnemonicParsing="false" styleClass="save-btn" text="Save" />
-         </children>
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
-         <padding>
-            <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
-         </padding>
-      </HBox>
-   </bottom>
-
+    <bottom>
+        <HBox fx:id="bottomBox" alignment="CENTER_RIGHT" spacing="15">
+            <padding>
+                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+            </padding>
+            <children>
+                <Button fx:id="setDefaultsBtn" mnemonicParsing="false" styleClass="secondary-wide-button" text="Reset to Defaults" />
+                <Button fx:id="saveBtn" mnemonicParsing="false" styleClass="action-button" text="Save" />
+            </children>
+        </HBox>
+    </bottom>
 </fx:root>
