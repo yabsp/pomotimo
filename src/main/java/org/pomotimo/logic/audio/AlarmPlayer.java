@@ -82,4 +82,21 @@ public class AlarmPlayer {
     public boolean isPlaying() {
         return playing;
     }
+
+    /**
+     *
+     * @return true if the player is muted
+     * false otherwise.
+     */
+    public boolean isMute() {
+        return player.isMute();
+    }
+
+    /**
+     *
+     * @param m true to mute, false to unmute
+     */
+    public void setMute(boolean m) {
+        player.setMute(m);
+    }
 }

@@ -146,6 +146,51 @@ public class PresetManager {
         scheduleSave();
     }
 
+    /**
+     * Starts the alarm player if not running.
+     */
+    public void startPlayer() {
+        if(!player.isPlaying()) {
+            player.play();
+
+        }
+    }
+
+    /**
+     * Stops the alarm player if running.
+     */
+    public void stopPlayer() {
+        if(player.isPlaying()) {
+            player.stop();
+        }
+
+    }
+
+    /**
+     *
+     * @return true if the player is mute,
+     * false otherwise.
+     */
+    public boolean isPlayerMute() {
+        return player.isMute();
+    }
+
+    /**
+     * Set mute status of the player.
+     * @param m true to mute, false to unmute.
+     */
+    public void setMutePlayer(boolean m) {
+        player.setMute(m);
+    }
+
+    /**
+     *
+     * @return true if the {@link PresetManager#player} is playing and false otherwise.
+     */
+    public boolean isPlaying() {
+        return player.isPlaying();
+    }
+
     /* --- Other Utility Methods --- */
 
     /**
