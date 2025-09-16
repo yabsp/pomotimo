@@ -5,11 +5,11 @@
 <?import javafx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.*?>
 
-<fx:root style="-fx-background-color: #1e1f22;" stylesheets="@../css/generalstyle.css" type="BorderPane" xmlns="http://javafx.com/javafx/22.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root styleClass="root-pane" stylesheets="@../css/generalstyle.css" type="BorderPane" xmlns="http://javafx.com/javafx/22.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <center>
         <VBox spacing="7.0">
-            <Label fx:id="deleteLbl" style="-fx-text-fill: white;" text="Select items to export:" />
-            <ListView fx:id="checkList" />
+            <Label fx:id="exportLbl" styleClass="pane-title" text="Select items to export:" />
+            <ListView fx:id="checkList" styleClass="task-list-view"/>
             <padding>
                 <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
             </padding>
@@ -17,9 +17,9 @@
     </center>
     <bottom>
         <HBox fx:id="bottomBox" alignment="CENTER_RIGHT" spacing="15">
-        <Button fx:id="exportBtn" alignment="CENTER_RIGHT" styleClass="window-close-btn" text="Export Selected">
+        <Button fx:id="exportBtn" alignment="CENTER_RIGHT" styleClass="close-btn" text="Export Selected">
             <graphic>
-                <FontIcon iconColor="white" iconLiteral="fas-file-export" styleClass="window-close-btn" />
+                <FontIcon iconColor="white" iconLiteral="fas-file-export" styleClass="close-btn" />
             </graphic>
         </Button>
         </HBox>

@@ -9,11 +9,11 @@
 <?import javafx.scene.layout.BorderPane?>
 
 <?import javafx.scene.layout.HBox?>
-<fx:root style="-fx-background-color: #1e1f22;" stylesheets="@../css/generalstyle.css" type="BorderPane" xmlns="http://javafx.com/javafx/22.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root styleClass="root-pane" stylesheets="@../css/generalstyle.css" type="BorderPane" xmlns="http://javafx.com/javafx/22.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <center>
         <VBox spacing="7.0">
-        <Label fx:id="deleteLbl" style="-fx-text-fill: white;" text="Select items to delete:" />
-        <ListView fx:id="checkList"/>
+        <Label fx:id="deleteLbl" styleClass="pane-title" text="Select items to delete:" />
+        <ListView fx:id="checkList" styleClass="task-list-view"/>
         <padding>
             <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
         </padding>
@@ -21,9 +21,9 @@
     </center>
     <bottom>
         <HBox fx:id="bottomBox" alignment="CENTER_RIGHT" spacing="15">
-            <Button fx:id="deleteBtn" text="Delete Selected" styleClass="window-close-btn">
+            <Button fx:id="deleteBtn" text="Delete Selected" styleClass="close-btn">
                 <graphic>
-                    <FontIcon iconColor="white" iconLiteral="far-trash-alt" styleClass="window-close-btn" />
+                    <FontIcon iconColor="white" iconLiteral="far-trash-alt" styleClass="close-btn" />
                 </graphic>
             </Button>
         </HBox>
