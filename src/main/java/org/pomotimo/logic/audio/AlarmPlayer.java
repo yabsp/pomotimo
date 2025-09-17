@@ -27,6 +27,7 @@ public class AlarmPlayer {
         this.soundUri = Objects.requireNonNull(getClass()
                 .getResource("/sounds/winter_vivaldi.mp3")).toExternalForm();
         newUri = true;
+        player = new MediaPlayer(new Media(soundUri));
     }
 
     /**

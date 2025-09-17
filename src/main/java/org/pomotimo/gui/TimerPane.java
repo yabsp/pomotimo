@@ -85,6 +85,7 @@ public class TimerPane extends BorderPane {
         updateSoundIcon();
         updatePlayIcon();
         soundToggleBtn.setOnAction(e -> {
+            if(presetManager.isPlaying())
             presetManager.setMutePlayer(soundOn);
             soundOn = !soundOn;
             updateSoundIcon();
