@@ -1,0 +1,57 @@
+# first draft, KI generated with comments
+name: Build and Release
+
+on:
+  push:
+    branches: ["main"]
+    tags: ["v*"] # Trigger on version tags like v1.0.0
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    # Run the job on both Ubuntu and Windows
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      # 1. Check out repository code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Set up JDK 21 (Temurin distribution)
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      # 3. Make gradlew executable (only on Linux)
+      - name: Make gradlew executable
+        if: runner.os == 'Linux'
+        run: chmod +x ./gradlew
+
+      # 4. Build the application (Gradle + jpackage)
+      - name: Build with Gradle
+        run: ./gradlew jpackage
+
+      # 5. Upload build artifacts (installers for inspection)
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Pomotimo-${{ matrix.os }}
+          path: build/jpackage/Pomotimo/
+
+      # 6. Create GitHub Release and upload assets (only for tags)
+      - name: Create Release and Upload Assets
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true # Set to false to auto-publish
+          body: "Release for version ${{ github.ref_name }}"
+          files: |
+            build/jpackage/Pomotimo/*.exe
+            build/jpackage/Pomotimo/*.deb
