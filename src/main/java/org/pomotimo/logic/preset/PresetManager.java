@@ -266,4 +266,12 @@ public class PresetManager {
             scheduler.shutdown();
         }
     }
+
+    /**
+     * Check if a preset is contained in the preset manager's preset list.
+     * @return true if the preset manager contains the preset and false if not.
+     */
+    public boolean contains(Preset p) {
+        return presets.contains(p);
+    }
 }

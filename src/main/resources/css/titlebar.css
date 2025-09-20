@@ -1,6 +1,5 @@
-/* Style custom title bar */
 .custom-title-bar {
-    -fx-background-color: #2e2e2e; /* Dark grey */
+    -fx-background-color: #2e2e2e;
     -fx-border-color: #444;
     -fx-border-width: 0 0 1px 0; /* Bottom border only */
     -fx-border-style: solid;
@@ -46,7 +45,6 @@
     -fx-padding: 5 14;
 }
 
-/* Force the text inside MenuButtons to be white */
 .topbar-close-button .label {
     -fx-text-fill: white;
 }

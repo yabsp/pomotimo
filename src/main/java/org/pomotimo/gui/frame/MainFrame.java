@@ -78,15 +78,15 @@ public class MainFrame extends PomoFrame {
         MenuItem editItem = new MenuItem("Edit Current");
         MenuItem deleteItem = new MenuItem("Delete");
         createItem.setOnAction(e -> {
-            timerPane.showPresetEditor(EditorMode.ADD_NEW);
+            timerPane.showPresetEditor(new Preset("preset"+ (presetManager.getPresetCount() + 1)));
         });
 
         importItem.setOnAction(e -> handleImportPreset());
         exportItem.setOnAction(e -> handleExportPreset());
 
         editItem.setOnAction(e -> {
-            if(presetManager.getCurrentPreset().isPresent()){
-                timerPane.showPresetEditor(EditorMode.EDIT_OLD);
+            if (presetManager.getCurrentPreset().isPresent()) {
+                timerPane.showPresetEditor(presetManager.getCurrentPreset().get());
             } else {
                 AlertFactory.alert(Alert.AlertType.WARNING, "Edit Not Possible",
                         "No Current Preset",

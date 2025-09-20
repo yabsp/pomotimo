@@ -20,13 +20,13 @@ public class Preset {
     private ArrayList<Task> tasks;
 
     /* Default for paths is empty path */
-    public final String DEFAULT_PATH = "";
+    public static final String DEFAULT_PATH = "";
     /* 25 minutes in seconds */
-    public final int DEFAULT_FOCUS_TIME = 1500;
+    public static final int DEFAULT_FOCUS_TIME = 1500;
     /* 5 minutes in seconds */
-    public final int DEFAULT_SHORT_BR_TIME = 300;
+    public static final int DEFAULT_SHORT_BR_TIME = 300;
     /* 15 minutes in seconds */
-    public final int DEFAULT_LONG_BR_TIME = 900;
+    public static final int DEFAULT_LONG_BR_TIME = 900;
 
     /**
      * No-arg constructor for Gson deserialization.
@@ -99,8 +99,9 @@ public class Preset {
      * Sets the name of the preset.
      * @param name The new name for the preset.
      */
-    public void setName(String name) {
+    public Preset setName(String name) {
         this.name = name;
+        return this;
     }
 
     /**
@@ -115,8 +116,9 @@ public class Preset {
      * Sets the duration of the focus period.
      * @param duration The new focus duration in seconds.
      */
-    public void setDurationFocus(int duration) {
+    public Preset setDurationFocus(int duration) {
         this.durationFocus = duration;
+        return this;
     }
 
     /**
@@ -131,8 +133,9 @@ public class Preset {
      * Sets the duration of the short break period.
      * @param duration The new short break duration in seconds.
      */
-    public void setDurationShortBreak(int duration) {
+    public Preset setDurationShortBreak(int duration) {
         this.durationShortBreak = duration;
+        return this;
     }
 
     /**
@@ -147,8 +150,9 @@ public class Preset {
      * Sets the duration of the long break period.
      * @param duration The new long break duration in seconds.
      */
-    public void setDurationLongBreak(int duration) {
+    public Preset setDurationLongBreak(int duration) {
         this.durationLongBreak = duration;
+        return this;
     }
 
     /**
@@ -163,8 +167,9 @@ public class Preset {
      * Sets the file path for the alarm sound.
      * @param soundFile The new path to the sound file.
      */
-    public void setSoundFile(String soundFile) {
+    public Preset setSoundFile(String soundFile) {
         this.soundFile = soundFile;
+        return this;
     }
 
     /**
@@ -179,8 +184,9 @@ public class Preset {
      * Sets the file path for the user image.
      * @param imageFile The new path to the image file.
      */
-    public void setImageFile(String imageFile) {
+    public Preset setImageFile(String imageFile) {
         this.imageFile = imageFile;
+        return this;
     }
 
     /**

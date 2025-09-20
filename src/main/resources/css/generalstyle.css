@@ -187,7 +187,6 @@
     -fx-border-width: 1;
 }
 
-/* This rule still works correctly to remove the border from the very last visible item */
 .task-list-view .list-cell {
     -fx-border-color: transparent;
 }

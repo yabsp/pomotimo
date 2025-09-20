@@ -10,14 +10,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-import java.awt.Font;
 import java.io.IOException;
 import java.util.List;
 
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.pomotimo.gui.utils.UIRefreshable;
-import org.pomotimo.logic.utils.EditorMode;
+import org.pomotimo.logic.preset.Preset;
 import org.pomotimo.logic.PomoTimer;
 import org.pomotimo.logic.preset.PresetManager;
 import org.slf4j.Logger;
@@ -29,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * (start, pause, reset, skip), and handles the Pomodoro state logic (Focus, Short Break, Long Break).
  */
 public class TimerPane extends BorderPane {
-    private Logger logger = LoggerFactory.getLogger(TimerPane.class);
+    private static final Logger logger = LoggerFactory.getLogger(TimerPane.class);
     @FXML private Button soundToggleBtn;
     @FXML private Button playBtn;
     @FXML private Label timerLabel;
@@ -48,7 +47,7 @@ public class TimerPane extends BorderPane {
     private int shortBrSec;
     private int longBrSec;
     private boolean soundOn = true;
-    private List<FontIcon> iconList = List.of(new FontIcon(FontAwesomeSolid.VOLUME_UP),
+    private final List<FontIcon> iconList = List.of(new FontIcon(FontAwesomeSolid.VOLUME_UP),
             new FontIcon(FontAwesomeSolid.VOLUME_MUTE),
             new FontIcon(FontAwesomeSolid.PLAY),
             new FontIcon(FontAwesomeSolid.PAUSE));
@@ -81,12 +80,13 @@ public class TimerPane extends BorderPane {
 
     @FXML
     private void initialize() {
-        iconList.forEach(i -> initIcon(i));
+        iconList.forEach(this::initIcon);
         updateSoundIcon();
         updatePlayIcon();
         soundToggleBtn.setOnAction(e -> {
-            if(presetManager.isPlaying())
-            presetManager.setMutePlayer(soundOn);
+            if(presetManager.isPlaying()) {
+                presetManager.setMutePlayer(soundOn);
+            }
             soundOn = !soundOn;
             updateSoundIcon();
         });
@@ -106,11 +106,11 @@ public class TimerPane extends BorderPane {
     /**
      * Displays the {@link PresetEditor} within this pane, allowing the user to create or edit a preset.
      *
-     * @param mode The mode for the editor, either {@link EditorMode#ADD_NEW} or {@link EditorMode#EDIT_OLD}.
+     * @param p The preset to be edited.
      */
 
-    public void showPresetEditor(EditorMode mode){
-        PresetEditor presetEditor = new PresetEditor(presetManager, this, mode);
+    public void showPresetEditor(Preset p){
+        PresetEditor presetEditor = new PresetEditor(presetManager, this, p);
         this.setCenter(presetEditor);
     }
 
@@ -130,7 +130,8 @@ public class TimerPane extends BorderPane {
             plusIcon.setIconSize(18);
             createPresetButton.setGraphic(plusIcon);
             createPresetButton.getStyleClass().add("create-preset-button");
-            createPresetButton.setOnAction(e -> showPresetEditor(EditorMode.ADD_NEW));
+            createPresetButton.setOnAction(e ->
+                    showPresetEditor(new Preset("preset" + (presetManager.getPresetCount() + 1))));
             this.setCenter(createPresetButton);
         } else {
             logger.debug("Refreshing UI with a Preset");
@@ -148,7 +149,7 @@ public class TimerPane extends BorderPane {
 
     private void updateSoundIcon() {
         if (soundOn) {
-            soundToggleBtn.setGraphic(iconList.get(0));
+            soundToggleBtn.setGraphic(iconList.getFirst());
             soundToggleBtn.setTooltip(new Tooltip("Mute Sound"));
         } else {
             soundToggleBtn.setGraphic(iconList.get(1));
