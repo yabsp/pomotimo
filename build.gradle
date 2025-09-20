@@ -2,6 +2,7 @@ plugins {
     id 'application'
     id 'checkstyle'
     id 'org.openjfx.javafxplugin' version '0.1.0'
+    id 'org.beryx.jlink' version '3.0.1'
     id 'java'
     id("com.gradleup.shadow") version "9.1.0"
 }
@@ -9,50 +10,52 @@ plugins {
 group = 'org.pomotimo'
 version = '1.1'
 
-ext {
-    appName = "Pomotimo"
-    appVersion = version
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-}
-
-application {
-    mainClass.set('org.pomotimo.Launcher')
-    mainModule.set('org.pomotimo')
-    applicationDefaultJvmArgs = []
-}
-
 repositories {
     mavenCentral()
 }
 
+ext {
+    appName = "Pomotimo"
+    appVersion = version
+    javafxVersion = '22.0.1'
+    junitVersion = '5.10.0'
+    ikonliVersion = '12.3.1'
+    slf4jVersion = '2.0.17'
+    logbackVersion = '1.4.11'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+}
+
+application {
+    mainModule = 'org.pomotimo'
+    mainClass = 'org.pomotimo.gui.PomotimoGUI'
+}
+
 dependencies {
-    implementation 'org.openjfx:javafx-controls:22.0.1'
-    implementation 'org.openjfx:javafx-base:22.0.1'
-    implementation 'org.openjfx:javafx-fxml:22.0.1'
-    implementation 'org.openjfx:javafx-graphics:22.0.1'
+    implementation "org.openjfx:javafx-controls:${javafxVersion}"
+    implementation "org.openjfx:javafx-base:${javafxVersion}"
+    implementation "org.openjfx:javafx-fxml:${javafxVersion}"
+    implementation "org.openjfx:javafx-graphics:${javafxVersion}"
 
     //Icons for title bar etc.
-    implementation 'org.kordamp.ikonli:ikonli-javafx:12.3.1'
-    implementation 'org.kordamp.ikonli:ikonli-fontawesome5-pack:12.3.1'
+    implementation "org.kordamp.ikonli:ikonli-javafx:${ikonliVersion}"
+    implementation "org.kordamp.ikonli:ikonli-fontawesome5-pack:${ikonliVersion}"
 
     // unit tests
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation platform("org.junit:junit-bom:${junitVersion}")
+    testImplementation "org.junit.jupiter:junit-jupiter"
 
     // java native access (e.g. for window snapping in windows)
-    implementation 'net.java.dev.jna:jna:5.17.0'
-    implementation 'net.java.dev.jna:jna-platform:5.17.0'
+    implementation "net.java.dev.jna:jna:5.17.0"
+    implementation "net.java.dev.jna:jna-platform:5.17.0"
 
     //google gson for object serialization
-    implementation 'com.google.code.gson:gson:2.13.1'
+    implementation "com.google.code.gson:gson:2.13.1"
 
-    // logger, https://mvnrepository.com/artifact/org.slf4j/slf4j-api
-    implementation("org.slf4j:slf4j-api:2.0.17")
-    runtimeOnly 'ch.qos.logback:logback-classic:1.4.11'
+    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+    runtimeOnly "ch.qos.logback:logback-classic:${logbackVersion}"
 }
 
 test {
@@ -61,7 +64,7 @@ test {
 
 javafx {
     version = "22.0.1"
-    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.swing' ]
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.swing']
 }
 
 run {
@@ -114,6 +117,6 @@ task jpackageApp(type: Exec) {
             "--win-dir-chooser",
             "--win-menu",
             "--win-shortcut",
-            "--icon", "assets/app_icon_2.ico",
+            "--icon", "assets/app_icon.ico",
             "--dest", "./build/jpackage"
 }
