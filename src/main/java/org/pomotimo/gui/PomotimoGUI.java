@@ -18,6 +18,10 @@ public class PomotimoGUI extends Application {
     private static MainFrame mainFrame;
     private static final Logger logger = LoggerFactory.getLogger(PomotimoGUI.class);
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage stage) {
         PomotimoGUI.presetManager = new PresetManager();

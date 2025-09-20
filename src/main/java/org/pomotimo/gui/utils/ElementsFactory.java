@@ -18,7 +18,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
  * window control buttons and spacers, ensuring a consistent appearance.
  */
 public class ElementsFactory {
-    static final String ICON_SM_PATH = "icons/logo_24x24.png";
+    static final String ICON_SM_PATH = "/icons/logo_24x24.png";
 
     /**
      * Private constructor to prevent instantiation of this utility class.
@@ -77,7 +77,7 @@ public class ElementsFactory {
      * @return A configured {@link ImageView} containing the application icon.
      */
     public static ImageView appIcon() {
-        ImageView appIcon = new ImageView(new Image(ICON_SM_PATH));
+        ImageView appIcon = new ImageView(new Image(ElementsFactory.class.getResourceAsStream(ICON_SM_PATH)));
         appIcon.setFitHeight(18);
         appIcon.setFitWidth(18);
         HBox.setMargin(appIcon, new Insets(0, 5, 0, 10));

@@ -2,7 +2,7 @@ plugins {
     id 'application'
     id 'checkstyle'
     id 'org.openjfx.javafxplugin' version '0.1.0'
-    id 'org.beryx.jlink' version '3.0.1'
+    id 'org.beryx.jlink' version '3.1.3'
     id 'java'
     id("com.gradleup.shadow") version "9.1.0"
 }
@@ -80,16 +80,11 @@ task createJavadoc(type: Javadoc) {
     classpath += configurations.compileClasspath
 }
 
-task buildAll(type: GradleBuild) {
-    tasks = ['build', 'createJavadoc']
-    doLast {
-        // additional actions after the build
-    }
-}
 jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
         attributes(
-                'Main-Class': 'org.pomotimo.Launcher'
+                'Main-Class': 'org.pomotimo.PomotimoGUI'
         )
     }
 }
@@ -99,24 +94,31 @@ shadowJar {
     archiveClassifier.set('')
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
-        attributes 'Main-Class': 'org.pomotimo.Launcher'
+        attributes 'Main-Class': 'org.pomotimo.PomotimoGUI'
     }
 }
 
-task jpackageApp(type: Exec) {
-    dependsOn shadowJar
-    def jarName = "${appName.toLowerCase()}-${appVersion}.jar"
-    def appName = "Pomotimo"
+jlink {
+    options = ['--strip-debug', '--no-header-files', '--no-man-pages']
+    launcher {
+        name = 'pomotimo'
+    }
+    jpackage {
+        imageName = 'Pomotimo'
 
-    commandLine "jpackage",
-            "--input", "build/libs",
-            "--main-jar", jarName,
-            "--main-class", "org.pomotimo.Launcher",
-            "--name", appName,
-            "--type", "exe",
-            "--win-dir-chooser",
-            "--win-menu",
-            "--win-shortcut",
-            "--icon", "assets/app_icon.ico",
-            "--dest", "./build/jpackage"
+        def os = org.gradle.internal.os.OperatingSystem.current()
+        if (os.isWindows()) {
+            icon = 'src/main/resources/assets/app_icon.ico'
+            installerType = 'exe'
+            installerOptions = ['--win-menu', '--win-shortcut', '--win-dir-chooser']
+        } else if (os.isLinux()) {
+            icon = 'src/main/resources/assets/app_icon.png'
+            installerType = 'deb' // or 'rpm'
+            installerOptions = ['--linux-shortcut', '--linux-menu-group', 'Office']
+        } else if (os.isMacOsX()) {
+            icon = 'src/main/resources/assets/app_icon.icns'
+            installerType = 'dmg'
+            installerOptions = ['--mac-package-name', 'Pomotimo']
+        }
+    }
 }
