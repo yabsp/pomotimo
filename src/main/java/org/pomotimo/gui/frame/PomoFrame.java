@@ -28,7 +28,7 @@ public abstract class PomoFrame extends BorderPane implements UIRefreshable {
     HBox topBar;
     PresetManager presetManager;
     PresetImporterExporter importerExporter;
-    final String ICON_PATH = "/icons/logo_tomato_removebg.png";
+    final String ICON_PATH = "/icons/app_icon.png";
 
     public enum ViewType {
         DELETE_VIEW,

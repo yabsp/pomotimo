@@ -18,7 +18,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
  * window control buttons and spacers, ensuring a consistent appearance.
  */
 public class ElementsFactory {
-    static final String ICON_SM_PATH = "/icons/logo_24x24.png";
+    static final String ICON_SM_PATH = "/icons/app_icon_24x24.png";
 
     /**
      * Private constructor to prevent instantiation of this utility class.

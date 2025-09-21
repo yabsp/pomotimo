@@ -15,9 +15,9 @@ import java.util.Objects;
 public class AlertFactory {
 
     private static final Image LOGO = new Image(Objects.requireNonNull(AlertFactory.class.
-            getResourceAsStream("/icons/logo_tomato_removebg.png")));
+            getResourceAsStream("/icons/app_icon.png")));
     private static final Image ICON = new Image(Objects.requireNonNull(AlertFactory.class.
-            getResourceAsStream("/icons/logo_24x24.png")));
+            getResourceAsStream("/icons/app_icon_24x24.png")));
 
     /**
      * Private constructor to prevent instantiation of this utility class.
