@@ -1,6 +1,7 @@
 package org.pomotimo.gui.frame;
 
 import java.io.File;
+import java.util.Objects;
 import java.util.Optional;
 
 import javafx.application.Platform;
@@ -191,7 +192,12 @@ public class MainFrame extends PomoFrame {
     protected void initialize() {
         this.mainStage.initStyle(StageStyle.TRANSPARENT);
         this.mainStage.setTitle("Pomotimo");
-        this.mainStage.getIcons().add(new Image(ICON_PATH));
+        try {
+            String iconURI = getClass().getResource(ICON_PATH).toExternalForm();
+            this.mainStage.getIcons().add(new Image(iconURI));
+        } catch (NullPointerException e) {
+            logger.error("Icon path is null.", e);
+        }
 
         createFrameEffects();
         makeWindowResizable();
@@ -212,6 +218,12 @@ public class MainFrame extends PomoFrame {
         Scene scene = new Scene(this, 900, 500);
         scene.setFill(Color.TRANSPARENT);
         this.mainStage.setScene(scene);
-        this.mainStage.getScene().getStylesheets().addAll("css/titlebar.css", "css/generalstyle.css");
+        try {
+            String titlebarCSS = getClass().getResource("/css/titlebar.css").toExternalForm();
+            String styleCSS = getClass().getResource("/css/generalstyle.css").toExternalForm();
+            this.mainStage.getScene().getStylesheets().addAll(titlebarCSS, styleCSS);
+        } catch (NullPointerException e) {
+            logger.error("Stylesheets not found.", e);
+        }
     }
 }

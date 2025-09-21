@@ -49,11 +49,14 @@ public class ExportPresetView extends BorderPane {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ExportPresetView.fxml"));
         loader.setRoot(this);
         loader.setController(this);
+
         try {
             loader.load();
-        } catch (
-                IOException e) {
-            logger.error("Failed to load DeletePresetView.fxml", e);
+            getStylesheets().add(getClass().getResource("/css/generalstyle.css").toExternalForm());
+        } catch (IOException e) {
+            logger.error("Failed to load ExportPresetView.fxml", e);
+        } catch (NullPointerException e) {
+            logger.error("Stylesheet not found", e);
         }
     }
 

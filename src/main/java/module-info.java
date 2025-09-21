@@ -31,10 +31,5 @@ module org.pomotimo {
     opens org.pomotimo.logic to com.google.gson;
     opens org.pomotimo.logic.audio to com.google.gson;
 
-    opens fxml;
-    opens icons;
-    opens sounds;
-    opens css;
-
 }
 

@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class PomoFrame extends BorderPane implements UIRefreshable {
-    private static final Logger logger = LoggerFactory.getLogger(PomoFrame.class);
+    protected static final Logger logger = LoggerFactory.getLogger(PomoFrame.class);
     double xOffset = 0;
     double yOffset = 0;
     boolean resizing = false;
@@ -28,7 +28,7 @@ public abstract class PomoFrame extends BorderPane implements UIRefreshable {
     HBox topBar;
     PresetManager presetManager;
     PresetImporterExporter importerExporter;
-    final String ICON_PATH = "icons/logo_tomato_removebg.png";
+    final String ICON_PATH = "/icons/logo_tomato_removebg.png";
 
     public enum ViewType {
         DELETE_VIEW,

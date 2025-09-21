@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<fx:root styleClass="root-pane" stylesheets="@../css/generalstyle.css" type="BorderPane" xmlns="http://javafx.com/javafx/22.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root styleClass="root-pane" type="BorderPane" xmlns="http://javafx.com/javafx/22.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <center>
         <VBox spacing="7.0">
         <Label fx:id="deleteLbl" styleClass="pane-title" text="Select items to delete:" />

@@ -41,9 +41,11 @@ public class PresetEditor extends BorderPane {
 
         try {
             loader.load();
-        } catch (
-                IOException e) {
-            throw new RuntimeException("Failed to load PresetEditor.fxml", e);
+            getStylesheets().add(getClass().getResource("/css/generalstyle.css").toExternalForm());
+        } catch (IOException e) {
+            logger.error("Failed to load PresetEditor.fxml", e);
+        } catch (NullPointerException e) {
+            logger.error("Stylesheet not found", e);
         }
     }
 

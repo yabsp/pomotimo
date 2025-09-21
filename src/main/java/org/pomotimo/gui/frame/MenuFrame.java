@@ -1,5 +1,7 @@
 package org.pomotimo.gui.frame;
 
+import java.util.Objects;
+
 import javax.swing.text.View;
 
 import javafx.scene.Scene;
@@ -110,7 +112,12 @@ public class MenuFrame extends PomoFrame {
         mainStage.initStyle(StageStyle.TRANSPARENT);
         mainStage.initModality(Modality.WINDOW_MODAL);
         mainStage.initOwner(parentStage);
-        mainStage.getIcons().add(new Image(ICON_PATH));
+        try {
+            String iconURI = getClass().getResource(ICON_PATH).toExternalForm();
+            this.mainStage.getIcons().add(new Image(iconURI));
+        } catch (NullPointerException e) {
+            logger.error("Icon path is null.", e);
+        }
 
         createTopBar();
         this.setCenter(view);
@@ -119,7 +126,12 @@ public class MenuFrame extends PomoFrame {
         Scene scene = new Scene(this, 600, 300);
         scene.setFill(Color.TRANSPARENT);
         mainStage.setScene(scene);
-        mainStage.getScene().getStylesheets().addAll("css/titlebar.css", "css/generalstyle.css");
+        try {
+            String titlebarCSS = getClass().getResource("/css/titlebar.css").toExternalForm();
+            String styleCSS = getClass().getResource("/css/generalstyle.css").toExternalForm();
+            this.mainStage.getScene().getStylesheets().addAll(titlebarCSS, styleCSS);
+        } catch (NullPointerException e) {
+            logger.error("Stylesheets not found.", e);
+        }
     }
-
 }

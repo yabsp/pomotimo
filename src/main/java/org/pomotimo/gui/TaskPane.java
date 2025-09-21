@@ -49,8 +49,11 @@ public class TaskPane extends BorderPane {
 
         try {
             loader.load();
+            getStylesheets().add(getClass().getResource("/css/generalstyle.css").toExternalForm());
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load TimerPane.fxml", e);
+            logger.error("Failed to load TaskPane.fxml", e);
+        } catch (NullPointerException e) {
+            logger.error("Stylesheet not found", e);
         }
     }
 
