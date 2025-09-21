@@ -1,4 +1,3 @@
-# first draft, KI generated with comments
 name: Build and Release
 
 on:
@@ -56,7 +55,7 @@ jobs:
           draft: true # Set to false to auto-publish
           body: "Release for version ${{ github.ref_name }}"
           files: |
-            build/jpackage/**/*.exe
-            build/jpackage/**/*.msi
-            build/jpackage/**/*.deb
-            build/jpackage/**/*.rpm
+            build/jpackage/*.exe
+            build/jpackage/*.msi
+            build/jpackage/*.deb
+            build/jpackage/*.rpm
