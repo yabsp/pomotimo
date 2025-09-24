@@ -19,6 +19,8 @@ public class Preset {
     private String imageFile;
     private ArrayList<Task> tasks;
 
+    private String soundName;
+
     /* Default for paths is empty path */
     public static final String DEFAULT_PATH = "";
     /* 25 minutes in seconds */
@@ -83,7 +85,8 @@ public class Preset {
         this.durationLongBreak = DEFAULT_LONG_BR_TIME;
         this.soundFile = DEFAULT_PATH;
         this.imageFile = DEFAULT_PATH;
-        this.tasks = new ArrayList<Task>();
+        this.soundName = DEFAULT_PATH;
+        this.tasks = new ArrayList<>();
     }
 
     // --- Getters & Setters ---

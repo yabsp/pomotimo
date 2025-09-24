@@ -68,6 +68,10 @@
     -fx-cursor: hand;
 }
 
+.create-preset-button:focused {
+    -fx-border-color: -fx-accent-color;
+}
+
 /* --- Timer Pane Style --- */
 
 /* Style for the root pane */
