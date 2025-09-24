@@ -5,10 +5,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.function.UnaryOperator;
 
 import org.pomotimo.gui.utils.AlertFactory;
 import org.pomotimo.logic.preset.Preset;
@@ -25,6 +27,7 @@ public class PresetEditor extends BorderPane {
     @FXML private TextField shortBreakField;
     @FXML private TextField longBreakField;
     @FXML private TextField nameField;
+    @FXML private TextField cycleField;
     @FXML private Button saveBtn;
     @FXML private Button setDefaultsBtn;
     private final PresetManager presetManager;
@@ -78,7 +81,7 @@ public class PresetEditor extends BorderPane {
     }
 
     public void savePresetConfiguration() {
-        logger.debug("Saving preset");
+        logger.debug("Save preset button pressed.");
         if (fieldEmpty(focusTimeField)) {
             AlertFactory.emptyTimeFieldAlert("Focus Time Field").showAndWait();
             return;
@@ -87,6 +90,10 @@ public class PresetEditor extends BorderPane {
             return;
         } else if (fieldEmpty(longBreakField)) {
             AlertFactory.emptyTimeFieldAlert("Long Break Field").showAndWait();
+            return;
+        } else if (fieldEmpty(cycleField)) {
+            AlertFactory.alert(Alert.AlertType.WARNING, "Input Required", "Cycle Amount Field",
+                    "Please enter an amount of Pomo Cycles.").showAndWait();
             return;
         }
         int focusSecs = extractTimeInSeconds(focusTimeField);
@@ -99,7 +106,8 @@ public class PresetEditor extends BorderPane {
         currentPreset.setName(nameField.getText())
                      .setDurationFocus(focusSecs)
                      .setDurationShortBreak(shortBrSecs)
-                     .setDurationLongBreak(longBrSecs);
+                     .setDurationLongBreak(longBrSecs)
+                     .setCycleAmount(Integer.parseInt(cycleField.getText()));
 
         if (!presetManager.contains(currentPreset)) {
             presetManager.addPreset(currentPreset);
@@ -113,6 +121,19 @@ public class PresetEditor extends BorderPane {
 
     private void configureTextField(TextField field, String initialValue) {
         field.setText(initialValue);
+    }
+
+    private void configureIntField(TextField field, int i) {
+        field.setText(String.valueOf(i));
+        UnaryOperator<TextFormatter.Change> integerFilter = change -> {
+            String newText = change.getControlNewText();
+            if (newText.matches("\\d*")) {
+                return change;
+            }
+            return null;
+        };
+        TextFormatter<String> formatter = new TextFormatter<>(integerFilter);
+        field.setTextFormatter(formatter);
     }
 
     private boolean fieldEmpty(TextField field) {
@@ -130,13 +151,15 @@ public class PresetEditor extends BorderPane {
                 configureTimeField(focusTimeField, String.format("%02d:%02d", currentPreset.getDurationFocus() / 60, currentPreset.getDurationFocus() % 60));
                 configureTimeField(shortBreakField, String.format("%02d:%02d", currentPreset.getDurationShortBreak() / 60, currentPreset.getDurationShortBreak() % 60));
                 configureTimeField(longBreakField, String.format("%02d:%02d", currentPreset.getDurationLongBreak() / 60, currentPreset.getDurationLongBreak() % 60));
+                configureIntField(cycleField, currentPreset.getCycleAmount());
                 configureTextField(nameField, currentPreset.getName());
             }
 
             case RESET -> {
-                configureTimeField(focusTimeField, "25:00");
-                configureTimeField(shortBreakField, "05:00");
-                configureTimeField(longBreakField, "15:00");
+                configureTimeField(focusTimeField, String.format("%02d:%02d", Preset.DEFAULT_FOCUS_TIME / 60, Preset.DEFAULT_FOCUS_TIME % 60));
+                configureTimeField(shortBreakField, String.format("%02d:%02d", Preset.DEFAULT_SHORT_BR_TIME / 60, Preset.DEFAULT_SHORT_BR_TIME % 60));
+                configureTimeField(longBreakField, String.format("%02d:%02d", Preset.DEFAULT_LONG_BR_TIME / 60, Preset.DEFAULT_LONG_BR_TIME % 60));
+                configureIntField(cycleField, Preset.DEFAULT_CYCLE_AMOUNT);
                 configureTextField(nameField, currentPreset.getName());
 
             }

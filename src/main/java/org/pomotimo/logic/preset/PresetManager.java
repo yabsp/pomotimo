@@ -121,6 +121,7 @@ public class PresetManager {
      * @return {@code true} if the preset was successfully removed, {@code false} otherwise.
      */
     public boolean removePreset(Preset p) {
+        logger.debug("Size of preset list: {}", presets.size());
         boolean removed;
         synchronized (this) {
             logger.debug("Removing preset: {}", p);

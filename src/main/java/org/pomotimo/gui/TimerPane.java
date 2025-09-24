@@ -46,6 +46,7 @@ public class TimerPane extends BorderPane {
     private int focusSec;
     private int shortBrSec;
     private int longBrSec;
+    private int cycleAmount;
     private boolean soundOn = true;
     private final List<FontIcon> iconList = List.of(new FontIcon(FontAwesomeSolid.VOLUME_UP),
             new FontIcon(FontAwesomeSolid.VOLUME_MUTE),
@@ -137,7 +138,7 @@ public class TimerPane extends BorderPane {
                     showPresetEditor(new Preset("preset" + (presetManager.getPresetCount() + 1))));
             this.setCenter(createPresetButton);
         } else {
-            logger.debug("Refreshing UI with a Preset");
+            logger.debug("Refreshing UI with a Preset.");
             timerContainer.setVisible(true);
             timerContainer.setManaged(true);
             this.setCenter(timerContainer);
@@ -178,7 +179,9 @@ public class TimerPane extends BorderPane {
             focusSec = pr.getDurationFocus();
             shortBrSec = pr.getDurationShortBreak();
             longBrSec = pr.getDurationLongBreak();
+            cycleAmount = pr.getCycleAmount();
             timerLabel.setText(String.format("%02d:%02d", focusSec / 60, focusSec % 60));
+            cycleLabel.setText("Cycle: " + cycleCounter + " / " + cycleAmount);
 
             timer.setRemainingSeconds(focusSec);
             startBtn.setOnAction(e -> {
@@ -206,7 +209,6 @@ public class TimerPane extends BorderPane {
                     });
                     startBtn.setText("Stop");
                 }
-
             });
             resetBtn.setOnAction(e -> {
                 if(timer.isRunning()){
@@ -222,7 +224,7 @@ public class TimerPane extends BorderPane {
     private void setNewPomoState() {
         switch (state) {
             case FOCUS:
-                if(cycleCounter >= 4) {
+                if(cycleCounter >= cycleAmount) {
                     state = PomoState.LONGBR;
                     cycleCounter = 1;
                     timer.setRemainingSeconds(longBrSec);
@@ -239,7 +241,7 @@ public class TimerPane extends BorderPane {
             case SHORTBR, LONGBR:
                 state = PomoState.FOCUS;
                 stateLabel.setText("Focus");
-                cycleLabel.setText("Cycle: " + cycleCounter + " / 4");
+                cycleLabel.setText("Cycle: " + cycleCounter + " / " + cycleAmount);
                 timer.setRemainingSeconds(focusSec);
                 timerLabel.setText(String.format("%02d:%02d", focusSec / 60, focusSec % 60));
                 break;

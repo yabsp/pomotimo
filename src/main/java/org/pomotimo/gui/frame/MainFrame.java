@@ -107,7 +107,8 @@ public class MainFrame extends PomoFrame {
         ToggleGroup presetsGroup = new ToggleGroup();
 
         presetManager.getPresets().forEach(pr -> {
-            RadioMenuItem prItem = new RadioMenuItem(pr.getName());
+            String itemName = pr.getName().replace("_", "__");
+            RadioMenuItem prItem = new RadioMenuItem(itemName);
             prItem.setToggleGroup(presetsGroup);
             if (presetManager.getCurrentPreset().map(p -> p.equals(pr)).orElse(false)) {
                 prItem.setSelected(true);

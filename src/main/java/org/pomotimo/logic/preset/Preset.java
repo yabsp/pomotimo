@@ -13,6 +13,7 @@ public class Preset {
     private int durationFocus;
     private int durationShortBreak;
     private int durationLongBreak;
+    private int cycleAmount;
 
     /* sound and image file location */
     private String soundFile;
@@ -29,6 +30,7 @@ public class Preset {
     public static final int DEFAULT_SHORT_BR_TIME = 300;
     /* 15 minutes in seconds */
     public static final int DEFAULT_LONG_BR_TIME = 900;
+    public static final int DEFAULT_CYCLE_AMOUNT = 4;
 
     /**
      * No-arg constructor for Gson deserialization.
@@ -47,13 +49,16 @@ public class Preset {
      * @param imageFile path to the user profile picture
      * @param tasks List of {@link Task} objects
      */
-    public Preset(String name, int durationFocus, int durationShortBreak, int durationLongBreak, String soundFile, String imageFile, ArrayList<Task> tasks) {
+    public Preset(String name, int durationFocus, int durationShortBreak,
+                  int durationLongBreak, String soundFile, String imageFile, int cycleAmount, ArrayList<Task> tasks) {
         this.name = name;
         this.durationFocus = durationFocus;
         this.durationShortBreak = durationShortBreak;
         this.durationLongBreak = durationLongBreak;
         this.soundFile = soundFile;
         this.imageFile = imageFile;
+        this.cycleAmount = cycleAmount;
+        this.soundName = DEFAULT_PATH;
         this.tasks = tasks;
     }
 
@@ -64,11 +69,12 @@ public class Preset {
      * @param durationShortBreak duration in seconds of a small break
      * @param durationLongBreak duration in seconds of a big break
     */
-    public Preset(String name, int durationFocus, int durationShortBreak, int durationLongBreak) {
+    public Preset(String name, int durationFocus, int durationShortBreak, int durationLongBreak, int cycleAmount) {
         this.name = name;
         this.durationFocus = durationFocus;
         this.durationShortBreak = durationShortBreak;
         this.durationLongBreak = durationLongBreak;
+        this.cycleAmount = cycleAmount;
         this.soundFile = DEFAULT_PATH;
         this.imageFile = DEFAULT_PATH;
         this.tasks = new ArrayList<Task>();
@@ -83,6 +89,7 @@ public class Preset {
         this.durationFocus = DEFAULT_FOCUS_TIME;
         this.durationShortBreak = DEFAULT_SHORT_BR_TIME;
         this.durationLongBreak = DEFAULT_LONG_BR_TIME;
+        this.cycleAmount = DEFAULT_CYCLE_AMOUNT;
         this.soundFile = DEFAULT_PATH;
         this.imageFile = DEFAULT_PATH;
         this.soundName = DEFAULT_PATH;
@@ -156,6 +163,23 @@ public class Preset {
     public Preset setDurationLongBreak(int duration) {
         this.durationLongBreak = duration;
         return this;
+    }
+
+    /**
+     *  Sets the amount of pomodoro cycles
+     * @param ca the new amount of pomodoro cycles
+     */
+    public Preset setCycleAmount(int ca) {
+        this.cycleAmount = ca;
+        return this;
+    }
+
+    /**
+     * Get the cycle amount.
+     * @return the current amount of cycles for this preset.
+     */
+    public int getCycleAmount() {
+        return this.cycleAmount;
     }
 
     /**
@@ -263,6 +287,7 @@ public class Preset {
         return p.getName().equals(name) && p.getDurationFocus() == durationFocus
                 && p.getDurationShortBreak() == durationShortBreak
                 && p.getDurationLongBreak() == durationLongBreak
+                && p.getCycleAmount() == cycleAmount
                 && p.getImageFile().equals(imageFile)
                 && p.getSoundFile().equals(soundFile)
                 && tasks.containsAll(p.getTasks());
