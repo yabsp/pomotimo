@@ -67,7 +67,7 @@ public class DeletePresetView extends BorderPane {
             }
         });
         deleteBtn.setOnAction(e -> {
-            deletePreset(checkList.getSelectionModel().getSelectedItems());
+            deletePreset(List.copyOf(checkList.getSelectionModel().getSelectedItems()));
         });
     }
 
@@ -80,6 +80,7 @@ public class DeletePresetView extends BorderPane {
      */
     private void deletePreset(List<Preset> pList) {
         pList.forEach(pr -> {
+            logger.debug("Preset to delete: {}", pr);
             presetManager.removePreset(pr);
             checkList.getItems().remove(pr);
         });

@@ -127,7 +127,8 @@ public class PresetImporterExporter {
                 original.getName(),
                 original.getDurationFocus(),
                 original.getDurationShortBreak(),
-                original.getDurationLongBreak()
+                original.getDurationLongBreak(),
+                original.getCycleAmount()
         );
 
         if (original.getSoundFile() != null && !original.getSoundFile().isEmpty()) {
@@ -137,7 +138,7 @@ public class PresetImporterExporter {
             forExport.setImageFile(Paths.get(original.getImageFile()).getFileName().toString());
         }
         if (original.getTaskAmount() > 0) {
-            original.getTasks().forEach(t -> forExport.addTask(t));
+            original.getTasks().forEach(forExport::addTask);
         }
         return forExport;
     }

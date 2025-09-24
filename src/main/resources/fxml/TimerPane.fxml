@@ -12,8 +12,8 @@
     <center>
         <VBox fx:id="timerContainer" alignment="CENTER" spacing="15" VBox.vgrow="ALWAYS">
             <Label fx:id="stateLabel" styleClass="state-label" text="Focus" />
-            <Label fx:id="timerLabel" styleClass="timer-label" text="00:00" />
-            <Label fx:id="cycleLabel" styleClass="cycle-label" text="Cycle: 1 / 4" />
+            <Label fx:id="timerLabel" styleClass="timer-label" />
+            <Label fx:id="cycleLabel" styleClass="cycle-label" />
 
             <HBox alignment="CENTER" spacing="15">
                 <padding>
