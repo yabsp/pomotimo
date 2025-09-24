@@ -164,7 +164,7 @@ public class TimerPane extends BorderPane {
     private void updatePlayIcon() {
         if (!presetManager.isPlaying()) {
             playBtn.setGraphic(iconList.get(2));
-            playBtn.setTooltip(new Tooltip("No Alarm Sound Ringing at the Moment"));
+            playBtn.setTooltip(new Tooltip("No Alarm Sound Ringing Currently"));
         } else {
             playBtn.setGraphic(iconList.get(3));
             playBtn.setTooltip(new Tooltip("Stop the Alarm Sound"));
@@ -187,6 +187,7 @@ public class TimerPane extends BorderPane {
                     startBtn.setText("Start");
                 } else {
                     presetManager.stopPlayer();
+                    updatePlayIcon();
                     timer.start( seconds -> {
                         int min = seconds / 60;
                         int sec = seconds % 60;
@@ -195,10 +196,12 @@ public class TimerPane extends BorderPane {
                         if (seconds <= 0) {
                             timer.pause();
                             Platform.runLater(() -> {
-                                if(soundOn) {
-                                    presetManager.startPlayer();
-                                    updatePlayIcon();
+                                presetManager.startPlayer();
+                                updatePlayIcon();
+                                if (!soundOn) {
+                                    presetManager.setMutePlayer(true);
                                 }
+
                                 setNewPomoState();
                                 startBtn.setText("Start");
                             });

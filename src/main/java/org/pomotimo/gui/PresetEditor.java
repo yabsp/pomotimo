@@ -89,9 +89,18 @@ public class PresetEditor extends BorderPane {
             AlertFactory.emptyTimeFieldAlert("Long Break Field").showAndWait();
             return;
         }
+
         int focusSecs = extractTimeInSeconds(focusTimeField);
         int shortBrSecs = extractTimeInSeconds(shortBreakField);
         int longBrSecs = extractTimeInSeconds(longBreakField);
+
+        logger.debug("{}, {}, {}", focusSecs, shortBrSecs, longBrSecs);
+        if (focusSecs == 0 || shortBrSecs == 0 || longBrSecs == 0) {
+            AlertFactory.alert(Alert.AlertType.WARNING, "Time Invalid", "",
+                    "Duration for focus or breaks cannot be zero, please enter another duration.").showAndWait();
+            return;
+        }
+
         if (nameField.getText() == null || nameField.getText().trim().isEmpty()) {
             AlertFactory.emptyNameFieldAlert("Preset Name Field").showAndWait();
             return;
