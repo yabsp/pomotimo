@@ -11,7 +11,7 @@ public class Task {
      */
     private int priority;
 
-    public final int DEFAULT_PRIO = 1;
+    public static final int DEFAULT_PRIO = 1;
 
     /**
      * no-args constructor required by Gson

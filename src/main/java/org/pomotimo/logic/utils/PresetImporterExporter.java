@@ -45,7 +45,7 @@ public class PresetImporterExporter {
             zos.write(gson.toJson(pr).getBytes(StandardCharsets.UTF_8));
             zos.closeEntry();
 
-            addFileToZip(preset.getSoundFile(), zos);
+            addFileToZip(preset.getCurrentAudio().filePath(), zos);
 
             addFileToZip(preset.getImageFile(), zos);
 
@@ -131,8 +131,9 @@ public class PresetImporterExporter {
                 original.getCycleAmount()
         );
 
-        if (original.getSoundFile() != null && !original.getSoundFile().isEmpty()) {
-            forExport.setSoundFile(Paths.get(original.getSoundFile()).getFileName().toString());
+        if (original.getCurrentAudio() != null) {
+            forExport.setCurrentAudio(Preset.AudioData.createAudioDataFromFile
+                                            (original.getCurrentAudio().filePath(), original.getCurrentAudio().isResource()));
         }
         if (original.getImageFile() != null && !original.getImageFile().isEmpty()) {
             forExport.setImageFile(Paths.get(original.getImageFile()).getFileName().toString());
@@ -144,9 +145,10 @@ public class PresetImporterExporter {
     }
 
     private void updatePathsToAbsolute(Preset preset) {
-        if (preset.getSoundFile() != null && !preset.getSoundFile().isEmpty()) {
-            Path newPath = MEDIA_PATH.resolve(preset.getSoundFile());
-            preset.setSoundFile(newPath.toAbsolutePath().toString());
+        if (preset.getCurrentAudio() != null) {
+            Path newPath = MEDIA_PATH.resolve(preset.getCurrentAudio().filePath());
+            preset.setCurrentAudio(Preset.AudioData.createAudioDataFromFile(newPath.toAbsolutePath().toString(),
+                    preset.getCurrentAudio().isResource()));
         }
         if (preset.getImageFile() != null && !preset.getImageFile().isEmpty()) {
             Path newPath = MEDIA_PATH.resolve(preset.getImageFile());

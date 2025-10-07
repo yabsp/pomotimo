@@ -1,13 +1,22 @@
 package org.pomotimo.logic.preset;
 
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.sun.jna.platform.unix.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represents a User preset. Contains duration of focus time, breaks, custom alarm sounds,
  * images and a List of {@link Task} objects.
  */
 public class Preset {
+    private static final Logger logger = LoggerFactory.getLogger(Preset.class);
     private String name;
     /* Durations in seconds */
     private int durationFocus;
@@ -15,12 +24,9 @@ public class Preset {
     private int durationLongBreak;
     private int cycleAmount;
 
-    /* sound and image file location */
-    private String soundFile;
     private String imageFile;
-    private ArrayList<Task> tasks;
-
-    private String soundName;
+    private final ArrayList<Task> tasks;
+    private AudioData currentAudio;
 
     /* Default for paths is empty path */
     public static final String DEFAULT_PATH = "";
@@ -45,20 +51,18 @@ public class Preset {
      * @param durationFocus duration in seconds of the focus period
      * @param durationShortBreak duration in seconds of a small break
      * @param durationLongBreak duration in seconds of a big break
-     * @param soundFile path to the alarm sound file
      * @param imageFile path to the user profile picture
      * @param tasks List of {@link Task} objects
      */
     public Preset(String name, int durationFocus, int durationShortBreak,
-                  int durationLongBreak, String soundFile, String imageFile, int cycleAmount, ArrayList<Task> tasks) {
+                  int durationLongBreak, String imageFile, int cycleAmount, ArrayList<Task> tasks) {
         this.name = name;
         this.durationFocus = durationFocus;
         this.durationShortBreak = durationShortBreak;
         this.durationLongBreak = durationLongBreak;
-        this.soundFile = soundFile;
         this.imageFile = imageFile;
         this.cycleAmount = cycleAmount;
-        this.soundName = DEFAULT_PATH;
+        this.currentAudio = AudioData.createAudioDataFromFile("/sounds/winter_vivaldi.mp3", true);
         this.tasks = tasks;
     }
 
@@ -75,9 +79,9 @@ public class Preset {
         this.durationShortBreak = durationShortBreak;
         this.durationLongBreak = durationLongBreak;
         this.cycleAmount = cycleAmount;
-        this.soundFile = DEFAULT_PATH;
         this.imageFile = DEFAULT_PATH;
-        this.tasks = new ArrayList<Task>();
+        this.currentAudio = AudioData.createAudioDataFromFile("/sounds/winter_vivaldi.mp3", true);
+        this.tasks = new ArrayList<>();
     }
 
     /**
@@ -90,9 +94,8 @@ public class Preset {
         this.durationShortBreak = DEFAULT_SHORT_BR_TIME;
         this.durationLongBreak = DEFAULT_LONG_BR_TIME;
         this.cycleAmount = DEFAULT_CYCLE_AMOUNT;
-        this.soundFile = DEFAULT_PATH;
         this.imageFile = DEFAULT_PATH;
-        this.soundName = DEFAULT_PATH;
+        this.currentAudio = AudioData.createAudioDataFromFile("/sounds/winter_vivaldi.mp3", true);
         this.tasks = new ArrayList<>();
     }
 
@@ -183,19 +186,19 @@ public class Preset {
     }
 
     /**
-     * Gets the file path for the alarm sound.
-     * @return The path to the sound file.
+     * Gets the {@link Preset#currentAudio}.
+     * @return The AudioData object.
      */
-    public String getSoundFile() {
-        return soundFile;
+    public AudioData getCurrentAudio() {
+        return currentAudio;
     }
 
     /**
-     * Sets the file path for the alarm sound.
-     * @param soundFile The new path to the sound file.
+     * Sets the {@link Preset#currentAudio}.
+     * @param newAudio The new AudioData.
      */
-    public Preset setSoundFile(String soundFile) {
-        this.soundFile = soundFile;
+    public Preset setCurrentAudio(AudioData newAudio) {
+        this.currentAudio = newAudio;
         return this;
     }
 
@@ -289,7 +292,72 @@ public class Preset {
                 && p.getDurationLongBreak() == durationLongBreak
                 && p.getCycleAmount() == cycleAmount
                 && p.getImageFile().equals(imageFile)
-                && p.getSoundFile().equals(soundFile)
+                && p.getCurrentAudio().equals(currentAudio)
                 && tasks.containsAll(p.getTasks());
+    }
+
+    public record AudioData (String name, String filePath, boolean isResource) {
+
+        /**
+         * Creates an AudioData record from a file Path.
+         * Extracts the name without the extension and gets the absolute file path.
+         *
+         * @param filePath The path where the audio file is located.
+         *             Assumes that a file exists under this path.
+         * @return  A new AudioData instance.
+         */
+        public static AudioData createAudioDataFromFile(String filePath, boolean isResource) {
+            String fileName = "";
+            if (isResource) {
+                URL resourceUrl = AudioData.class.getResource("fileName");
+                if (resourceUrl != null) {
+                    String fullResourcePath = resourceUrl.toExternalForm();
+                    logger.debug("Full Resource Path: {}", fullResourcePath);
+
+                    fileName = getFileNameFromString(fullResourcePath);
+                    logger.debug("Extracted Filename: {}", fileName);
+                }
+            } else {
+                fileName = getFileNameFromString(filePath);
+            }
+
+            String nameWithoutExtension = fileName;
+            int lastDotIndex = fileName.lastIndexOf('.');
+            if (lastDotIndex > 0) {
+                nameWithoutExtension = fileName.substring(0, lastDotIndex);
+            }
+            return new AudioData(nameWithoutExtension, filePath, true);
+        }
+
+        /**
+         * Extracts the filename from any path/URL/URI string by finding the last separator.
+         * @param pathString The full path or URL string.
+         * @return The filename with its extension.
+         */
+        public static String getFileNameFromString(String pathString) {
+            if (pathString == null || pathString.isEmpty()) {
+                return "";
+            }
+            int lastSlash = pathString.lastIndexOf('/');
+            if (lastSlash >= 0) {
+                return pathString.substring(lastSlash + 1);
+            }
+            return pathString;
+        }
+
+        @Override
+        public String toString() {
+            return this.name;
+        }
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            return o instanceof AudioData(String nameOther, String path, boolean isResourceOther)
+                    && this.name.equals(nameOther)
+                    && this.filePath.equals(path)
+                    && isResource == isResourceOther;
+        }
     }
 }

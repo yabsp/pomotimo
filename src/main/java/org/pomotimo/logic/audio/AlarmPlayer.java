@@ -5,6 +5,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
+import org.pomotimo.logic.utils.PersistenceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,8 +25,7 @@ public class AlarmPlayer {
      * Constructs an AlarmPlayer and initializes it with a default sound path.
      */
     public AlarmPlayer () {
-        this.soundUri = Objects.requireNonNull(getClass()
-                .getResource("/sounds/winter_vivaldi.mp3")).toExternalForm();
+        this.soundUri = AlarmPlayer.class.getResource("/sounds/winter_vivaldi.mp3").toExternalForm();
         newUri = true;
         player = new MediaPlayer(new Media(soundUri));
     }

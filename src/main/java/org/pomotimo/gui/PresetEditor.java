@@ -1,20 +1,29 @@
 package org.pomotimo.gui;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
+
+import javax.swing.text.html.Option;
 
 import org.pomotimo.gui.utils.AlertFactory;
 import org.pomotimo.logic.preset.Preset;
 import org.pomotimo.logic.utils.EditorMode;
+import org.pomotimo.logic.utils.PersistenceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +39,7 @@ public class PresetEditor extends BorderPane {
     @FXML private TextField cycleField;
     @FXML private Button saveBtn;
     @FXML private Button setDefaultsBtn;
+    @FXML private ComboBox<Preset.AudioData> soundSelectBox;
     private final PresetManager presetManager;
     private final TimerPane parentPane;
     private final Preset currentPreset;
@@ -56,8 +66,8 @@ public class PresetEditor extends BorderPane {
     private void initialize() {
         closeBtn.setOnAction(e -> parentPane.refreshUI());
         saveBtn.setOnAction(e -> savePresetConfiguration());
-        setDefaultsBtn.setOnAction(e -> setTextFields(EditorMode.RESET));
-        setTextFields(EditorMode.EDIT);
+        setDefaultsBtn.setOnAction(e -> setFields(EditorMode.RESET));
+        setFields(EditorMode.EDIT);
     }
 
     private void configureTimeField(TextField field, String initialValue) {
@@ -101,10 +111,13 @@ public class PresetEditor extends BorderPane {
         int shortBrSecs = extractTimeInSeconds(shortBreakField);
         int longBrSecs = extractTimeInSeconds(longBreakField);
 
-        logger.debug("{}, {}, {}", focusSecs, shortBrSecs, longBrSecs);
         if (focusSecs == 0 || shortBrSecs == 0 || longBrSecs == 0) {
             AlertFactory.alert(Alert.AlertType.WARNING, "Time Invalid", "",
                     "Duration for focus or breaks cannot be zero, please enter another duration.").showAndWait();
+            return;
+        } else if (Integer.parseInt(cycleField.getText()) < 1) {
+            AlertFactory.alert(Alert.AlertType.WARNING, "Cycle Amount Invalid", "",
+                    "The amount of Pomo cycles cannot be zero. Please enter another number.").showAndWait();
             return;
         }
 
@@ -117,6 +130,18 @@ public class PresetEditor extends BorderPane {
                      .setDurationShortBreak(shortBrSecs)
                      .setDurationLongBreak(longBrSecs)
                      .setCycleAmount(Integer.parseInt(cycleField.getText()));
+        Preset.AudioData selectedAudio = soundSelectBox.getSelectionModel().getSelectedItem();
+
+        if(selectedAudio != null) {
+            if (currentPreset.getCurrentAudio() != selectedAudio) {
+                currentPreset.setCurrentAudio(selectedAudio);
+                String path = selectedAudio.filePath();
+                if (selectedAudio.isResource()) {
+                    path = Objects.requireNonNull(PresetEditor.class.getResource(path)).toString();
+                }
+                presetManager.refreshPlayerAudioPath(path);
+            }
+        }
 
         if (!presetManager.contains(currentPreset)) {
             presetManager.addPreset(currentPreset);
@@ -154,7 +179,7 @@ public class PresetEditor extends BorderPane {
         return Integer.parseInt(temp[0])*60 + Integer.parseInt(temp[1]);
     }
 
-    private void setTextFields(EditorMode mode) {
+    private void setFields(EditorMode mode) {
         switch (mode){
             case EDIT -> {
                 configureTimeField(focusTimeField, String.format("%02d:%02d", currentPreset.getDurationFocus() / 60, currentPreset.getDurationFocus() % 60));
@@ -162,6 +187,7 @@ public class PresetEditor extends BorderPane {
                 configureTimeField(longBreakField, String.format("%02d:%02d", currentPreset.getDurationLongBreak() / 60, currentPreset.getDurationLongBreak() % 60));
                 configureIntField(cycleField, currentPreset.getCycleAmount());
                 configureTextField(nameField, currentPreset.getName());
+                setupSoundSelectBox(false);
             }
 
             case RESET -> {
@@ -170,8 +196,22 @@ public class PresetEditor extends BorderPane {
                 configureTimeField(longBreakField, String.format("%02d:%02d", Preset.DEFAULT_LONG_BR_TIME / 60, Preset.DEFAULT_LONG_BR_TIME % 60));
                 configureIntField(cycleField, Preset.DEFAULT_CYCLE_AMOUNT);
                 configureTextField(nameField, currentPreset.getName());
-
+                setupSoundSelectBox(true);
             }
+        }
+    }
+
+    private void setupSoundSelectBox(boolean reset) {
+        ObservableList<Preset.AudioData> audioItems = FXCollections.observableList(PersistenceManager.readOnlyAudioDataList);
+        soundSelectBox.setItems(audioItems);
+        if (reset) {
+            Optional<Preset.AudioData> optDef = PersistenceManager.readOnlyAudioDataList
+                    .stream()
+                    .filter(e -> e.name().equals("winter_vivaldi"))
+                    .findFirst();
+            optDef.ifPresent(opt -> soundSelectBox.getSelectionModel().select(opt));
+        } else {
+            soundSelectBox.getSelectionModel().select(currentPreset.getCurrentAudio());
         }
     }
 

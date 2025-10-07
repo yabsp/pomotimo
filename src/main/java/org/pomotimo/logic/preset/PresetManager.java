@@ -2,6 +2,7 @@ package org.pomotimo.logic.preset;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -28,16 +29,21 @@ public class PresetManager {
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> pendingSave;
 
-
     /**
      * Default constructor that creates a PresetManager instance and initializes the list of presets
      * by loading them asynchronously.
      */
     public PresetManager() {
-        this.presets = new ArrayList<Preset>();
+        this.presets = new ArrayList<>();
         this.persistenceManager = new PersistenceManager();
         this.player = new AlarmPlayer();
         loadPresetsAsync();
+        loadAvailableAudioFiles();
+    }
+
+    public void loadAvailableAudioFiles() {
+        logger.debug("Loading Audio Files to audioDataList, {}", this.getClass());
+        scheduler.submit(persistenceManager::refreshAudioDataList);
     }
 
     /**
@@ -53,7 +59,7 @@ public class PresetManager {
                     setCurrentPreset(presets.getFirst());
                 }
             }
-            logger.info("Presets loaded successfully.");
+            logger.debug("Presets loaded successfully.");
         });
     }
 
@@ -153,8 +159,15 @@ public class PresetManager {
     public void startPlayer() {
         if(!player.isPlaying()) {
             player.play();
-
         }
+    }
+
+    /**
+     * Change the audio of the alarm.
+     * @param newPath the new audio path (absolute).
+     */
+    public void refreshPlayerAudioPath(String newPath) {
+        player.setSoundPath(newPath);
     }
 
     /**
@@ -255,7 +268,14 @@ public class PresetManager {
      * @param pr The {@link Preset} to be set as the current one.
      */
     public synchronized void setCurrentPreset(Preset pr) {
-        this.currentPreset = pr;
+        if (pr != currentPreset){
+            this.currentPreset = pr;
+            String path = currentPreset.getCurrentAudio().filePath();
+            if (currentPreset.getCurrentAudio().isResource()){
+                path = Objects.requireNonNull(PresetManager.class.getResource(path)).toString();
+            }
+            refreshPlayerAudioPath(path);
+        }
     }
 
     /**

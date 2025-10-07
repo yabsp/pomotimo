@@ -219,3 +219,21 @@
 .form-text-field:focused {
     -fx-border-color: -fx-accent-color;
 }
+
+/* ---- ComboBox ----- */
+.combo-box {
+    -fx-background-color: #5a5d61;
+    -fx-text-fill: white;
+}
+
+.combo-box:hover {
+    -fx-background-color: #6e7175;
+}
+
+.combo-box:focused {
+    -fx-border-color: -fx-accent-color;
+}
+
+.combo-box:cell-selection {
+    -fx-border-color: -fx-accent-color;
+}
