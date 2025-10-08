@@ -271,7 +271,7 @@ public class PresetManager {
         if (pr != currentPreset){
             this.currentPreset = pr;
             String path = currentPreset.getCurrentAudio().filePath();
-            if (currentPreset.getCurrentAudio().isResource()){
+            if (currentPreset.getCurrentAudio().isInternalResource()){
                 path = Objects.requireNonNull(PresetManager.class.getResource(path)).toString();
             }
             refreshPlayerAudioPath(path);

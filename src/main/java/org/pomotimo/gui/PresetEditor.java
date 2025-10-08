@@ -7,18 +7,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
-
-import javax.swing.text.html.Option;
 
 import org.pomotimo.gui.utils.AlertFactory;
 import org.pomotimo.logic.preset.Preset;
@@ -136,7 +132,7 @@ public class PresetEditor extends BorderPane {
             if (currentPreset.getCurrentAudio() != selectedAudio) {
                 currentPreset.setCurrentAudio(selectedAudio);
                 String path = selectedAudio.filePath();
-                if (selectedAudio.isResource()) {
+                if (selectedAudio.isInternalResource()) {
                     path = Objects.requireNonNull(PresetEditor.class.getResource(path)).toString();
                 }
                 presetManager.refreshPlayerAudioPath(path);

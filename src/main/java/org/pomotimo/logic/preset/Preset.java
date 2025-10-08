@@ -1,13 +1,9 @@
 package org.pomotimo.logic.preset;
 
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.jna.platform.unix.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -296,7 +292,7 @@ public class Preset {
                 && tasks.containsAll(p.getTasks());
     }
 
-    public record AudioData (String name, String filePath, boolean isResource) {
+    public record AudioData (String name, String filePath, boolean isInternalResource) {
 
         /**
          * Creates an AudioData record from a file Path.
@@ -306,10 +302,10 @@ public class Preset {
          *             Assumes that a file exists under this path.
          * @return  A new AudioData instance.
          */
-        public static AudioData createAudioDataFromFile(String filePath, boolean isResource) {
+        public static AudioData createAudioDataFromFile(String filePath, boolean isInternalResource) {
             String fileName = "";
-            if (isResource) {
-                URL resourceUrl = AudioData.class.getResource("fileName");
+            if (isInternalResource) {
+                URL resourceUrl = AudioData.class.getResource(filePath);
                 if (resourceUrl != null) {
                     String fullResourcePath = resourceUrl.toExternalForm();
                     logger.debug("Full Resource Path: {}", fullResourcePath);
@@ -357,7 +353,7 @@ public class Preset {
             return o instanceof AudioData(String nameOther, String path, boolean isResourceOther)
                     && this.name.equals(nameOther)
                     && this.filePath.equals(path)
-                    && isResource == isResourceOther;
+                    && isInternalResource == isResourceOther;
         }
     }
 }
