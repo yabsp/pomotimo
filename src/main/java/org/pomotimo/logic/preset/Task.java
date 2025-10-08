@@ -1,5 +1,7 @@
 package org.pomotimo.logic.preset;
 
+import org.pomotimo.logic.config.AppConstants;
+
 /**
  * Represents a task that is to be done. A task has a name and a priority.
  */
@@ -11,14 +13,12 @@ public class Task {
      */
     private int priority;
 
-    public static final int DEFAULT_PRIO = 1;
-
     /**
      * no-args constructor required by Gson
      */
     public Task() {
         this.name = "";
-        this.priority = DEFAULT_PRIO;
+        this.priority = AppConstants.DEFAULT_PRIO;
     }
 
     /**
@@ -37,7 +37,7 @@ public class Task {
      */
     public Task(String name) {
         this.name = name;
-        this.priority = DEFAULT_PRIO;
+        this.priority = AppConstants.DEFAULT_PRIO;
     }
 
     /**

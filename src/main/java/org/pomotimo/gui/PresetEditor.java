@@ -12,11 +12,11 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 import org.pomotimo.gui.utils.AlertFactory;
+import org.pomotimo.logic.config.AppConstants;
 import org.pomotimo.logic.preset.Preset;
 import org.pomotimo.logic.utils.EditorMode;
 import org.pomotimo.logic.utils.PersistenceManager;
@@ -131,11 +131,7 @@ public class PresetEditor extends BorderPane {
         if(selectedAudio != null) {
             if (currentPreset.getCurrentAudio() != selectedAudio) {
                 currentPreset.setCurrentAudio(selectedAudio);
-                String path = selectedAudio.filePath();
-                if (selectedAudio.isInternalResource()) {
-                    path = Objects.requireNonNull(PresetEditor.class.getResource(path)).toString();
-                }
-                presetManager.refreshPlayerAudioPath(path);
+                presetManager.refreshPlayerAudioPath(selectedAudio.filePath());
             }
         }
 
@@ -187,10 +183,10 @@ public class PresetEditor extends BorderPane {
             }
 
             case RESET -> {
-                configureTimeField(focusTimeField, String.format("%02d:%02d", Preset.DEFAULT_FOCUS_TIME / 60, Preset.DEFAULT_FOCUS_TIME % 60));
-                configureTimeField(shortBreakField, String.format("%02d:%02d", Preset.DEFAULT_SHORT_BR_TIME / 60, Preset.DEFAULT_SHORT_BR_TIME % 60));
-                configureTimeField(longBreakField, String.format("%02d:%02d", Preset.DEFAULT_LONG_BR_TIME / 60, Preset.DEFAULT_LONG_BR_TIME % 60));
-                configureIntField(cycleField, Preset.DEFAULT_CYCLE_AMOUNT);
+                configureTimeField(focusTimeField, String.format("%02d:%02d", AppConstants.DEFAULT_FOCUS_TIME / 60, AppConstants.DEFAULT_FOCUS_TIME % 60));
+                configureTimeField(shortBreakField, String.format("%02d:%02d", AppConstants.DEFAULT_SHORT_BREAK / 60, AppConstants.DEFAULT_SHORT_BREAK % 60));
+                configureTimeField(longBreakField, String.format("%02d:%02d", AppConstants.DEFAULT_LONG_BREAK / 60, AppConstants.DEFAULT_LONG_BREAK % 60));
+                configureIntField(cycleField, AppConstants.DEFAULT_CYCLE_AMOUNT);
                 configureTextField(nameField, currentPreset.getName());
                 setupSoundSelectBox(true);
             }

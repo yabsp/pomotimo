@@ -1,9 +1,13 @@
 package org.pomotimo.logic.preset;
 
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pomotimo.logic.config.AppConstants;
+import org.pomotimo.logic.utils.PersistenceManager;
+import org.pomotimo.platform.OperatingSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,15 +28,6 @@ public class Preset {
     private final ArrayList<Task> tasks;
     private AudioData currentAudio;
 
-    /* Default for paths is empty path */
-    public static final String DEFAULT_PATH = "";
-    /* 25 minutes in seconds */
-    public static final int DEFAULT_FOCUS_TIME = 1500;
-    /* 5 minutes in seconds */
-    public static final int DEFAULT_SHORT_BR_TIME = 300;
-    /* 15 minutes in seconds */
-    public static final int DEFAULT_LONG_BR_TIME = 900;
-    public static final int DEFAULT_CYCLE_AMOUNT = 4;
 
     /**
      * No-arg constructor for Gson deserialization.
@@ -58,7 +53,7 @@ public class Preset {
         this.durationLongBreak = durationLongBreak;
         this.imageFile = imageFile;
         this.cycleAmount = cycleAmount;
-        this.currentAudio = AudioData.createAudioDataFromFile("/sounds/winter_vivaldi.mp3", true);
+        this.currentAudio = PersistenceManager.readOnlyAudioDataList.getFirst();
         this.tasks = tasks;
     }
 
@@ -75,8 +70,8 @@ public class Preset {
         this.durationShortBreak = durationShortBreak;
         this.durationLongBreak = durationLongBreak;
         this.cycleAmount = cycleAmount;
-        this.imageFile = DEFAULT_PATH;
-        this.currentAudio = AudioData.createAudioDataFromFile("/sounds/winter_vivaldi.mp3", true);
+        this.imageFile = null;
+        this.currentAudio = PersistenceManager.readOnlyAudioDataList.getFirst();
         this.tasks = new ArrayList<>();
     }
 
@@ -86,12 +81,12 @@ public class Preset {
      */
     public Preset(String name) {
         this.name = name;
-        this.durationFocus = DEFAULT_FOCUS_TIME;
-        this.durationShortBreak = DEFAULT_SHORT_BR_TIME;
-        this.durationLongBreak = DEFAULT_LONG_BR_TIME;
-        this.cycleAmount = DEFAULT_CYCLE_AMOUNT;
-        this.imageFile = DEFAULT_PATH;
-        this.currentAudio = AudioData.createAudioDataFromFile("/sounds/winter_vivaldi.mp3", true);
+        this.durationFocus = AppConstants.DEFAULT_FOCUS_TIME;
+        this.durationShortBreak = AppConstants.DEFAULT_SHORT_BREAK;
+        this.durationLongBreak = AppConstants.DEFAULT_LONG_BREAK;
+        this.cycleAmount = AppConstants.DEFAULT_CYCLE_AMOUNT;
+        this.imageFile = null;
+        this.currentAudio = PersistenceManager.readOnlyAudioDataList.getFirst();
         this.tasks = new ArrayList<>();
     }
 
@@ -292,7 +287,7 @@ public class Preset {
                 && tasks.containsAll(p.getTasks());
     }
 
-    public record AudioData (String name, String filePath, boolean isInternalResource) {
+    public record AudioData (String name, String filePath) {
 
         /**
          * Creates an AudioData record from a file Path.
@@ -302,27 +297,14 @@ public class Preset {
          *             Assumes that a file exists under this path.
          * @return  A new AudioData instance.
          */
-        public static AudioData createAudioDataFromFile(String filePath, boolean isInternalResource) {
-            String fileName = "";
-            if (isInternalResource) {
-                URL resourceUrl = AudioData.class.getResource(filePath);
-                if (resourceUrl != null) {
-                    String fullResourcePath = resourceUrl.toExternalForm();
-                    logger.debug("Full Resource Path: {}", fullResourcePath);
-
-                    fileName = getFileNameFromString(fullResourcePath);
-                    logger.debug("Extracted Filename: {}", fileName);
-                }
-            } else {
-                fileName = getFileNameFromString(filePath);
-            }
-
+        public static AudioData createAudioDataFromFile(String filePath) {
+            String fileName = getFileNameFromString(filePath);
             String nameWithoutExtension = fileName;
             int lastDotIndex = fileName.lastIndexOf('.');
             if (lastDotIndex > 0) {
                 nameWithoutExtension = fileName.substring(0, lastDotIndex);
             }
-            return new AudioData(nameWithoutExtension, filePath, true);
+            return new AudioData(nameWithoutExtension, filePath);
         }
 
         /**
@@ -334,7 +316,12 @@ public class Preset {
             if (pathString == null || pathString.isEmpty()) {
                 return "";
             }
-            int lastSlash = pathString.lastIndexOf('/');
+            int lastSlash = 0;
+            switch (AppConstants.os) {
+                case WINDOWS -> lastSlash = pathString.lastIndexOf('\\');
+                case LINUX, MAC -> lastSlash = pathString.lastIndexOf('/');
+
+            }
             if (lastSlash >= 0) {
                 return pathString.substring(lastSlash + 1);
             }
@@ -350,10 +337,9 @@ public class Preset {
             if (this == o) {
                 return true;
             }
-            return o instanceof AudioData(String nameOther, String path, boolean isResourceOther)
+            return o instanceof AudioData(String nameOther, String path)
                     && this.name.equals(nameOther)
-                    && this.filePath.equals(path)
-                    && isInternalResource == isResourceOther;
+                    && this.filePath.equals(path);
         }
     }
 }

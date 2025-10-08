@@ -1,10 +1,13 @@
 package org.pomotimo.gui;
 
 
+import java.io.InputStream;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 import org.pomotimo.gui.frame.MainFrame;
+import org.pomotimo.logic.utils.PersistenceManager;
 import org.pomotimo.logic.utils.PresetImporterExporter;
 import org.pomotimo.logic.preset.PresetManager;
 import org.slf4j.Logger;

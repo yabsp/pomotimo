@@ -84,7 +84,7 @@ jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
         attributes(
-                'Main-Class': 'org.pomotimo.PomotimoGUI'
+                'Main-Class': 'org.pomotimo.gui.PomotimoGUI'
         )
     }
 }
@@ -94,7 +94,7 @@ shadowJar {
     archiveClassifier.set('')
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
-        attributes 'Main-Class': 'org.pomotimo.PomotimoGUI'
+        attributes 'Main-Class': 'org.pomotimo.gui.PomotimoGUI'
     }
 }
 

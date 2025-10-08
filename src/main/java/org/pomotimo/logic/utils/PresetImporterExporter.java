@@ -2,6 +2,7 @@ package org.pomotimo.logic.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.pomotimo.logic.config.AppConstants;
 import org.pomotimo.logic.preset.Preset;
 import org.pomotimo.logic.preset.PresetManager;
 import org.slf4j.Logger;
@@ -19,9 +20,6 @@ public class PresetImporterExporter {
 
     private static final Logger logger = LoggerFactory.getLogger(PresetImporterExporter.class);
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-    private static final Path CONFIG_PATH = Paths.get(System.getProperty("user.home"), ".pomotimo");
-    private static final Path MEDIA_PATH = CONFIG_PATH.resolve("media");
 
     private final PresetManager presetManager;
 
@@ -45,7 +43,7 @@ public class PresetImporterExporter {
             zos.write(gson.toJson(pr).getBytes(StandardCharsets.UTF_8));
             zos.closeEntry();
 
-            addFileToZip(preset.getCurrentAudio().filePath(), zos);
+            addFileToZip(preset.getCurrentAudio().filePath().toString(), zos);
 
             addFileToZip(preset.getImageFile(), zos);
 
@@ -66,9 +64,9 @@ public class PresetImporterExporter {
      */
     public Optional<Preset> importPreset(File sourceFile) {
         try {
-            Files.createDirectories(MEDIA_PATH);
+            Files.createDirectories(AppConstants.MEDIA_DIR);
         } catch (IOException e) {
-            logger.error("Could not create media directory: {}", MEDIA_PATH, e);
+            logger.error("Could not create media directory: {}", AppConstants.MEDIA_DIR, e);
             return Optional.empty();
         }
 
@@ -81,7 +79,7 @@ public class PresetImporterExporter {
                     String json = new String(zis.readAllBytes(), StandardCharsets.UTF_8);
                     importedPreset = gson.fromJson(json, Preset.class);
                 } else {
-                    Path destinationPath = MEDIA_PATH.resolve(entry.getName());
+                    Path destinationPath = AppConstants.MEDIA_DIR.resolve(entry.getName());
                     Files.copy(zis, destinationPath, StandardCopyOption.REPLACE_EXISTING);
                     logger.info("Extracted media file to {}", destinationPath);
                 }
@@ -132,14 +130,8 @@ public class PresetImporterExporter {
                 original.getCycleAmount()
         );
         if (originalAudio != null) {
-            if (originalAudio.isInternalResource()) {
-                forExport.setCurrentAudio(Preset.AudioData.createAudioDataFromFile
-                                                                  (originalAudio.filePath(),
-                                                                          true));
-            } else {
-                String relPath = Paths.get(originalAudio.filePath()).getFileName().toString();
-                forExport.setCurrentAudio(Preset.AudioData.createAudioDataFromFile(relPath, false));
-            }
+            String relPath = Paths.get(originalAudio.filePath()).getFileName().toString();
+            forExport.setCurrentAudio(Preset.AudioData.createAudioDataFromFile(relPath));
 
         }
         if (original.getImageFile() != null && !original.getImageFile().isEmpty()) {
@@ -153,14 +145,11 @@ public class PresetImporterExporter {
 
     private void updatePathsToAbsolute(Preset preset) {
         if (preset.getCurrentAudio() != null) {
-            if (!preset.getCurrentAudio().isInternalResource()) {
-                Path newPath = MEDIA_PATH.resolve(preset.getCurrentAudio().filePath());
-                preset.setCurrentAudio(Preset.AudioData.createAudioDataFromFile(newPath.toAbsolutePath().toString(),
-                        preset.getCurrentAudio().isInternalResource()));
-            }
+            Path newPath = AppConstants.MEDIA_DIR.resolve(preset.getCurrentAudio().filePath());
+            preset.setCurrentAudio(Preset.AudioData.createAudioDataFromFile(newPath.toAbsolutePath().toString()));
         }
         if (preset.getImageFile() != null && !preset.getImageFile().isEmpty()) {
-            Path newPath = MEDIA_PATH.resolve(preset.getImageFile());
+            Path newPath = AppConstants.MEDIA_DIR.resolve(preset.getImageFile());
             preset.setImageFile(newPath.toAbsolutePath().toString());
         }
     }

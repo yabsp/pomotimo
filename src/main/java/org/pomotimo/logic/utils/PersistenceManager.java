@@ -3,6 +3,7 @@ package org.pomotimo.logic.utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import org.pomotimo.logic.config.AppConstants;
 import org.pomotimo.logic.preset.Preset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -30,11 +32,6 @@ import java.util.stream.Stream;
  */
 public class PersistenceManager {
 
-    // Store presets in a .pomotimo folder in the user's home directory.
-    private static final Path CONFIG_PATH = Paths.get(System.getProperty("user.home"), ".pomotimo");
-    private static final Path PRESETS_FILE_PATH = CONFIG_PATH.resolve("presets.json");
-    private static final Path MEDIA_PATH = CONFIG_PATH.resolve("media");
-
     // Gson instance for JSON serialization/deserialization. Pretty printing makes it human-readable.
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static final Logger logger = LoggerFactory.getLogger(PersistenceManager.class);
@@ -44,33 +41,15 @@ public class PersistenceManager {
 
     static {
         logger.debug("Running static initializer for PersistenceManager...");
-        final String resourceDir = "/sounds";
         try {
-            URL resourceUrl = PersistenceManager.class.getResource(resourceDir);
-            if (resourceUrl == null) {
-                throw new IOException("Resource directory not found: " + resourceDir);
+            if (!Files.exists(AppConstants.MEDIA_DIR)) {
+                Files.createDirectories(AppConstants.MEDIA_DIR);
             }
-            URI uri = resourceUrl.toURI();
-            Path resourcePath;
-            // Handle the difference between running from a file system (in IDE) and from a JAR file.
-            if (uri.getScheme().equals("jar")) {
-                // If the resource is in a JAR, we create a temporary file system to access it.
-                try (FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap())) {
-                    resourcePath = fileSystem.getPath(resourceDir);
-                    loadAudioFromPath(resourcePath);
-                }
-            } else {
-                // If the resource is a regular file on disk (running from IDE).
-                resourcePath = Paths.get(uri);
-                loadAudioFromPath(resourcePath);
-            }
-
-            logger.debug("Static audio data list initialized. Total sounds: {}", audioDataList.size());
-
-        } catch (IOException |
-                 URISyntaxException e) {
-            logger.error("FATAL: Failed to load audio resources from '" + resourceDir + "'.", e);
+        } catch (IOException e) {
+            logger.warn("Couldn't set up directory structure");
         }
+        extractDefaultSounds();
+        refreshAudioDataList();
     }
 
     /**
@@ -80,14 +59,14 @@ public class PersistenceManager {
      */
     public void savePresets(List<Preset> presets) {
         try {
-            if (!Files.exists(CONFIG_PATH)) {
-                Files.createDirectories(CONFIG_PATH);
+            if (!Files.exists(AppConstants.CONFIG_DIR)) {
+                Files.createDirectories(AppConstants.CONFIG_DIR);
             }
         } catch (IOException e){
             logger.error("Error when trying to create directories for presets.{}", e.getMessage());
         }
 
-        try (FileWriter writer = new FileWriter(PRESETS_FILE_PATH.toFile())) {
+        try (FileWriter writer = new FileWriter(AppConstants.PRESETS_FILE.toFile())) {
             gson.toJson(presets, writer);
         } catch (IOException e) {
             logger.error("Error when trying to write presets{}", e.getMessage());
@@ -100,18 +79,18 @@ public class PersistenceManager {
      * @return A list of loaded presets. Returns an empty list if the file doesn't exist or an error occurs.
      */
     public List<Preset> loadPresets() {
-        if (!Files.exists(PRESETS_FILE_PATH)) {
+        if (!Files.exists(AppConstants.PRESETS_FILE)) {
             return new ArrayList<>();
         }
 
         Type presetListType = new TypeToken<ArrayList<Preset>>() {}.getType();
 
-        try (FileReader reader = new FileReader(PRESETS_FILE_PATH.toFile())) {
+        try (FileReader reader = new FileReader(AppConstants.PRESETS_FILE.toFile())) {
             List<Preset> presets = gson.fromJson(reader, presetListType);
 
             return presets == null ? new ArrayList<>() : presets;
         } catch (IOException e) {
-            logger.error("Error loading presets from file: {}, {}", PRESETS_FILE_PATH, e.getMessage());
+            logger.error("Error loading presets from file: {}, {}", AppConstants.PRESETS_FILE, e.getMessage());
             return new ArrayList<>();
         }
     }
@@ -123,19 +102,22 @@ public class PersistenceManager {
      * <p>This method is usually called on application startup.</p>
      */
 
-    public void refreshAudioDataList() {
-        if (!Files.exists(MEDIA_PATH)) {
+    public static void refreshAudioDataList() {
+        if (!Files.exists(AppConstants.MEDIA_DIR)) {
             return;
         }
         List<Preset.AudioData> audioFiles = new ArrayList<>();
-        try (Stream<Path> stream = Files.list(Paths.get(MEDIA_PATH.toUri()))) {
+        try (Stream<Path> stream = Files.list(Paths.get(AppConstants.MEDIA_DIR.toUri()))) {
              audioFiles = stream
                     .filter(Files::isRegularFile)
-                    .map(e -> Preset.AudioData
-                            .createAudioDataFromFile(e.getFileName().toString(), false))
+                    .map(e -> {
+                        logger.debug("Following audio added to list: {}", e.toString());
+                        return Preset.AudioData
+                                .createAudioDataFromFile(e.toString());
+                    })
                     .toList();
         } catch (IOException e){
-            logger.error("Error reading directory: {}, {}", MEDIA_PATH, e.getMessage());
+            logger.error("Error reading directory: {}, {}", AppConstants.MEDIA_DIR, e.getMessage());
         }
         List<Preset.AudioData> filesToAdd = new ArrayList<>(audioFiles);
         filesToAdd.removeAll(audioDataList);
@@ -158,19 +140,24 @@ public class PersistenceManager {
         audioDataList.remove(entry);
     }
 
-    /**
-     * Helper method to walk a given path and load all .mp3 files into the static list.
-     * @param path The directory path to scan for audio files.
-     * @throws IOException if an I/O error occurs when walking the path.
-     */
-    private static void loadAudioFromPath(Path path) throws IOException {
-        try (Stream<Path> paths = Files.walk(path, 1)) {
-            paths.filter(Files::isRegularFile)
-                 .filter(p -> p.toString().toLowerCase().endsWith(".mp3"))
-                 .forEach(e -> {
-                     Preset.AudioData temp = Preset.AudioData.createAudioDataFromFile(e.toAbsolutePath().toString(), false);
-                     audioDataList.add(temp);
-                 });
+    private static void extractDefaultSounds() {
+        logger.info("Extracting default sounds to {}", AppConstants.MEDIA_DIR);
+
+        for (String name : AppConstants.DEFAULT_SOUNDS) {
+            Path target = AppConstants.MEDIA_DIR.resolve(name);
+            if (!Files.exists(target)) {
+                try (InputStream in = PersistenceManager.class.getResourceAsStream("/sounds/" + name)) {
+                    if (in != null) {
+                        Files.copy(in, target);
+                        logger.info("Copied default sound: {}", name);
+                    } else {
+                        logger.warn("Missing internal sound resource: {}", name);
+                    }
+                } catch (IOException e) {
+                    logger.error("Failed to copy default sound {}: {}", name, e.getMessage());
+                }
+            }
         }
     }
+
 }

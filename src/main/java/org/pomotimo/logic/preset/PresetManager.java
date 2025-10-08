@@ -1,8 +1,8 @@
 package org.pomotimo.logic.preset;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -38,12 +38,6 @@ public class PresetManager {
         this.persistenceManager = new PersistenceManager();
         this.player = new AlarmPlayer();
         loadPresetsAsync();
-        loadAvailableAudioFiles();
-    }
-
-    public void loadAvailableAudioFiles() {
-        logger.debug("Loading Audio Files to audioDataList, {}", this.getClass());
-        scheduler.submit(persistenceManager::refreshAudioDataList);
     }
 
     /**
@@ -167,7 +161,7 @@ public class PresetManager {
      * @param newPath the new audio path (absolute).
      */
     public void refreshPlayerAudioPath(String newPath) {
-        player.setSoundPath(newPath);
+        player.setSoundPath(Paths.get(newPath).toUri().toString());
     }
 
     /**
@@ -271,9 +265,6 @@ public class PresetManager {
         if (pr != currentPreset){
             this.currentPreset = pr;
             String path = currentPreset.getCurrentAudio().filePath();
-            if (currentPreset.getCurrentAudio().isInternalResource()){
-                path = Objects.requireNonNull(PresetManager.class.getResource(path)).toString();
-            }
             refreshPlayerAudioPath(path);
         }
     }
