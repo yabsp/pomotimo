@@ -195,7 +195,7 @@ public class MainFrame extends PomoFrame {
         this.mainStage.initStyle(StageStyle.TRANSPARENT);
         this.mainStage.setTitle("Pomotimo");
         try {
-            this.mainStage.getIcons().add(AppConstants.ICON_24x24);
+            this.mainStage.getIcons().add(AppConstants.ICON);
         } catch (NullPointerException e) {
             logger.error("Icon path is null.", e);
         }
