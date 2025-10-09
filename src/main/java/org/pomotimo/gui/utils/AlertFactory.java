@@ -7,17 +7,14 @@ import javafx.scene.image.ImageView;
 
 import java.util.Objects;
 
+import org.pomotimo.logic.config.AppConstants;
+
 /**
  * A factory utility class for creating standardized JavaFX Alert dialogs.
  * This class provides methods to generate pre-configured alerts with consistent
  * styling, titles, and icons for the application.
  */
 public class AlertFactory {
-
-    private static final Image LOGO = new Image(Objects.requireNonNull(AlertFactory.class.
-            getResourceAsStream("/icons/app_icon.png")));
-    private static final Image ICON = new Image(Objects.requireNonNull(AlertFactory.class.
-            getResourceAsStream("/icons/app_icon_24x24.png")));
 
     /**
      * Private constructor to prevent instantiation of this utility class.
@@ -39,13 +36,13 @@ public class AlertFactory {
         alert.setHeaderText(header);
         alert.setContentText(content);
 
-        ImageView logoView = new ImageView(LOGO);
+        ImageView logoView = new ImageView(AppConstants.ICON);
         logoView.setFitWidth(48);
         logoView.setFitHeight(48);
         alert.setGraphic(logoView);
 
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(ICON);
+        stage.getIcons().add(AppConstants.ICON_24x24);
 
         return alert;
     }

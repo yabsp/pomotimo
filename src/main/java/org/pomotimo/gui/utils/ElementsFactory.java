@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
+import org.pomotimo.logic.config.AppConstants;
 
 /**
  * A factory utility class for creating common and reusable JavaFX UI elements.
@@ -18,7 +19,6 @@ import org.kordamp.ikonli.javafx.FontIcon;
  * window control buttons and spacers, ensuring a consistent appearance.
  */
 public class ElementsFactory {
-    static final String ICON_SM_PATH = "/icons/app_icon_24x24.png";
 
     /**
      * Private constructor to prevent instantiation of this utility class.
@@ -77,7 +77,7 @@ public class ElementsFactory {
      * @return A configured {@link ImageView} containing the application icon.
      */
     public static ImageView appIcon() {
-        ImageView appIcon = new ImageView(new Image(ElementsFactory.class.getResourceAsStream(ICON_SM_PATH)));
+        ImageView appIcon = new ImageView(AppConstants.ICON_24x24);
         appIcon.setFitHeight(18);
         appIcon.setFitWidth(18);
         HBox.setMargin(appIcon, new Insets(0, 5, 0, 10));

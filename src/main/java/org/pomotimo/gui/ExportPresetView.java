@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 
 import org.pomotimo.gui.utils.AlertFactory;
 import org.pomotimo.gui.utils.UIRefreshable;
+import org.pomotimo.logic.config.AppConstants;
 import org.pomotimo.logic.preset.Preset;
 import org.pomotimo.logic.preset.PresetManager;
 import org.pomotimo.logic.utils.PresetImporterExporter;
@@ -96,9 +97,9 @@ public class ExportPresetView extends BorderPane {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Export Preset");
-        fileChooser.setInitialFileName(pr.getName().replaceAll("\\s+", "_") + ".pomo");
+        fileChooser.setInitialFileName(pr.getName().replaceAll("\\s+", "_") + AppConstants.FILE_TYPE);
         fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Pomotimo Preset Files", "*.pomo")
+                new FileChooser.ExtensionFilter("Pomotimo Preset Files", "*" + AppConstants.FILE_TYPE)
         );
 
         Stage stage = (Stage) exportBtn.getScene().getWindow();

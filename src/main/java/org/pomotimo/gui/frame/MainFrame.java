@@ -26,6 +26,7 @@ import org.pomotimo.gui.TaskPane;
 import org.pomotimo.gui.TimerPane;
 import org.pomotimo.gui.utils.AlertFactory;
 import org.pomotimo.gui.utils.ElementsFactory;
+import org.pomotimo.logic.config.AppConstants;
 import org.pomotimo.logic.preset.Preset;
 import org.pomotimo.logic.preset.PresetManager;
 import org.pomotimo.logic.utils.EditorMode;
@@ -163,7 +164,7 @@ public class MainFrame extends PomoFrame {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Import Preset");
         fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("PomoTimo Preset Files", "*.pomo")
+                new FileChooser.ExtensionFilter("PomoTimo Preset Files", "*" + AppConstants.FILE_TYPE)
         );
 
         File file = fileChooser.showOpenDialog(mainStage);
@@ -194,8 +195,7 @@ public class MainFrame extends PomoFrame {
         this.mainStage.initStyle(StageStyle.TRANSPARENT);
         this.mainStage.setTitle("Pomotimo");
         try {
-            String iconURI = getClass().getResource(ICON_PATH).toExternalForm();
-            this.mainStage.getIcons().add(new Image(iconURI));
+            this.mainStage.getIcons().add(AppConstants.ICON_24x24);
         } catch (NullPointerException e) {
             logger.error("Icon path is null.", e);
         }

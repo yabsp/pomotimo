@@ -20,6 +20,7 @@ import org.pomotimo.gui.ExportPresetView;
 import org.pomotimo.gui.TaskPane;
 import org.pomotimo.gui.TimerPane;
 import org.pomotimo.gui.utils.ElementsFactory;
+import org.pomotimo.logic.config.AppConstants;
 import org.pomotimo.logic.preset.PresetManager;
 import org.pomotimo.logic.utils.PresetImporterExporter;
 
@@ -113,8 +114,7 @@ public class MenuFrame extends PomoFrame {
         mainStage.initModality(Modality.WINDOW_MODAL);
         mainStage.initOwner(parentStage);
         try {
-            String iconURI = getClass().getResource(ICON_PATH).toExternalForm();
-            this.mainStage.getIcons().add(new Image(iconURI));
+            this.mainStage.getIcons().add(AppConstants.ICON_24x24);
         } catch (NullPointerException e) {
             logger.error("Icon path is null.", e);
         }

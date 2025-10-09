@@ -1,13 +1,25 @@
 package org.pomotimo.logic.config;
 
 import java.nio.file.Path;
+import java.util.Objects;
 
+import javafx.scene.image.Image;
+
+import org.pomotimo.gui.utils.AlertFactory;
 import org.pomotimo.platform.OperatingSystem;
 
 public final class AppConstants {
 
     private AppConstants() {}
 
+
+    // --- App Icons ---
+    public static final Image ICON = new Image(Objects.requireNonNull(AppConstants.class.
+            getResourceAsStream("/icons/app_icon.png")));
+    public static final Image ICON_24x24 = new Image(Objects.requireNonNull(AppConstants.class.
+            getResourceAsStream("/icons/app_icon_24x24.png")));
+
+    // --- Operating System ---
     public static final OperatingSystem os = OperatingSystem.detect();
 
     // --- File system ---
@@ -18,6 +30,7 @@ public final class AppConstants {
     // --- Application metadata ---
     public static final String APP_NAME = "Pomotimo";
     public static final String VERSION = "1.1.2";
+    public static final String FILE_TYPE = ".pomo";
 
     // --- Default presets / settings ---
     public static final int DEFAULT_FOCUS_TIME = 1500;  // 25 min
