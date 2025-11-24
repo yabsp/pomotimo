@@ -13,6 +13,7 @@ import org.pomotimo.gui.TimerPane;
 import org.pomotimo.gui.utils.UIRefreshable;
 import org.pomotimo.logic.preset.PresetManager;
 import org.pomotimo.logic.utils.PresetImporterExporter;
+import org.pomotimo.gui.config.GUIConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +21,8 @@ public abstract class PomoFrame extends BorderPane implements UIRefreshable {
     protected static final Logger logger = LoggerFactory.getLogger(PomoFrame.class);
     double xOffset = 0;
     double yOffset = 0;
+    double startX, startY, startWidth, startHeight;
+    double startScreenX, startScreenY;
     boolean resizing = false;
     Cursor resizeCursor = Cursor.DEFAULT;
     Stage mainStage;
@@ -89,57 +92,90 @@ public abstract class PomoFrame extends BorderPane implements UIRefreshable {
             this.setCursor(resizeCursor);
         });
 
-        this.setOnMouseDragged(event -> {
-            if (resizeCursor == Cursor.DEFAULT) return;
-            resizing = true;
+        this.setOnMousePressed(event -> {
+            if (resizeCursor != Cursor.DEFAULT) {
+                resizing = true;
+                startX = mainStage.getX();
+                startY = mainStage.getY();
+                startWidth = mainStage.getWidth();
+                startHeight = mainStage.getHeight();
+                startScreenX = event.getScreenX();
+                startScreenY = event.getScreenY();
+            }
+        });
 
-            double mouseX = event.getScreenX();
-            double mouseY = event.getScreenY();
-            double stageX = mainStage.getX();
-            double stageY = mainStage.getY();
-            double stageW = mainStage.getWidth();
-            double stageH = mainStage.getHeight();
+        this.setOnMouseDragged(event -> {
+            if (!resizing || resizeCursor == Cursor.DEFAULT) return;
+
+            double rawDeltaX = event.getScreenX() - startScreenX;
+            double rawDeltaY = event.getScreenY() - startScreenY;
+
+            double newWidth = startWidth;
+            double newHeight = startHeight;
+            double newX = startX;
+            double newY = startY;
 
             switch (resizeCursor.toString()) {
-                case "NW_RESIZE":
-                    mainStage.setX(mouseX);
-                    mainStage.setY(mouseY);
-                    mainStage.setWidth(stageW - (mouseX - stageX));
-                    mainStage.setHeight(stageH - (mouseY - stageY));
+                case "W_RESIZE": // Left Resize
+                    double effectiveDeltaW = Math.min(rawDeltaX, startWidth - GUIConstants.MIN_WIN_WIDTH);
+                    newX = startX + effectiveDeltaW;
+                    newWidth = startWidth - effectiveDeltaW;
                     break;
-                case "NE_RESIZE":
-                    mainStage.setY(mouseY);
-                    mainStage.setWidth(mouseX - stageX);
-                    mainStage.setHeight(stageH - (mouseY - stageY));
+
+                case "E_RESIZE": // Right Resize
+                    newWidth = Math.max(startWidth + rawDeltaX, GUIConstants.MIN_WIN_WIDTH);
                     break;
-                case "SW_RESIZE":
-                    mainStage.setX(mouseX);
-                    mainStage.setWidth(stageW - (mouseX - stageX));
-                    mainStage.setHeight(mouseY - stageY);
+
+                case "N_RESIZE": // Top Resize
+                    double effectiveDeltaN = Math.min(rawDeltaY, startHeight - GUIConstants.MIN_WIN_HEIGHT);
+                    newY = startY + effectiveDeltaN;
+                    newHeight = startHeight - effectiveDeltaN;
                     break;
-                case "SE_RESIZE":
-                    mainStage.setWidth(mouseX - stageX);
-                    mainStage.setHeight(mouseY - stageY);
+
+                case "S_RESIZE": // Bottom Resize
+                    newHeight = Math.max(startHeight + rawDeltaY, GUIConstants.MIN_WIN_WIDTH);
                     break;
-                case "W_RESIZE":
-                    mainStage.setX(mouseX);
-                    mainStage.setWidth(stageW - (mouseX - stageX));
+
+                case "NW_RESIZE": // Top-Left
+                    double effDX_NW = Math.min(rawDeltaX, startWidth - GUIConstants.MIN_WIN_WIDTH);
+                    double effDY_NW = Math.min(rawDeltaY, startHeight - GUIConstants.MIN_WIN_HEIGHT);
+                    newX = startX + effDX_NW;
+                    newWidth = startWidth - effDX_NW;
+                    newY = startY + effDY_NW;
+                    newHeight = startHeight - effDY_NW;
                     break;
-                case "E_RESIZE":
-                    mainStage.setWidth(mouseX - stageX);
+
+                case "NE_RESIZE": // Top-Right
+                    double effDY_NE = Math.min(rawDeltaY, startHeight - GUIConstants.MIN_WIN_HEIGHT);
+                    newWidth = Math.max(startWidth + rawDeltaX, GUIConstants.MIN_WIN_WIDTH);
+                    newY = startY + effDY_NE;
+                    newHeight = startHeight - effDY_NE;
                     break;
-                case "N_RESIZE":
-                    mainStage.setY(mouseY);
-                    mainStage.setHeight(stageH - (mouseY - stageY));
+
+                case "SW_RESIZE": // Bottom-Left
+                    double effDX_SW = Math.min(rawDeltaX, startWidth - GUIConstants.MIN_WIN_WIDTH);
+                    newX = startX + effDX_SW;
+                    newWidth = startWidth - effDX_SW;
+                    newHeight = Math.max(startHeight + rawDeltaY, GUIConstants.MIN_WIN_HEIGHT);
                     break;
-                case "S_RESIZE":
-                    mainStage.setHeight(mouseY - stageY);
+
+                case "SE_RESIZE": // Bottom-Right
+                    newWidth = Math.max(startWidth + rawDeltaX, GUIConstants.MIN_WIN_WIDTH);
+                    newHeight = Math.max(startHeight + rawDeltaY, GUIConstants.MIN_WIN_HEIGHT);
                     break;
             }
+
+            if (mainStage.getWidth() != newWidth) mainStage.setWidth(newWidth);
+            if (mainStage.getHeight() != newHeight) mainStage.setHeight(newHeight);
+            if (mainStage.getX() != newX) mainStage.setX(newX);
+            if (mainStage.getY() != newY) mainStage.setY(newY);
         });
 
         this.setOnMouseReleased(event -> {
             resizing = false;
+            if (event.getPickResult().getIntersectedNode() == this) {
+                this.setCursor(Cursor.DEFAULT);
+            }
         });
 
     }
