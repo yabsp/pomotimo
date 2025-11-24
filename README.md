@@ -1,10 +1,9 @@
-<img src="src/main/resources/icons/app_icon_highres.png" align="right" width="120" alt="Logo" />
+<img src="src/main/resources/icons/app_icon_highres.png" width="180">
 
 # Pomotimo
-
-![Java Version](https://img.shields.io/badge/Java-21-orange)
-![Build Tool](https://img.shields.io/badge/Gradle-8.11-02303A)
-![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
+[![Java Version](https://img.shields.io/badge/Java-21-orange)](https://adoptium.net/de/temurin/releases?version=21&os=any&arch=any)
+[![Build Tool](https://img.shields.io/badge/Gradle-8.11-02303A)](https://gradle.org/releases/#8.11)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/yabsp/pomotimo/blob/c85f856bf764891e881d17939ee29564fc503609/LICENSE)
 
 **Pomotimo** is a modern, cross-platform desktop application built with Java 21 and JavaFX. It features a responsive user interface and self-contained packaging.
 
