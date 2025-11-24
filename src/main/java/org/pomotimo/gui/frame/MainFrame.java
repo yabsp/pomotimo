@@ -66,11 +66,13 @@ public class MainFrame extends PomoFrame {
         this.topBar = new HBox();
         topBar.getStyleClass().add("custom-title-bar");
 
+        /*
         MenuButton settingsButton = new MenuButton("Settings");
         settingsButton.getItems().addAll(
                 new MenuItem("General Settings")
         );
         settingsButton.getStyleClass().add("topbar-button");
+        */
         MenuItem importItem = new MenuItem("Import");
         MenuItem exportItem = new MenuItem("Export");
 
@@ -142,7 +144,8 @@ public class MainFrame extends PomoFrame {
         makeWindowDraggable();
 
         topBar.getChildren().addAll(ElementsFactory.appIcon(),
-                settingsButton, presetButton,
+                //settingsButton,
+                presetButton,
                 ElementsFactory.spacer(),
                 minimizeBtn, maximizeBtn, closeBtn);
         this.setTop(topBar);
