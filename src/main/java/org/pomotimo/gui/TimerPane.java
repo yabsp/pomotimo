@@ -217,8 +217,14 @@ public class TimerPane extends BorderPane {
                 if(timer.isRunning()){
                     startBtn.setText("Start");
                 }
-                timer.reset(focusSec);
-                timerLabel.setText(String.format("%02d:%02d", focusSec / 60, focusSec % 60));
+                int nt = focusSec;
+                switch (state) {
+                    case SHORTBR -> nt = shortBrSec;
+                    case LONGBR -> nt = longBrSec;
+                }
+                timer.reset(nt);
+                timerLabel.setText(String.format("%02d:%02d", nt / 60, nt % 60));
+
             });
             skipBtn.setOnAction(e -> setNewPomoState());
         });

@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 import org.pomotimo.gui.utils.AlertFactory;
+import org.pomotimo.logic.audio.AudioData;
 import org.pomotimo.logic.config.AppConstants;
 import org.pomotimo.logic.preset.Preset;
 import org.pomotimo.logic.utils.EditorMode;
@@ -35,7 +36,7 @@ public class PresetEditor extends BorderPane {
     @FXML private TextField cycleField;
     @FXML private Button saveBtn;
     @FXML private Button setDefaultsBtn;
-    @FXML private ComboBox<Preset.AudioData> soundSelectBox;
+    @FXML private ComboBox<AudioData> soundSelectBox;
     private final PresetManager presetManager;
     private final TimerPane parentPane;
     private final Preset currentPreset;
@@ -126,7 +127,7 @@ public class PresetEditor extends BorderPane {
                      .setDurationShortBreak(shortBrSecs)
                      .setDurationLongBreak(longBrSecs)
                      .setCycleAmount(Integer.parseInt(cycleField.getText()));
-        Preset.AudioData selectedAudio = soundSelectBox.getSelectionModel().getSelectedItem();
+        AudioData selectedAudio = soundSelectBox.getSelectionModel().getSelectedItem();
 
         if(selectedAudio != null) {
             if (currentPreset.getCurrentAudio() != selectedAudio) {
@@ -194,10 +195,10 @@ public class PresetEditor extends BorderPane {
     }
 
     private void setupSoundSelectBox(boolean reset) {
-        ObservableList<Preset.AudioData> audioItems = FXCollections.observableList(PersistenceManager.readOnlyAudioDataList);
+        ObservableList<AudioData> audioItems = FXCollections.observableList(PersistenceManager.readOnlyAudioDataList);
         soundSelectBox.setItems(audioItems);
         if (reset) {
-            Optional<Preset.AudioData> optDef = PersistenceManager.readOnlyAudioDataList
+            Optional<AudioData> optDef = PersistenceManager.readOnlyAudioDataList
                     .stream()
                     .filter(e -> e.name().equals("winter_vivaldi"))
                     .findFirst();

@@ -1,12 +1,20 @@
 package org.pomotimo.logic.preset;
 
+import javafx.scene.input.DataFormat;
 import org.pomotimo.logic.config.AppConstants;
+
+import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Represents a task that is to be done. A task has a name and a priority.
  */
 public class Task {
     private String name;
+    /**
+     * Unique Identifier for our task.
+     */
+    private final String uuid;
     /**
      * Priority is used as a number to sort tasks. Value 1 means that the priority is the highest.
      * In the task list the numbers refer to the placement in the list and can be used to sort tasks.
@@ -19,16 +27,30 @@ public class Task {
     public Task() {
         this.name = "";
         this.priority = AppConstants.DEFAULT_PRIO;
+        this.uuid = "";
     }
 
     /**
      * Constructs a task with custom priority.
      * @param name the name of the task
      * @param priority the priority of the task, lower int value means higher priority.
+     * @param uuid the uuid of our task.
+     */
+    public Task(String name, int priority, String uuid) {
+        this.name = name;
+        this.priority = priority;
+        this.uuid = uuid;
+    }
+
+    /**
+     * Constructs a task with custom priority without providing a uuid.
+     * @param name the name of the task
+     * @param priority the priority of the task, lower int value means higher priority.
      */
     public Task(String name, int priority) {
         this.name = name;
         this.priority = priority;
+        this.uuid = UUID.randomUUID().toString();
     }
 
     /**
@@ -38,6 +60,7 @@ public class Task {
     public Task(String name) {
         this.name = name;
         this.priority = AppConstants.DEFAULT_PRIO;
+        this.uuid = UUID.randomUUID().toString();
     }
 
     /**
@@ -48,6 +71,14 @@ public class Task {
     public String getName() {
         return name;
     }
+
+    /**
+     * Gets the unique identifier of the task.
+     * This returns a String in standard UUID format.
+     *
+     * @return String, the tasks unique id
+     */
+    public String getUUId() { return uuid; }
 
     /**
      * Gets the priority of the task.
@@ -84,7 +115,7 @@ public class Task {
             return false;
         }
 
-        return t.getName().equals(name) && t.getPriority() == priority;
+        return this.uuid.equals(t.uuid);
     }
 
     /**

@@ -1,7 +1,11 @@
 package org.pomotimo.gui;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -64,11 +68,11 @@ public class TaskPane extends BorderPane {
     }
 
     private void addTask() {
-        if(taskInput.getText() == null || taskInput.getText().trim().isEmpty() || taskInput.getText().isBlank()) {
+        if (taskInput.getText() == null || taskInput.getText().trim().isEmpty() || taskInput.getText().isBlank()) {
             return;
         }
 
-        if(presetManager.getCurrentPreset().isPresent()){
+        if (presetManager.getCurrentPreset().isPresent()){
             logger.info("Current Preset is present.");
             Preset pr = presetManager.getCurrentPreset().get();
             Task t = new Task(taskInput.getText(), pr.getTaskAmount());
@@ -114,9 +118,9 @@ public class TaskPane extends BorderPane {
                 Dragboard db = cell.startDragAndDrop(TransferMode.MOVE);
                 ClipboardContent content = new ClipboardContent();
 
-                int draggedIndex = cell.getIndex();
-                content.putString(Integer.toString(draggedIndex));
+                content.putString(cell.getItem().getUUId());
                 db.setContent(content);
+
                 db.setDragView(cell.snapshot(null, null));
 
                 event.consume();
@@ -126,11 +130,9 @@ public class TaskPane extends BorderPane {
                 Dragboard db = event.getDragboard();
                 if (event.getGestureSource() != cell && db.hasString()) {
                     event.acceptTransferModes(TransferMode.MOVE);
-
-                    int draggedIdx = Integer.parseInt(db.getString());
-                    Task draggedTask = taskListView.getItems().get(draggedIdx);
-                    cell.setText(draggedTask.getName());
-                    cell.setStyle("-fx-border-color: grey; -fx-border-width: 2 0 0 0; -fx-background-color: lightgrey;");
+                    if (cell.getIndex() <= taskListView.getItems().size()) {
+                        cell.setStyle("-fx-border-color: grey; -fx-border-width: 2 0 0 0; -fx-background-color: lightgrey;");
+                    }
                 }
                 event.consume();
             });
@@ -142,44 +144,47 @@ public class TaskPane extends BorderPane {
             });
 
             cell.setOnDragDropped(event -> {
-                if (cell.isEmpty())
+                int newIndex;
+                ObservableList<Task> list = taskListView.getItems();
+                if (cell.getIndex() > list.size())
                     return;
 
-                Dragboard db = event.getDragboard();
-                if (db.hasString()) {
-                    int draggedIdx = Integer.parseInt(db.getString());
-                    int thisIdx = cell.getIndex();
+                Dragboard db =  event.getDragboard();
+                if (!db.hasString()) return;
+                String draggedId = db.getString();
 
-                    if (draggedIdx != thisIdx) {
-                        Task draggedTask = taskListView.getItems().get(draggedIdx);
-                        Task targetTask = taskListView.getItems().get(thisIdx);
+                Optional<Task> t = findTaskById(draggedId);
+                if (t.isPresent()) {
+                    Task draggedTask = t.get();
 
-                        logger.info("Dragged index: " + draggedIdx);
-                        logger.info("Target index: " + thisIdx);
-                        logger.info("Dragged task (before prio adjustment): " + draggedTask);
-                        logger.info("Target task (before prio adjustment): " + targetTask);
+                    int oldIndex = list.indexOf(draggedTask);
+                    newIndex = cell.isEmpty()? list.size() : cell.getIndex();
 
-                        taskListView.getItems().set(draggedIdx, targetTask);
-                        taskListView.getItems().set(thisIdx, draggedTask);
+                    if (oldIndex < newIndex) newIndex--;
 
-                        int tempPriority = draggedTask.getPriority();
-                        draggedTask.setPriority(targetTask.getPriority());
-                        targetTask.setPriority(tempPriority);
+                    if (oldIndex != newIndex) {
+                        list.remove(draggedTask);
+                        list.add(newIndex, draggedTask);
 
-                        logger.info("Dragged task (after prio adjustment): " + draggedTask);
-                        logger.info("Target task (after prio adjustment): " + targetTask);
+                        normalizePriorities(list);
                         presetManager.scheduleSave();
-                        taskListView.refresh();
-                        taskListView.getSelectionModel().select(thisIdx);
                     }
 
                     event.setDropCompleted(true);
-                }
+                };
+
                 event.consume();
             });
 
             return cell;
         });
+    }
+
+    private void normalizePriorities(ObservableList<Task> items) {
+        for (int i = 0; i < items.size(); i++) {
+            items.get(i).setPriority(i);
+        }
+        presetManager.scheduleSave();
     }
 
     private void removeTaskItem(Task task) {
@@ -188,6 +193,15 @@ public class TaskPane extends BorderPane {
             presetManager.getCurrentPreset().ifPresent(pr -> pr.removeTask(task));
             presetManager.scheduleSave();
             logger.info("Deleted: {}", task);
+        }
+    }
+
+    private Optional<Task> findTaskById(String uuid) {
+        if (presetManager.getCurrentPreset().isPresent()) {
+            return presetManager.findTaskByUUID(presetManager.getCurrentPreset().get(), uuid);
+        }
+        else {
+            return Optional.empty();
         }
     }
 
@@ -218,7 +232,8 @@ public class TaskPane extends BorderPane {
         enableCellFactory();
         presetManager.getCurrentPreset().ifPresent(pr -> {
             logger.info("Adding all tasks of current presets to ListView");
-            taskListView.getItems().setAll(pr.getTasks());
+            List<Task> tasks = pr.getTasks();
+            taskListView.setItems(FXCollections.observableArrayList(tasks));
         });
     }
 

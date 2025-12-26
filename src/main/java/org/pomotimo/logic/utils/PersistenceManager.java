@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.pomotimo.logic.config.AppConstants;
 import org.pomotimo.logic.preset.Preset;
+import org.pomotimo.logic.audio.AudioData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,18 +14,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -36,8 +31,8 @@ public class PersistenceManager {
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static final Logger logger = LoggerFactory.getLogger(PersistenceManager.class);
 
-    private static final List<Preset.AudioData> audioDataList = new ArrayList<>();
-    public static final List<Preset.AudioData> readOnlyAudioDataList = Collections.unmodifiableList(audioDataList);
+    private static final List<AudioData> audioDataList = new ArrayList<>();
+    public static final List<AudioData> readOnlyAudioDataList = Collections.unmodifiableList(audioDataList);
 
     static {
         logger.debug("Running static initializer for PersistenceManager...");
@@ -106,37 +101,37 @@ public class PersistenceManager {
         if (!Files.exists(AppConstants.MEDIA_DIR)) {
             return;
         }
-        List<Preset.AudioData> audioFiles = new ArrayList<>();
+        List<AudioData> audioFiles = new ArrayList<>();
         try (Stream<Path> stream = Files.list(Paths.get(AppConstants.MEDIA_DIR.toUri()))) {
              audioFiles = stream
                     .filter(Files::isRegularFile)
                     .map(e -> {
                         logger.debug("Following audio added to list: {}", e.toString());
-                        return Preset.AudioData
+                        return AudioData
                                 .createAudioDataFromFile(e.toString());
                     })
                     .toList();
         } catch (IOException e){
             logger.error("Error reading directory: {}, {}", AppConstants.MEDIA_DIR, e.getMessage());
         }
-        List<Preset.AudioData> filesToAdd = new ArrayList<>(audioFiles);
+        List<AudioData> filesToAdd = new ArrayList<>(audioFiles);
         filesToAdd.removeAll(audioDataList);
         audioDataList.addAll(filesToAdd);
     }
 
     /**
      *  Adds an entry to the {@link PersistenceManager#audioDataList}.
-     * @param entry the {@link Preset.AudioData} record that is added.
+     * @param entry the {@link AudioData} record that is added.
      */
-    public void addAudioDataEntry (Preset.AudioData entry) {
+    public void addAudioDataEntry (AudioData entry) {
         audioDataList.add(entry);
     }
 
     /**
      *  Removes an entry from the {@link PersistenceManager#audioDataList}.
-     * @param entry the {@link Preset.AudioData} record that is removed.
+     * @param entry the {@link AudioData} record that is removed.
      */
-    public void removeAudioDataEntry (Preset.AudioData entry) {
+    public void removeAudioDataEntry (AudioData entry) {
         audioDataList.remove(entry);
     }
 

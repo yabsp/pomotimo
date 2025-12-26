@@ -1,13 +1,13 @@
 package org.pomotimo.logic.preset;
 
-import java.net.URL;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
+import org.pomotimo.logic.audio.AudioData;
 import org.pomotimo.logic.config.AppConstants;
 import org.pomotimo.logic.utils.PersistenceManager;
-import org.pomotimo.platform.OperatingSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -227,6 +227,12 @@ public class Preset {
     }
 
     /**
+     * Sorts the tasklist according to their priority.
+     */
+    public void sortTasks() {
+        tasks.sort(Comparator.comparingInt(Task::getPriority));
+    }
+    /**
      * Add a task to the preset. See {@link Task} for more information.
      * @param t Task that should be added to the preset.
      * @return {@code true} if the task has been added successfully, {@code false} otherwise.
@@ -249,6 +255,13 @@ public class Preset {
         return tasks.remove(t);
     }
 
+    public Optional<Task> getTaskByUUID(String uuid) {
+        for (Task task : tasks) {
+            if (task.getUUId().equals(uuid))
+                return Optional.of(task);
+        }
+        return Optional.empty();
+    }
     /**
      * Returns a string representation of the preset, including its name and timer durations.
      *
@@ -285,61 +298,5 @@ public class Preset {
                 && p.getImageFile().equals(imageFile)
                 && p.getCurrentAudio().equals(currentAudio)
                 && tasks.containsAll(p.getTasks());
-    }
-
-    public record AudioData (String name, String filePath) {
-
-        /**
-         * Creates an AudioData record from a file Path.
-         * Extracts the name without the extension and gets the absolute file path.
-         *
-         * @param filePath The path where the audio file is located.
-         *             Assumes that a file exists under this path.
-         * @return  A new AudioData instance.
-         */
-        public static AudioData createAudioDataFromFile(String filePath) {
-            String fileName = getFileNameFromString(filePath);
-            String nameWithoutExtension = fileName;
-            int lastDotIndex = fileName.lastIndexOf('.');
-            if (lastDotIndex > 0) {
-                nameWithoutExtension = fileName.substring(0, lastDotIndex);
-            }
-            return new AudioData(nameWithoutExtension, filePath);
-        }
-
-        /**
-         * Extracts the filename from any path/URL/URI string by finding the last separator.
-         * @param pathString The full path or URL string.
-         * @return The filename with its extension.
-         */
-        public static String getFileNameFromString(String pathString) {
-            if (pathString == null || pathString.isEmpty()) {
-                return "";
-            }
-            int lastSlash = 0;
-            switch (AppConstants.os) {
-                case WINDOWS -> lastSlash = pathString.lastIndexOf('\\');
-                case LINUX, MAC -> lastSlash = pathString.lastIndexOf('/');
-
-            }
-            if (lastSlash >= 0) {
-                return pathString.substring(lastSlash + 1);
-            }
-            return pathString;
-        }
-
-        @Override
-        public String toString() {
-            return this.name;
-        }
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            return o instanceof AudioData(String nameOther, String path)
-                    && this.name.equals(nameOther)
-                    && this.filePath.equals(path);
-        }
     }
 }

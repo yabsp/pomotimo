@@ -137,6 +137,10 @@ public class PresetManager {
         return removed;
     }
 
+    public Optional<Task> findTaskByUUID(Preset p, String uuid) {
+        return p.getTaskByUUID(uuid);
+    }
+
     /**
      * Removes all presets from the manager and schedules a save operation.
      */

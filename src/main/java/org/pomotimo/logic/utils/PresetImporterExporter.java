@@ -2,6 +2,7 @@ package org.pomotimo.logic.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.pomotimo.logic.audio.AudioData;
 import org.pomotimo.logic.config.AppConstants;
 import org.pomotimo.logic.preset.Preset;
 import org.pomotimo.logic.preset.PresetManager;
@@ -121,7 +122,7 @@ public class PresetImporterExporter {
     }
 
     private Preset createPresetWithRelativePaths(Preset original) {
-        Preset.AudioData originalAudio = original.getCurrentAudio();
+        AudioData originalAudio = original.getCurrentAudio();
         Preset forExport = new Preset(
                 original.getName(),
                 original.getDurationFocus(),
@@ -131,7 +132,7 @@ public class PresetImporterExporter {
         );
         if (originalAudio != null) {
             String relPath = Paths.get(originalAudio.filePath()).getFileName().toString();
-            forExport.setCurrentAudio(Preset.AudioData.createAudioDataFromFile(relPath));
+            forExport.setCurrentAudio(AudioData.createAudioDataFromFile(relPath));
 
         }
         if (original.getImageFile() != null && !original.getImageFile().isEmpty()) {
@@ -146,7 +147,7 @@ public class PresetImporterExporter {
     private void updatePathsToAbsolute(Preset preset) {
         if (preset.getCurrentAudio() != null) {
             Path newPath = AppConstants.MEDIA_DIR.resolve(preset.getCurrentAudio().filePath());
-            preset.setCurrentAudio(Preset.AudioData.createAudioDataFromFile(newPath.toAbsolutePath().toString()));
+            preset.setCurrentAudio(AudioData.createAudioDataFromFile(newPath.toAbsolutePath().toString()));
         }
         if (preset.getImageFile() != null && !preset.getImageFile().isEmpty()) {
             Path newPath = AppConstants.MEDIA_DIR.resolve(preset.getImageFile());
