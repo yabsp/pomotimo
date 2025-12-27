@@ -75,7 +75,7 @@ public class TimerPane extends BorderPane {
 
         try {
             loader.load();
-            getStylesheets().add(getClass().getResource("/css/generalstyle.css").toExternalForm());
+            getStylesheets().add(getClass().getResource("/css/style-dark.css").toExternalForm());
         } catch (IOException e) {
             logger.error("Failed to load TimerPane.fxml", e);
         } catch (NullPointerException e) {

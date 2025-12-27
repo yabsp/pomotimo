@@ -1,7 +1,6 @@
 package org.pomotimo.gui.frame;
 
 import java.io.File;
-import java.util.Objects;
 import java.util.Optional;
 
 import javafx.application.Platform;
@@ -13,7 +12,6 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
@@ -21,16 +19,15 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import org.pomotimo.gui.ExportPresetView;
 import org.pomotimo.gui.TaskPane;
 import org.pomotimo.gui.TimerPane;
 import org.pomotimo.gui.state.AppState;
+import org.pomotimo.gui.state.TimerViewState;
 import org.pomotimo.gui.utils.AlertFactory;
 import org.pomotimo.gui.utils.ElementsFactory;
 import org.pomotimo.logic.config.AppConstants;
 import org.pomotimo.logic.preset.Preset;
 import org.pomotimo.logic.preset.PresetManager;
-import org.pomotimo.logic.utils.EditorMode;
 import org.pomotimo.logic.utils.PresetImporterExporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -160,6 +157,7 @@ public class MainFrame extends PomoFrame {
             importedPreset.ifPresent(preset -> {
                 presetManager.setCurrentPreset(preset);
                 appState.setCurrentPreset(preset);
+                appState.setTimerViewState(TimerViewState.TIMER);
             });
             if (importedPreset.isPresent()) {
                 AlertFactory.alert(Alert.AlertType.INFORMATION, "Import Successful", "",
@@ -231,8 +229,8 @@ public class MainFrame extends PomoFrame {
         scene.setFill(Color.TRANSPARENT);
         this.mainStage.setScene(scene);
         try {
-            String titlebarCSS = getClass().getResource("/css/titlebar.css").toExternalForm();
-            String styleCSS = getClass().getResource("/css/generalstyle.css").toExternalForm();
+            String titlebarCSS = getClass().getResource("/css/style-dark.css").toExternalForm();
+            String styleCSS = getClass().getResource("/css/style-dark.css").toExternalForm();
             this.mainStage.getScene().getStylesheets().addAll(titlebarCSS, styleCSS);
         } catch (NullPointerException e) {
             logger.error("Stylesheets not found.", e);

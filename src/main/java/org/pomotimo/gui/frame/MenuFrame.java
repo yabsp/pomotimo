@@ -1,13 +1,7 @@
 package org.pomotimo.gui.frame;
 
-import java.util.Objects;
-
-import javax.swing.text.View;
-
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -129,8 +123,8 @@ public class MenuFrame extends PomoFrame {
         scene.setFill(Color.TRANSPARENT);
         mainStage.setScene(scene);
         try {
-            String titlebarCSS = getClass().getResource("/css/titlebar.css").toExternalForm();
-            String styleCSS = getClass().getResource("/css/generalstyle.css").toExternalForm();
+            String titlebarCSS = getClass().getResource("/css/style-dark.css").toExternalForm();
+            String styleCSS = getClass().getResource("/css/style-dark.css").toExternalForm();
             this.mainStage.getScene().getStylesheets().addAll(titlebarCSS, styleCSS);
         } catch (NullPointerException e) {
             logger.error("Stylesheets not found.", e);

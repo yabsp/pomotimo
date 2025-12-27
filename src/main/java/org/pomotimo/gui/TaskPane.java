@@ -55,7 +55,7 @@ public class TaskPane extends BorderPane {
         loader.setController(this);
         try {
             loader.load();
-            getStylesheets().add(getClass().getResource("/css/generalstyle.css").toExternalForm());
+            getStylesheets().add(getClass().getResource("/css/style-dark.css").toExternalForm());
         } catch (IOException e) {
             logger.error("Failed to load TaskPane.fxml", e);
         } catch (NullPointerException e) {
