@@ -10,14 +10,14 @@ import javafx.stage.Stage;
 
 import org.pomotimo.gui.TaskPane;
 import org.pomotimo.gui.TimerPane;
-import org.pomotimo.gui.utils.UIRefreshable;
+import org.pomotimo.gui.state.AppState;
 import org.pomotimo.logic.preset.PresetManager;
 import org.pomotimo.logic.utils.PresetImporterExporter;
 import org.pomotimo.gui.config.GUIConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class PomoFrame extends BorderPane implements UIRefreshable {
+public abstract class PomoFrame extends BorderPane {
     protected static final Logger logger = LoggerFactory.getLogger(PomoFrame.class);
     double xOffset = 0;
     double yOffset = 0;
@@ -31,6 +31,7 @@ public abstract class PomoFrame extends BorderPane implements UIRefreshable {
     HBox topBar;
     PresetManager presetManager;
     PresetImporterExporter importerExporter;
+    AppState appState;
 
     public enum ViewType {
         DELETE_VIEW,
@@ -41,23 +42,32 @@ public abstract class PomoFrame extends BorderPane implements UIRefreshable {
                       PresetImporterExporter importerExporter,
                       TimerPane timerPane,
                       TaskPane taskPane,
-                      Stage mainStage) {
+                      Stage mainStage,
+                      AppState appState) {
         this.presetManager = presetManager;
         this.importerExporter = importerExporter;
         this.taskPane = taskPane;
         this.timerPane = timerPane;
         this.mainStage = mainStage;
+        this.appState = appState;
+        appState.currentPresetProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                drawTopBar();
+            }
+        });
     }
 
     public PomoFrame(PresetManager presetManager,
                      PresetImporterExporter importerExporter,
-                     Stage mainStage) {
+                     Stage mainStage,
+                     AppState appState) {
         this.presetManager = presetManager;
         this.importerExporter = importerExporter;
         this.mainStage = mainStage;
+        this.appState = appState;
     }
 
-    protected abstract void createTopBar();
+    protected abstract void drawTopBar();
     protected abstract void initialize();
 
     protected void makeWindowResizable() {
@@ -212,25 +222,5 @@ public abstract class PomoFrame extends BorderPane implements UIRefreshable {
 
     public void show() {
         mainStage.show();
-    }
-
-    @Override
-    public void refreshTopBar() {
-        createTopBar();
-    }
-
-    @Override
-    public void refreshTimerPane() {
-        timerPane.refreshUI();
-    }
-
-    @Override
-    public void refreshTaskPane() {
-        taskPane.refreshUI();
-    }
-
-    @Override
-    public void refreshTaskListView() {
-        taskPane.refreshTaskListView();
     }
 }

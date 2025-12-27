@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 import org.pomotimo.gui.frame.MainFrame;
+import org.pomotimo.gui.state.AppState;
 import org.pomotimo.logic.utils.PersistenceManager;
 import org.pomotimo.logic.utils.PresetImporterExporter;
 import org.pomotimo.logic.preset.PresetManager;
@@ -27,11 +28,12 @@ public class PomotimoGUI extends Application {
 
     @Override
     public void start(Stage stage) {
-        PomotimoGUI.presetManager = new PresetManager();
+        AppState appState = new AppState();
+        PomotimoGUI.presetManager = new PresetManager(appState);
         PomotimoGUI.importerExporter = new PresetImporterExporter(presetManager);
         PomotimoGUI.mainStage = stage;
         logger.debug("Starting GUI...");
-        PomotimoGUI.mainFrame = new MainFrame(presetManager, importerExporter, mainStage);
+        PomotimoGUI.mainFrame = new MainFrame(presetManager, importerExporter, mainStage, appState);
         mainFrame.show();
     }
 }

@@ -114,7 +114,10 @@ jlink {
         } else if (os.isLinux()) {
             icon = 'src/main/resources/icons/app_icon.png'
             installerType = 'deb' // or 'rpm'
-            installerOptions = ['--linux-shortcut', '--linux-menu-group', 'Office']
+            installerOptions = ['--linux-shortcut',
+                                '--linux-menu-group', 'Office',
+                                '--linux-app-category', 'Office',
+                                '--linux-deb-maintainer', 'pomotimo-dev']
         } else if (os.isMacOsX()) {
             icon = 'src/main/resources/icons/app_icon.icns'
             installerType = 'dmg'

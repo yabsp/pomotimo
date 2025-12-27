@@ -9,12 +9,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 
+import org.pomotimo.gui.state.AppState;
+import org.pomotimo.gui.state.TimerViewState;
 import org.pomotimo.gui.utils.AlertFactory;
 import org.pomotimo.logic.audio.AudioData;
 import org.pomotimo.logic.config.AppConstants;
@@ -38,13 +41,13 @@ public class PresetEditor extends BorderPane {
     @FXML private Button setDefaultsBtn;
     @FXML private ComboBox<AudioData> soundSelectBox;
     private final PresetManager presetManager;
-    private final TimerPane parentPane;
-    private final Preset currentPreset;
+    private Preset currentPreset;
+    private final AppState appState;
 
-    public PresetEditor(PresetManager presetManager, TimerPane parentPane, Preset currentPreset) {
+    public PresetEditor(PresetManager presetManager, AppState appState, Preset currentPreset) {
         this.presetManager = presetManager;
-        this.parentPane = parentPane;
         this.currentPreset = currentPreset;
+        this.appState = appState;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PresetEditor.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -61,9 +64,14 @@ public class PresetEditor extends BorderPane {
 
     @FXML
     private void initialize() {
-        closeBtn.setOnAction(e -> parentPane.refreshUI());
+        closeBtn.setOnAction(e -> appState.setTimerViewState(TimerViewState.TIMER));
         saveBtn.setOnAction(e -> savePresetConfiguration());
         setDefaultsBtn.setOnAction(e -> setFields(EditorMode.RESET));
+        this.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                savePresetConfiguration();
+            }
+        });
         setFields(EditorMode.EDIT);
     }
 
@@ -122,28 +130,29 @@ public class PresetEditor extends BorderPane {
             AlertFactory.emptyNameFieldAlert("Preset Name Field").showAndWait();
             return;
         }
-        currentPreset.setName(nameField.getText())
-                     .setDurationFocus(focusSecs)
-                     .setDurationShortBreak(shortBrSecs)
-                     .setDurationLongBreak(longBrSecs)
-                     .setCycleAmount(Integer.parseInt(cycleField.getText()));
+
         AudioData selectedAudio = soundSelectBox.getSelectionModel().getSelectedItem();
 
-        if(selectedAudio != null) {
-            if (currentPreset.getCurrentAudio() != selectedAudio) {
-                currentPreset.setCurrentAudio(selectedAudio);
-                presetManager.refreshPlayerAudioPath(selectedAudio.filePath());
-            }
+        Preset updated = currentPreset.copyWith(
+                nameField.getText(),
+                focusSecs,
+                shortBrSecs,
+                longBrSecs,
+                Integer.parseInt(cycleField.getText()),
+                selectedAudio
+        );
+        presetManager.refreshPlayerAudioPath(selectedAudio.filePath());
+
+        if (!presetManager.contains(updated)) {
+            presetManager.addPreset(updated);
+            presetManager.setCurrentPreset(updated);
         }
 
-        if (!presetManager.contains(currentPreset)) {
-            presetManager.addPreset(currentPreset);
-            presetManager.setCurrentPreset(currentPreset);
-        }
+        appState.setCurrentPreset(updated);
+        appState.setTimerViewState(TimerViewState.TIMER);
+
+        currentPreset = updated;
         presetManager.scheduleSave();
-        parentPane.refreshTopBar();
-        parentPane.refreshTaskListView();
-        parentPane.refreshUI();
     }
 
     private void configureTextField(TextField field, String initialValue) {

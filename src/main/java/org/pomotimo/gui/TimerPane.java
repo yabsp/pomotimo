@@ -15,7 +15,8 @@ import java.util.List;
 
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
-import org.pomotimo.gui.utils.UIRefreshable;
+import org.pomotimo.gui.state.AppState;
+import org.pomotimo.gui.state.TimerViewState;
 import org.pomotimo.logic.preset.Preset;
 import org.pomotimo.logic.PomoTimer;
 import org.pomotimo.logic.preset.PresetManager;
@@ -40,7 +41,7 @@ public class TimerPane extends BorderPane {
     @FXML private VBox timerContainer;
     private final PomoTimer timer = new PomoTimer();
     private final PresetManager presetManager;
-    private final UIRefreshable refresher;
+    private final AppState appState;
     private int cycleCounter;
     private PomoState state;
     private int focusSec;
@@ -63,11 +64,11 @@ public class TimerPane extends BorderPane {
      * Constructs the TimerPane.
      *
      * @param presetManager The manager for accessing preset data, such as timer durations.
-     * @param refresher     An interface implementation used to refresh other UI components like the top bar.
+     * @param appState     state of our Application.
      */
-    public TimerPane(PresetManager presetManager, UIRefreshable refresher) {
+    public TimerPane(PresetManager presetManager, AppState appState) {
         this.presetManager = presetManager;
-        this.refresher = refresher;
+        this.appState = appState;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TimerPane.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -103,8 +104,29 @@ public class TimerPane extends BorderPane {
                 updateSoundIcon();
             }
         });
+        appState.mainViewStateProperty().addListener((obs, oldValue, newValue) -> {
+            switch (newValue) {
+                case EMPTY -> showEmptyState();
+                case TIMER -> showTimerState();
+            }
+        });
+        appState.currentPresetProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                updateFromPreset(newValue);
+            }
+        });
+        if (appState.getCurrentPreset() != null) {
+            showTimerState();
+            updateFromPreset(appState.getCurrentPreset());
+        } else {
+            showEmptyState();
+        }
         this.setOnMousePressed(event -> this.requestFocus());
-        refreshUI();
+        if (presetManager.hasPresets()) {
+            appState.setTimerViewState(TimerViewState.TIMER);
+        } else {
+            appState.setTimerViewState(TimerViewState.EMPTY);
+        }
     }
 
     /**
@@ -114,36 +136,33 @@ public class TimerPane extends BorderPane {
      */
 
     public void showPresetEditor(Preset p){
-        PresetEditor presetEditor = new PresetEditor(presetManager, this, p);
+        PresetEditor presetEditor = new PresetEditor(presetManager, appState, p);
+        appState.setTimerViewState(TimerViewState.EDITING);
         this.setCenter(presetEditor);
     }
 
-    /**
-     * Refreshes the user interface of the timer pane.
-     * If no presets exist, it displays a button to create a new one. Otherwise, it
-     * configures the timer display based on the currently selected preset.
-     */
-    public void refreshUI () {
-        if(!presetManager.hasPresets()) {
-            timerContainer.setVisible(false);
-            timerContainer.setManaged(false);
+    private void showEmptyState() {
+        timerContainer.setVisible(false);
+        timerContainer.setManaged(false);
 
-            Button createPresetButton = new Button("Create Preset");
-            FontIcon plusIcon = new FontIcon(FontAwesomeSolid.PLUS_SQUARE);
-            plusIcon.setIconColor(Color.WHITE);
-            plusIcon.setIconSize(18);
-            createPresetButton.setGraphic(plusIcon);
-            createPresetButton.getStyleClass().add("create-preset-button");
-            createPresetButton.setOnAction(e ->
-                    showPresetEditor(new Preset("preset" + (presetManager.getPresetCount() + 1))));
-            this.setCenter(createPresetButton);
-        } else {
-            logger.debug("Refreshing UI with a Preset.");
-            timerContainer.setVisible(true);
-            timerContainer.setManaged(true);
-            this.setCenter(timerContainer);
-            setUIFromPreset();
-        }
+        Button createPresetButton = new Button("Create Preset");
+        FontIcon plusIcon = new FontIcon(FontAwesomeSolid.PLUS_SQUARE);
+        plusIcon.setIconColor(Color.WHITE);
+        plusIcon.setIconSize(18);
+        createPresetButton.setGraphic(plusIcon);
+        createPresetButton.getStyleClass().add("create-preset-button");
+        createPresetButton.setOnAction(e ->
+                showPresetEditor(new Preset("preset" + (presetManager.getPresetCount() + 1))));
+        this.setCenter(createPresetButton);
+    }
+
+    private void showTimerState() {
+        if (timerContainer == null) return;
+        logger.debug("Refreshing UI with a Preset.");
+        timerContainer.setVisible(true);
+        timerContainer.setManaged(true);
+        this.setCenter(timerContainer);
+        createButtonsAndLabels();
     }
 
     private void initIcon(FontIcon icon) {
@@ -172,62 +191,65 @@ public class TimerPane extends BorderPane {
         }
     }
 
-    private void setUIFromPreset(){
+    private void updateFromPreset(Preset p) {
+        focusSec = p.getDurationFocus();
+        shortBrSec = p.getDurationShortBreak();
+        longBrSec = p.getDurationLongBreak();
+        cycleAmount = p.getCycleAmount();
+        timerLabel.setText(String.format("%02d:%02d", focusSec / 60, focusSec % 60));
+        cycleLabel.setText("Cycle: " + cycleCounter + " / " + cycleAmount);
+
+        timer.setRemainingSeconds(focusSec);
+        startBtn.setOnAction(e -> {
+            if (timer.isRunning()) {
+                timer.pause();
+                startBtn.setText("Start");
+            } else {
+                presetManager.stopPlayer();
+                updatePlayIcon();
+                timer.start(seconds -> {
+                    int min = seconds / 60;
+                    int sec = seconds % 60;
+                    String time = String.format("%02d:%02d", min, sec);
+                    Platform.runLater(() -> timerLabel.setText(time));
+                    if (seconds <= 0) {
+                        timer.pause();
+                        Platform.runLater(() -> {
+                            presetManager.startPlayer();
+                            updatePlayIcon();
+                            if (!soundOn) {
+                                presetManager.setMutePlayer(true);
+                            }
+
+                            setNewPomoState();
+                            startBtn.setText("Start");
+                        });
+                    }
+                });
+                startBtn.setText("Stop");
+            }
+        });
+    }
+
+    private void createButtonsAndLabels(){
         state = PomoState.FOCUS;
         cycleCounter = 1;
-        presetManager.getCurrentPreset().ifPresent(pr -> {
-            focusSec = pr.getDurationFocus();
-            shortBrSec = pr.getDurationShortBreak();
-            longBrSec = pr.getDurationLongBreak();
-            cycleAmount = pr.getCycleAmount();
-            timerLabel.setText(String.format("%02d:%02d", focusSec / 60, focusSec % 60));
-            cycleLabel.setText("Cycle: " + cycleCounter + " / " + cycleAmount);
 
-            timer.setRemainingSeconds(focusSec);
-            startBtn.setOnAction(e -> {
-                if(timer.isRunning()) {
-                    timer.pause();
-                    startBtn.setText("Start");
-                } else {
-                    presetManager.stopPlayer();
-                    updatePlayIcon();
-                    timer.start( seconds -> {
-                        int min = seconds / 60;
-                        int sec = seconds % 60;
-                        String time = String.format("%02d:%02d", min, sec);
-                        Platform.runLater(() -> timerLabel.setText(time));
-                        if (seconds <= 0) {
-                            timer.pause();
-                            Platform.runLater(() -> {
-                                presetManager.startPlayer();
-                                updatePlayIcon();
-                                if (!soundOn) {
-                                    presetManager.setMutePlayer(true);
-                                }
+        resetBtn.setOnAction(e -> {
+            if(timer.isRunning()){
+                startBtn.setText("Start");
+            }
+            int nt = focusSec;
+            switch (state) {
+                case SHORTBR -> nt = shortBrSec;
+                case LONGBR -> nt = longBrSec;
+            }
+            timer.reset(nt);
+            timerLabel.setText(String.format("%02d:%02d", nt / 60, nt % 60));
 
-                                setNewPomoState();
-                                startBtn.setText("Start");
-                            });
-                        }
-                    });
-                    startBtn.setText("Stop");
-                }
-            });
-            resetBtn.setOnAction(e -> {
-                if(timer.isRunning()){
-                    startBtn.setText("Start");
-                }
-                int nt = focusSec;
-                switch (state) {
-                    case SHORTBR -> nt = shortBrSec;
-                    case LONGBR -> nt = longBrSec;
-                }
-                timer.reset(nt);
-                timerLabel.setText(String.format("%02d:%02d", nt / 60, nt % 60));
-
-            });
-            skipBtn.setOnAction(e -> setNewPomoState());
         });
+        skipBtn.setOnAction(e -> setNewPomoState());
+
     }
 
     private void setNewPomoState() {
@@ -255,20 +277,6 @@ public class TimerPane extends BorderPane {
                 timerLabel.setText(String.format("%02d:%02d", focusSec / 60, focusSec % 60));
                 break;
         }
-    }
-
-    /**
-     * Triggers a refresh of the main application's top bar via the refresher interface.
-     */
-    public void refreshTopBar() {
-        refresher.refreshTopBar();
-    }
-
-    /**
-     * Triggers a refresh of the task list view via the refresher interface.
-     */
-    public void refreshTaskListView() {
-        refresher.refreshTaskListView();
     }
 
 }

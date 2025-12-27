@@ -14,7 +14,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import org.pomotimo.gui.utils.AlertFactory;
-import org.pomotimo.gui.utils.UIRefreshable;
 import org.pomotimo.logic.config.AppConstants;
 import org.pomotimo.logic.preset.Preset;
 import org.pomotimo.logic.preset.PresetManager;
@@ -31,7 +30,6 @@ public class ExportPresetView extends BorderPane {
     private static final Logger logger = LoggerFactory.getLogger(ExportPresetView.class);
     private final PresetManager presetManager;
     private final PresetImporterExporter importerExporter;
-    private final UIRefreshable refresher;
     @FXML private ListView<Preset> checkList;
     @FXML private Button exportBtn;
 
@@ -40,12 +38,10 @@ public class ExportPresetView extends BorderPane {
      *
      * @param presetManager The manager responsible for preset data logic, used to retrieve presets.
      * @param importerExporter The utility for handling the preset export process.
-     * @param refresher An interface implementation for refreshing other UI components.
      */
     public ExportPresetView(PresetManager presetManager,
-                            PresetImporterExporter importerExporter, UIRefreshable refresher) {
+                            PresetImporterExporter importerExporter) {
         this.presetManager = presetManager;
-        this.refresher = refresher;
         this.importerExporter = importerExporter;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ExportPresetView.fxml"));
         loader.setRoot(this);

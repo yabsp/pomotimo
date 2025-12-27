@@ -262,6 +262,15 @@ public class Preset {
         }
         return Optional.empty();
     }
+
+    public Preset copyWith(String name, int focusSecs,
+                           int shortBrSecs, int longBrSecs,
+                           int cycleAmount,
+                           AudioData currentAudio) {
+        return new Preset(name, focusSecs,
+                shortBrSecs, longBrSecs, this.imageFile, cycleAmount, this.tasks);
+    }
+
     /**
      * Returns a string representation of the preset, including its name and timer durations.
      *
@@ -295,7 +304,7 @@ public class Preset {
                 && p.getDurationShortBreak() == durationShortBreak
                 && p.getDurationLongBreak() == durationLongBreak
                 && p.getCycleAmount() == cycleAmount
-                && p.getImageFile().equals(imageFile)
+                //&& p.getImageFile().equals(imageFile) --> not used yet
                 && p.getCurrentAudio().equals(currentAudio)
                 && tasks.containsAll(p.getTasks());
     }

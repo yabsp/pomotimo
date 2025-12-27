@@ -19,6 +19,7 @@ import org.pomotimo.gui.DeletePresetView;
 import org.pomotimo.gui.ExportPresetView;
 import org.pomotimo.gui.TaskPane;
 import org.pomotimo.gui.TimerPane;
+import org.pomotimo.gui.state.AppState;
 import org.pomotimo.gui.utils.ElementsFactory;
 import org.pomotimo.logic.config.AppConstants;
 import org.pomotimo.logic.preset.PresetManager;
@@ -49,8 +50,9 @@ public class MenuFrame extends PomoFrame {
                      TimerPane timerPane,
                      TaskPane taskPane,
                      Stage parentStage,
-                     ViewType viewType) {
-        super(presetManager, importerExporter, timerPane, taskPane, new Stage());
+                     ViewType viewType,
+                     AppState appState) {
+        super(presetManager, importerExporter, timerPane, taskPane, new Stage(), appState);
         this.parentStage = parentStage;
         this.viewType = viewType;
         initialize();
@@ -62,7 +64,7 @@ public class MenuFrame extends PomoFrame {
      * Overrides the method from {@link PomoFrame}.
      */
     @Override
-    protected void createTopBar() {
+    protected void drawTopBar() {
         this.topBar = new HBox();
         topBar.getStyleClass().add("custom-title-bar");
 
@@ -101,11 +103,11 @@ public class MenuFrame extends PomoFrame {
         BorderPane view;
         switch(viewType) {
             case DELETE_VIEW -> {
-                view = new DeletePresetView(presetManager, (MainFrame) parentStage.getScene().getRoot());
+                view = new DeletePresetView(presetManager, appState);
                 mainStage.setTitle("Delete Presets");
             }
             case EXPORT_VIEW -> {
-                view = new ExportPresetView(presetManager, importerExporter, this);
+                view = new ExportPresetView(presetManager, importerExporter);
                 mainStage.setTitle("Export Presets");
             }
             default -> view = new BorderPane();
@@ -119,7 +121,7 @@ public class MenuFrame extends PomoFrame {
             logger.error("Icon path is null.", e);
         }
 
-        createTopBar();
+        drawTopBar();
         this.setCenter(view);
         createFrameEffects();
         makeWindowResizable();

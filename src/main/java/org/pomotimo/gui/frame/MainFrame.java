@@ -24,6 +24,7 @@ import javafx.stage.StageStyle;
 import org.pomotimo.gui.ExportPresetView;
 import org.pomotimo.gui.TaskPane;
 import org.pomotimo.gui.TimerPane;
+import org.pomotimo.gui.state.AppState;
 import org.pomotimo.gui.utils.AlertFactory;
 import org.pomotimo.gui.utils.ElementsFactory;
 import org.pomotimo.logic.config.AppConstants;
@@ -51,8 +52,9 @@ public class MainFrame extends PomoFrame {
      */
     public MainFrame(PresetManager presetManager,
                      PresetImporterExporter importerExporter,
-                     Stage mainStage) {
-        super(presetManager, importerExporter, mainStage);
+                     Stage mainStage,
+                     AppState appState) {
+        super(presetManager, importerExporter, mainStage, appState);
         initialize();
     }
 
@@ -62,11 +64,11 @@ public class MainFrame extends PomoFrame {
      * and attaches their respective event handlers. Overrides the method from {@link PomoFrame}.
      */
     @Override
-    protected void createTopBar() {
+    protected void drawTopBar() {
         this.topBar = new HBox();
         topBar.getStyleClass().add("custom-title-bar");
 
-        /*
+        /* This for later and not implemented yet.
         MenuButton settingsButton = new MenuButton("Settings");
         settingsButton.getItems().addAll(
                 new MenuItem("General Settings")
@@ -101,32 +103,14 @@ public class MainFrame extends PomoFrame {
 
         deleteItem.setOnAction(ev -> {
             MenuFrame menuFrame = new MenuFrame(presetManager, importerExporter,
-                    timerPane, taskPane, mainStage, ViewType.DELETE_VIEW);
+                    timerPane, taskPane, mainStage, ViewType.DELETE_VIEW, appState);
             menuFrame.show();
         });
+        MenuButton presetButton = new MenuButton("Preset");
 
         manageMenu.getItems().addAll(createItem, editItem, deleteItem);
-        Menu switchMenu = new Menu("Select");
-        ToggleGroup presetsGroup = new ToggleGroup();
+        Menu switchMenu = getMenu(presetButton);
 
-        presetManager.getPresets().forEach(pr -> {
-            String itemName = pr.getName().replace("_", "__");
-            RadioMenuItem prItem = new RadioMenuItem(itemName);
-            prItem.setToggleGroup(presetsGroup);
-            if (presetManager.getCurrentPreset().map(p -> p.equals(pr)).orElse(false)) {
-                prItem.setSelected(true);
-            }
-            prItem.setOnAction(e -> {
-                presetManager.setCurrentPreset(pr);
-                prItem.setSelected(true);
-                timerPane.refreshUI();
-                taskPane.refreshTaskListView();
-                logger.debug("Switched to preset: {}", pr);
-            });
-            switchMenu.getItems().add(prItem);
-        });
-
-        MenuButton presetButton = new MenuButton("Preset");
         presetButton.getItems().addAll(importItem, exportItem, switchMenu, manageMenu);
         presetButton.getStyleClass().add("topbar-button");
 
@@ -137,8 +121,7 @@ public class MainFrame extends PomoFrame {
         minimizeBtn.setOnAction(e -> mainStage.setIconified(true));
         maximizeBtn.setOnAction(e -> mainStage.setMaximized(!mainStage.isMaximized()));
         closeBtn.setOnAction(e -> {
-            presetManager.shutDownScheduler();
-            Platform.exit();
+            shutdownApplication();
         });
 
         makeWindowDraggable();
@@ -159,7 +142,7 @@ public class MainFrame extends PomoFrame {
 
     private void handleExportPreset() {
         MenuFrame exportFrame = new MenuFrame(presetManager, importerExporter,
-                timerPane, taskPane, mainStage, ViewType.EXPORT_VIEW);
+                timerPane, taskPane, mainStage, ViewType.EXPORT_VIEW, appState);
         exportFrame.show();
     }
 
@@ -174,10 +157,11 @@ public class MainFrame extends PomoFrame {
 
         if (file != null) {
             Optional<Preset> importedPreset = importerExporter.importPreset(file);
+            importedPreset.ifPresent(preset -> {
+                presetManager.setCurrentPreset(preset);
+                appState.setCurrentPreset(preset);
+            });
             if (importedPreset.isPresent()) {
-                refreshTimerPane();
-                refreshTaskPane();
-                refreshTopBar();
                 AlertFactory.alert(Alert.AlertType.INFORMATION, "Import Successful", "",
                         "Preset '" + importedPreset.get().getName() + "' was imported.").showAndWait();
             } else {
@@ -185,6 +169,30 @@ public class MainFrame extends PomoFrame {
                         "Could not import the preset from the selected file.").showAndWait();
             }
         }
+    }
+
+    private Menu getMenu(MenuButton presetButton) {
+        Menu switchMenu = new Menu("Select");
+        ToggleGroup presetsGroup = new ToggleGroup();
+        presetButton.setOnShowing(e -> {
+            switchMenu.getItems().clear();
+            presetManager.getPresets().forEach(pr -> {
+                String itemName = pr.getName().replace("_", "__");
+                RadioMenuItem prItem = new RadioMenuItem(itemName);
+                prItem.setToggleGroup(presetsGroup);
+                if (presetManager.getCurrentPreset().map(p -> p.equals(pr)).orElse(false)) {
+                    prItem.setSelected(true);
+                }
+                prItem.setOnAction(e2 -> {
+                    presetManager.setCurrentPreset(pr);
+                    appState.setCurrentPreset(pr);
+                    prItem.setSelected(true);
+                    logger.debug("Switched to preset: {}", pr);
+                });
+                switchMenu.getItems().add(prItem);
+            });
+        });
+        return switchMenu;
     }
 
     /**
@@ -205,13 +213,13 @@ public class MainFrame extends PomoFrame {
 
         createFrameEffects();
         makeWindowResizable();
-        createTopBar();
+        drawTopBar();
 
         HBox content = new HBox();
         content.setSpacing(10);
 
-        this.timerPane = new TimerPane(presetManager, this);
-        this.taskPane = new TaskPane(presetManager);
+        this.timerPane = new TimerPane(presetManager, appState);
+        this.taskPane = new TaskPane(presetManager, appState);
 
         content.getChildren().addAll(timerPane, taskPane);
         HBox.setHgrow(timerPane, Priority.ALWAYS);
@@ -229,5 +237,15 @@ public class MainFrame extends PomoFrame {
         } catch (NullPointerException e) {
             logger.error("Stylesheets not found.", e);
         }
+
+        mainStage.setOnCloseRequest(event -> {
+            shutdownApplication();
+            event.consume();
+        });
+    }
+
+    private void shutdownApplication() {
+        presetManager.shutDownScheduler();
+        Platform.exit();
     }
 }

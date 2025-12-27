@@ -20,6 +20,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 
+import org.pomotimo.gui.state.AppState;
 import org.pomotimo.logic.preset.Preset;
 import org.pomotimo.logic.preset.PresetManager;
 import org.pomotimo.logic.preset.Task;
@@ -38,6 +39,7 @@ public class TaskPane extends BorderPane {
     @FXML private Button addTaskButton;
     private final ContextMenu contextMenu = new ContextMenu();
     private final PresetManager presetManager;
+    private final AppState appState;
     private final Logger logger = LoggerFactory.getLogger(TaskPane.class);
 
     /**
@@ -45,12 +47,12 @@ public class TaskPane extends BorderPane {
      *
      * @param presetManager The manager for accessing and modifying the task list of the current preset.
      */
-    public TaskPane(PresetManager presetManager) {
+    public TaskPane(PresetManager presetManager, AppState appState) {
         this.presetManager = presetManager;
+        this.appState = appState;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TaskPane.fxml"));
         loader.setRoot(this);
         loader.setController(this);
-
         try {
             loader.load();
             getStylesheets().add(getClass().getResource("/css/generalstyle.css").toExternalForm());
@@ -63,8 +65,13 @@ public class TaskPane extends BorderPane {
 
     @FXML
     private void initialize(){
+        appState.currentPresetProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                updateTaskList(newValue);
+            }
+        });
         this.setOnMousePressed(event -> this.requestFocus());
-        refreshUI();
+        setupTaskPaneFunctionality();
     }
 
     private void addTask() {
@@ -214,13 +221,22 @@ public class TaskPane extends BorderPane {
         });
     }
 
+    private void updateTaskList (Preset p) {
+        taskListView.getItems().clear();
+        enableCellFactory();
+
+        logger.info("Adding all tasks of current presets to ListView");
+        List<Task> tasks = p.getTasks();
+        taskListView.setItems(FXCollections.observableArrayList(tasks));
+    }
+
     /**
      * Initializes or refreshes the entire UI of the task pane.
      * This method sets up event handlers for the input field and add button,
      * configures the list view's cell factory for context menus and drag-and-drop,
      * and populates the list with tasks from the current preset.
      */
-    public void refreshUI() {
+    private void setupTaskPaneFunctionality() {
         addTaskButton.setOnAction(e -> addTask());
         taskInput.setOnAction(e -> addTaskButton.fire());
         taskListView.setOnKeyPressed(event -> {
@@ -228,13 +244,5 @@ public class TaskPane extends BorderPane {
                 removeTaskItem(taskListView.getSelectionModel().getSelectedItem());
             }
         });
-        taskListView.getItems().clear();
-        enableCellFactory();
-        presetManager.getCurrentPreset().ifPresent(pr -> {
-            logger.info("Adding all tasks of current presets to ListView");
-            List<Task> tasks = pr.getTasks();
-            taskListView.setItems(FXCollections.observableArrayList(tasks));
-        });
     }
-
 }

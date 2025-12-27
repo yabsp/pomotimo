@@ -11,7 +11,8 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 
-import org.pomotimo.gui.utils.UIRefreshable;
+import org.pomotimo.gui.state.AppState;
+import org.pomotimo.gui.state.TimerViewState;
 import org.pomotimo.logic.preset.Preset;
 import org.pomotimo.logic.preset.PresetManager;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ import org.slf4j.LoggerFactory;
 public class DeletePresetView extends BorderPane {
     private static final Logger logger = LoggerFactory.getLogger(DeletePresetView.class);
     private final PresetManager presetManager;
-    private final UIRefreshable refresher;
+    private final AppState appState;
     @FXML private ListView<Preset> checkList;
     @FXML private Button deleteBtn;
 
@@ -33,11 +34,11 @@ public class DeletePresetView extends BorderPane {
      * Constructs the DeletePresetView.
      *
      * @param presetManager The manager responsible for preset data logic, used to delete presets.
-     * @param refresher     An interface implementation used to refresh the main application UI after deletion.
+     * @param appState     The state of the application.
      */
-    public DeletePresetView(PresetManager presetManager, UIRefreshable refresher) {
+    public DeletePresetView(PresetManager presetManager, AppState appState) {
         this.presetManager = presetManager;
-        this.refresher = refresher;
+        this.appState = appState;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DeletePresetView.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -82,11 +83,14 @@ public class DeletePresetView extends BorderPane {
         pList.forEach(pr -> {
             logger.debug("Preset to delete: {}", pr);
             presetManager.removePreset(pr);
+            if (presetManager.getCurrentPreset().isPresent()) {
+                appState.setCurrentPreset(presetManager.getCurrentPreset().get());
+                appState.setTimerViewState(TimerViewState.TIMER);
+            } else {
+                appState.setTimerViewState(TimerViewState.EMPTY);
+            }
             checkList.getItems().remove(pr);
         });
-        refresher.refreshTimerPane();
-        refresher.refreshTaskPane();
-        refresher.refreshTopBar();
         presetManager.scheduleSave();
     }
 
