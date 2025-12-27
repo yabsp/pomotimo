@@ -8,8 +8,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-import org.pomotimo.gui.TaskPane;
-import org.pomotimo.gui.TimerPane;
 import org.pomotimo.gui.state.AppState;
 import org.pomotimo.logic.preset.PresetManager;
 import org.pomotimo.logic.utils.PresetImporterExporter;
@@ -26,8 +24,6 @@ public abstract class PomoFrame extends BorderPane {
     boolean resizing = false;
     Cursor resizeCursor = Cursor.DEFAULT;
     Stage mainStage;
-    TimerPane timerPane;
-    TaskPane taskPane;
     HBox topBar;
     PresetManager presetManager;
     PresetImporterExporter importerExporter;
@@ -40,14 +36,10 @@ public abstract class PomoFrame extends BorderPane {
 
     public PomoFrame (PresetManager presetManager,
                       PresetImporterExporter importerExporter,
-                      TimerPane timerPane,
-                      TaskPane taskPane,
                       Stage mainStage,
                       AppState appState) {
         this.presetManager = presetManager;
         this.importerExporter = importerExporter;
-        this.taskPane = taskPane;
-        this.timerPane = timerPane;
         this.mainStage = mainStage;
         this.appState = appState;
         appState.currentPresetProperty().addListener((observable, oldValue, newValue) -> {
@@ -55,16 +47,6 @@ public abstract class PomoFrame extends BorderPane {
                 drawTopBar();
             }
         });
-    }
-
-    public PomoFrame(PresetManager presetManager,
-                     PresetImporterExporter importerExporter,
-                     Stage mainStage,
-                     AppState appState) {
-        this.presetManager = presetManager;
-        this.importerExporter = importerExporter;
-        this.mainStage = mainStage;
-        this.appState = appState;
     }
 
     protected abstract void drawTopBar();

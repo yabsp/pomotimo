@@ -296,7 +296,7 @@
     -fx-border-width: 0 0 1px 0; /* Bottom border only */
     -fx-border-style: solid;
     -fx-padding: 0 0 1 0; /* Top right bottom left */
-    -fx-spacing: 10;
+    -fx-spacing: 0;
     -fx-alignment: center-left;
 }
 
@@ -305,7 +305,7 @@
     -fx-background-color: #2e2e2e;
     -fx-text-fill: white;
     -fx-font-size: 1em;
-    -fx-padding: 5 20;
+    -fx-padding: 3 15;
     -fx-background-radius: 4;
     -fx-border-color: transparent;
     -fx-border-radius: 4;
@@ -320,6 +320,33 @@
 }
 
 .topbar-button:hover {
+    -fx-background-color: #3a3a3a;
+    -fx-cursor: hand;
+}
+
+.select-button-container {
+    -fx-padding: 5 5 5 8; /* top right bottom left */
+}
+
+.topbar-select-button {
+    -fx-background-color: #2e2e2e;
+    -fx-text-fill: white;
+    -fx-font-size: 1em;
+    -fx-padding: 1 1;
+    -fx-background-radius: 3;
+    -fx-border-color: transparent;
+    -fx-border-radius: 3;
+}
+
+.topbar-select-button .label {
+    -fx-text-fill: white;
+}
+
+.topbar-select-button .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.topbar-select-button:hover {
     -fx-background-color: #3a3a3a;
     -fx-cursor: hand;
 }

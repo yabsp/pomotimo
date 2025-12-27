@@ -77,10 +77,10 @@ public class ElementsFactory {
      * @return A configured {@link ImageView} containing the application icon.
      */
     public static ImageView appIcon() {
-        ImageView appIcon = new ImageView(AppConstants.ICON_24x24);
-        appIcon.setFitHeight(18);
-        appIcon.setFitWidth(18);
-        HBox.setMargin(appIcon, new Insets(0, 5, 0, 10));
+        ImageView appIcon = new ImageView(AppConstants.ICON_48);
+        appIcon.setFitHeight(24);
+        appIcon.setFitWidth(24);
+        HBox.setMargin(appIcon, new Insets(0, 5, 0, 9));
 
         return appIcon;
     }

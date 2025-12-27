@@ -46,14 +46,14 @@ public class Preset {
      * @param tasks List of {@link Task} objects
      */
     public Preset(String name, int durationFocus, int durationShortBreak,
-                  int durationLongBreak, String imageFile, int cycleAmount, ArrayList<Task> tasks) {
+                  int durationLongBreak, String imageFile, int cycleAmount, AudioData currentAudio, ArrayList<Task> tasks) {
         this.name = name;
         this.durationFocus = durationFocus;
         this.durationShortBreak = durationShortBreak;
         this.durationLongBreak = durationLongBreak;
         this.imageFile = imageFile;
         this.cycleAmount = cycleAmount;
-        this.currentAudio = PersistenceManager.readOnlyAudioDataList.getFirst();
+        this.currentAudio = currentAudio;
         this.tasks = tasks;
     }
 
@@ -268,7 +268,7 @@ public class Preset {
                            int cycleAmount,
                            AudioData currentAudio) {
         return new Preset(name, focusSecs,
-                shortBrSecs, longBrSecs, this.imageFile, cycleAmount, this.tasks);
+                shortBrSecs, longBrSecs, this.imageFile, cycleAmount, currentAudio, this.tasks);
     }
 
     /**

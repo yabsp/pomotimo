@@ -22,7 +22,6 @@ import org.pomotimo.gui.utils.AlertFactory;
 import org.pomotimo.logic.audio.AudioData;
 import org.pomotimo.logic.config.AppConstants;
 import org.pomotimo.logic.preset.Preset;
-import org.pomotimo.logic.utils.EditorMode;
 import org.pomotimo.logic.utils.PersistenceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +42,11 @@ public class PresetEditor extends BorderPane {
     private final PresetManager presetManager;
     private Preset currentPreset;
     private final AppState appState;
+
+    private enum EditorMode {
+        EDIT,
+        RESET
+    }
 
     public PresetEditor(PresetManager presetManager, AppState appState, Preset currentPreset) {
         this.presetManager = presetManager;
@@ -143,10 +147,9 @@ public class PresetEditor extends BorderPane {
         );
         presetManager.refreshPlayerAudioPath(selectedAudio.filePath());
 
-        if (!presetManager.contains(updated)) {
-            presetManager.addPreset(updated);
-            presetManager.setCurrentPreset(updated);
-        }
+        presetManager.removePreset(currentPreset);
+        presetManager.addPreset(updated);
+        presetManager.setCurrentPreset(updated);
 
         appState.setCurrentPreset(updated);
         appState.setTimerViewState(TimerViewState.TIMER);

@@ -1,4 +1,4 @@
-<img src="src/main/resources/icons/app_icon_highres.png" width="180">
+![](src/main/resources/icons/alt/app_icon.svg)
 
 # Pomotimo
 [![Java Version](https://img.shields.io/badge/Java-21-orange)](https://adoptium.net/de/temurin/releases?version=21&os=any&arch=any)
@@ -16,14 +16,14 @@
 
 ## Tech Stack
 
-| Component | Technology | Version | License |
-| :--- | :--- |:--------| :--- |
-| **Language** | Java | 21      | GPLv2+CE |
-| **GUI Framework** | JavaFX | 22.0.1  | GPLv2+CE |
-| **Icons** | Ikonli (FontAwesome) | 12.3.1  | Apache 2.0 |
-| **Native Access** | JNA | 5.17.0  | Apache 2.0 |
-| **JSON/Data** | Gson | 2.13.1  | Apache 2.0 |
-| **Logging** | SLF4J + Logback | 2.0.17  | MIT / EPL |
+| Component         | Technology           | Version  | License    |
+|:------------------|:---------------------|:---------|:-----------|
+| **Language**      | Java                 | 21       | GPLv2+CE   |
+| **GUI Framework** | JavaFX               | 22.0.1   | GPLv2+CE   |
+| **Icons**         | Ikonli (FontAwesome) | 12.3.1   | Apache 2.0 |
+| **Native Access** | JNA                  | 5.17.0   | Apache 2.0 |
+| **JSON/Data**     | Gson                 | 2.13.1   | Apache 2.0 |
+| **Logging**       | SLF4J + Logback      | 2.0.17   | MIT / EPL  |
 
 ## Prerequisites for Building
 
@@ -54,7 +54,7 @@ To build `.dmg` or `.pkg` installers:
 
 ### 1. Clone the repository
 ```bash
-git clone [https://github.com/yabsp/pomotimo.git](https://github.com/yabsp/pomotimo.git)
+git clone https://github.com/yabsp/pomotimo.git
 cd pomotimo
 ```
 
@@ -80,13 +80,19 @@ Creates a single JAR file containing all dependencies (useful for quick sharing 
 Creates a minimized folder containing the app and only the specific Java modules required to run it. This does not require Java to be installed on the target machine.
 
 ```./gradlew jlink```
+
 *Output location*: ```build/image/```
 
 ### Create Native Installers (JPackage)
 Generates an installer file specific to the OS you are building on.
+This can be run standalone and all needed tasks will be executed.
 
 ```./gradlew jpackage```
+
 *Output location*: ```build/jpackage/```
+
+### Remark
+For installation on linux please see [the linux install guide](docs/install-linux.md).
 
 ## License
 
@@ -94,7 +100,7 @@ This project is licensed under the **Apache License 2.0**.
 See the [LICENSE](LICENSE) file for the full text.
 
 ### Third-Party Notices
-This software includes third-party open-source components.
+This software includes third-party open-source components. See the [NOTICE](NOTICE) file.
 
 * **JavaFX**
     * Copyright (c) Oracle and/or its affiliates.
@@ -110,7 +116,7 @@ This software includes third-party open-source components.
     * Licensed under [Apache 2.0](https://github.com/java-native-access/jna/blob/master/LICENSE) / LGPL 2.1.
 
 ## Contributing
-Contributions are welcome! Not only coding contributions but proposals for architectural improvements as well.
+Contributions are welcome!
 
 1. Fork the repository.
 

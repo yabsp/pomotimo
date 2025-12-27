@@ -36,13 +36,13 @@ public class AlertFactory {
         alert.setHeaderText(header);
         alert.setContentText(content);
 
-        ImageView logoView = new ImageView(AppConstants.ICON);
+        ImageView logoView = new ImageView(AppConstants.ICON_128);
         logoView.setFitWidth(48);
         logoView.setFitHeight(48);
         alert.setGraphic(logoView);
 
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(AppConstants.ICON_24x24);
+        stage.getIcons().addAll(AppConstants.ICON_LIST);
 
         return alert;
     }

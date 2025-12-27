@@ -1,6 +1,8 @@
 package org.pomotimo.logic.config;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javafx.scene.image.Image;
@@ -15,9 +17,29 @@ public final class AppConstants {
 
     // --- App Icons ---
     public static final Image ICON = new Image(Objects.requireNonNull(AppConstants.class.
-            getResourceAsStream("/icons/app_icon.png")));
-    public static final Image ICON_24x24 = new Image(Objects.requireNonNull(AppConstants.class.
-            getResourceAsStream("/icons/app_icon_24x24.png")));
+            getResourceAsStream("/icons/alt/app_icon.png")));
+    public static final Image ICON_48 = new Image(Objects.requireNonNull(AppConstants.class.
+            getResourceAsStream("/icons/alt/app_icon_48.png")));
+    public static final Image ICON_128 = new Image(Objects.requireNonNull(AppConstants.class.
+            getResourceAsStream("/icons/alt/app_icon_128.png")));
+
+    //List of Icons size versions
+    public static final List<Image> ICON_LIST = List.of(
+            new Image(Objects.requireNonNull(AppConstants.class.
+                    getResourceAsStream("/icons/alt/app_icon_16.png"))),
+            new Image(Objects.requireNonNull(AppConstants.class.
+                    getResourceAsStream("/icons/alt/app_icon_24.png"))),
+            new Image(Objects.requireNonNull(AppConstants.class.
+                    getResourceAsStream("/icons/alt/app_icon_32.png"))),
+            ICON_48,
+            new Image(Objects.requireNonNull(AppConstants.class.
+                    getResourceAsStream("/icons/alt/app_icon_64.png"))),
+            ICON_128,
+            new Image(Objects.requireNonNull(AppConstants.class.
+                    getResourceAsStream("/icons/alt/app_icon_256.png"))),
+            new Image(Objects.requireNonNull(AppConstants.class.
+                    getResourceAsStream("/icons/alt/app_icon_512.png")))
+    );
 
     // --- Operating System ---
     public static final OperatingSystem os = OperatingSystem.detect();

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Pomotimo
+Comment=Pomotimo Timer App
+Exec=/opt/pomotimo/bin/Pomotimo
+Icon=/opt/pomotimo/lib/Pomotimo.png
+Terminal=false
+Type=Application
+Categories=Office
+StartupWMClass=org.pomotimo.gui.PomotimoGUI

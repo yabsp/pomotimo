@@ -12,6 +12,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
@@ -38,6 +39,7 @@ import org.slf4j.LoggerFactory;
  * including the custom title bar, timer pane, and task pane.
  */
 public class MainFrame extends PomoFrame {
+    private TimerPane timerPane;
     private static final Logger logger = LoggerFactory.getLogger(MainFrame.class);
 
     /**
@@ -100,16 +102,19 @@ public class MainFrame extends PomoFrame {
 
         deleteItem.setOnAction(ev -> {
             MenuFrame menuFrame = new MenuFrame(presetManager, importerExporter,
-                    timerPane, taskPane, mainStage, ViewType.DELETE_VIEW, appState);
+                    mainStage, ViewType.DELETE_VIEW, appState);
             menuFrame.show();
         });
+        HBox buttonContainer1 = new HBox();
+        buttonContainer1.getStyleClass().add("select-button-container");
         MenuButton presetButton = new MenuButton("Preset");
 
         manageMenu.getItems().addAll(createItem, editItem, deleteItem);
         Menu switchMenu = getMenu(presetButton);
 
         presetButton.getItems().addAll(importItem, exportItem, switchMenu, manageMenu);
-        presetButton.getStyleClass().add("topbar-button");
+        presetButton.getStyleClass().add("topbar-select-button");
+        buttonContainer1.getChildren().add(presetButton);
 
         Button minimizeBtn = ElementsFactory.minimizeBtn();
         Button maximizeBtn = ElementsFactory.maximizeBtn();
@@ -125,7 +130,7 @@ public class MainFrame extends PomoFrame {
 
         topBar.getChildren().addAll(ElementsFactory.appIcon(),
                 //settingsButton,
-                presetButton,
+                buttonContainer1,
                 ElementsFactory.spacer(),
                 minimizeBtn, maximizeBtn, closeBtn);
         this.setTop(topBar);
@@ -139,7 +144,7 @@ public class MainFrame extends PomoFrame {
 
     private void handleExportPreset() {
         MenuFrame exportFrame = new MenuFrame(presetManager, importerExporter,
-                timerPane, taskPane, mainStage, ViewType.EXPORT_VIEW, appState);
+                mainStage, ViewType.EXPORT_VIEW, appState);
         exportFrame.show();
     }
 
@@ -204,7 +209,7 @@ public class MainFrame extends PomoFrame {
         this.mainStage.initStyle(StageStyle.TRANSPARENT);
         this.mainStage.setTitle("Pomotimo");
         try {
-            this.mainStage.getIcons().add(AppConstants.ICON);
+            this.mainStage.getIcons().addAll(AppConstants.ICON_LIST);
         } catch (NullPointerException e) {
             logger.error("Icon path is null.", e);
         }
@@ -217,7 +222,7 @@ public class MainFrame extends PomoFrame {
         content.setSpacing(10);
 
         this.timerPane = new TimerPane(presetManager, appState);
-        this.taskPane = new TaskPane(presetManager, appState);
+        BorderPane taskPane = new TaskPane(presetManager, appState);
 
         content.getChildren().addAll(timerPane, taskPane);
         HBox.setHgrow(timerPane, Priority.ALWAYS);

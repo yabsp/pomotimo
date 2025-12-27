@@ -11,8 +11,6 @@ import javafx.stage.StageStyle;
 
 import org.pomotimo.gui.DeletePresetView;
 import org.pomotimo.gui.ExportPresetView;
-import org.pomotimo.gui.TaskPane;
-import org.pomotimo.gui.TimerPane;
 import org.pomotimo.gui.state.AppState;
 import org.pomotimo.gui.utils.ElementsFactory;
 import org.pomotimo.logic.config.AppConstants;
@@ -34,19 +32,15 @@ public class MenuFrame extends PomoFrame {
      *
      * @param presetManager The manager for handling application presets.
      * @param importerExporter The utility for importing and exporting presets.
-     * @param timerPane A reference to the main application's TimerPane.
-     * @param taskPane A reference to the main application's TaskPane.
      * @param parentStage The primary stage that owns this menu frame.
      * @param viewType The type of view to display within this frame (e.g., {@link PomoFrame.ViewType#DELETE_VIEW}).
      */
     public MenuFrame(PresetManager presetManager,
                      PresetImporterExporter importerExporter,
-                     TimerPane timerPane,
-                     TaskPane taskPane,
                      Stage parentStage,
                      ViewType viewType,
                      AppState appState) {
-        super(presetManager, importerExporter, timerPane, taskPane, new Stage(), appState);
+        super(presetManager, importerExporter, new Stage(), appState);
         this.parentStage = parentStage;
         this.viewType = viewType;
         initialize();
@@ -110,7 +104,7 @@ public class MenuFrame extends PomoFrame {
         mainStage.initModality(Modality.WINDOW_MODAL);
         mainStage.initOwner(parentStage);
         try {
-            this.mainStage.getIcons().add(AppConstants.ICON);
+            this.mainStage.getIcons().addAll(AppConstants.ICON_LIST);
         } catch (NullPointerException e) {
             logger.error("Icon path is null.", e);
         }

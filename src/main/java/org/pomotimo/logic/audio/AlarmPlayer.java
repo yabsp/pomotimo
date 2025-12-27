@@ -2,6 +2,8 @@ package org.pomotimo.logic.audio;
 
 import java.nio.file.Paths;
 import java.util.Objects;
+
+import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
@@ -16,10 +18,10 @@ import org.slf4j.LoggerFactory;
  * to only reload the media when the sound file path changes.
  */
 public class AlarmPlayer {
-    private MediaPlayer player;
+    private AudioClip clip;
     private String soundUri;
-    private boolean newUri;
-    private boolean playing;
+    private boolean playing = false;
+    private boolean isMuted = false;
     private final static Logger logger = LoggerFactory.getLogger(AlarmPlayer.class);
 
     /**
@@ -27,18 +29,26 @@ public class AlarmPlayer {
      */
     public AlarmPlayer () {
         this.soundUri = Paths.get(PersistenceManager.readOnlyAudioDataList.getFirst().filePath()).toUri().toString();
-        newUri = true;
-        player = new MediaPlayer(new Media(soundUri));
+        loadClip(this.soundUri);
     }
 
+    private void loadClip(String uri) {
+        try {
+            clip = new AudioClip(uri);
+        } catch (Exception e) {
+            logger.error("Failed to load audio clip: {}", uri, e);
+        }
+    }
     /**
      * Sets a new sound file to be used for the alarm.
      *
      * @param soundUri The URI string of the new sound file (e.g., from file.toURI().toString()).
      */
     public void setSoundPath(String soundUri) {
+        if (this.soundUri.equals(soundUri)) return;
+        stop();
         this.soundUri = soundUri;
-        newUri = true;
+        loadClip(soundUri);
     }
 
     /**
@@ -47,20 +57,17 @@ public class AlarmPlayer {
      * has been set, this method will first dispose of the old player and create a new one.
      */
     public void play() {
-        if (soundUri == null) {
-            logger.warn("URI to sound is not defined");
+        if (clip == null) {
+            logger.warn("AudioClip is not initialized");
             return;
         }
-        if (newUri) {
-            if (player != null) {
-                player.dispose();
-            }
-            player = new MediaPlayer(new Media(soundUri));
-            player.setCycleCount(MediaPlayer.INDEFINITE);
-            newUri = false;
+        if (playing && clip.isPlaying()) {
+            return;
         }
-        player.seek(Duration.ZERO);
-        player.play();
+        clip.setCycleCount(AudioClip.INDEFINITE);
+        clip.setVolume(isMuted ? 0.0 : 1.0);
+
+        clip.play();
         playing = true;
     }
 
@@ -68,11 +75,9 @@ public class AlarmPlayer {
      * Stops the playback of the alarm sound if it is currently playing.
      */
     public void stop() {
-        if (player == null) {
-            logger.info("Trying to stop but player is not defined");
-            return;
+        if (clip != null && playing) {
+            clip.stop();
         }
-        player.stop();
         playing = false;
     }
 
@@ -91,7 +96,7 @@ public class AlarmPlayer {
      * false otherwise.
      */
     public boolean isMute() {
-        return player.isMute();
+        return isMuted;
     }
 
     /**
@@ -99,6 +104,9 @@ public class AlarmPlayer {
      * @param m true to mute, false to unmute
      */
     public void setMute(boolean m) {
-        player.setMute(m);
+        this.isMuted = m;
+        if (clip != null) {
+            clip.setVolume(isMuted ? 0.0 : 1.0);
+        }
     }
 }
