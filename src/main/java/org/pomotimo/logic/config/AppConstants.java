@@ -66,6 +66,7 @@ public final class AppConstants {
             "winter_vivaldi.wav",
             "zarathustra_strauss.wav",
             "alarm_clock_digital.wav",
-            "swift_wildest_dreams.wav"
+            "wildest_dreams_taylor_swift.wav",
+            "chi_mai_ennio_morricone.wav"
     };
 }

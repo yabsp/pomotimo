@@ -54,7 +54,7 @@
             <TextField fx:id="cycleField" promptText="e.g. 4" styleClass="form-text-field" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
             <Label text="Alarm Sound" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-            <ComboBox fx:id="soundSelectBox" promptText="Select a sound..." GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <ComboBox fx:id="soundSelectBox" prefWidth="200" promptText="Select a sound..." GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
         </GridPane>
     </center>

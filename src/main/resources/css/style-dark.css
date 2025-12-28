@@ -132,7 +132,7 @@
     -fx-padding: 8 15;
     -fx-cursor: hand;
 
-    -fx-pref-width: 70px;
+    -fx-pref-width: 115px;
     -fx-pref-height: 40px;
 }
 .secondary-button:hover {

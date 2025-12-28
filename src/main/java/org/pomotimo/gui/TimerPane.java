@@ -39,6 +39,7 @@ public class TimerPane extends BorderPane {
     @FXML private Label stateLabel;
     @FXML private Label cycleLabel;
     @FXML private VBox timerContainer;
+    @FXML private Button resetCycleBtn;
     private final PomoTimer timer = new PomoTimer();
     private final PresetManager presetManager;
     private final AppState appState;
@@ -104,6 +105,13 @@ public class TimerPane extends BorderPane {
                 updateSoundIcon();
             }
         });
+
+        resetCycleBtn.setTooltip(new Tooltip("Reset to First Cycle"));
+        resetCycleBtn.setOnAction(e -> {
+            createButtonsAndLabels();
+            presetManager.getCurrentPreset().ifPresent(this::updateFromPreset);
+        });
+
         appState.timerViewStateProperty().addListener((obs, oldValue, newValue) -> {
             switch (newValue) {
                 case EMPTY -> showEmptyState();
@@ -236,6 +244,7 @@ public class TimerPane extends BorderPane {
         state = PomoState.FOCUS;
         cycleCounter = 1;
 
+        resetBtn.setTooltip(new Tooltip("Restart Current Timer"));
         resetBtn.setOnAction(e -> {
             if(timer.isRunning()){
                 startBtn.setText("Start");
@@ -249,6 +258,7 @@ public class TimerPane extends BorderPane {
             timerLabel.setText(String.format("%02d:%02d", nt / 60, nt % 60));
 
         });
+        skipBtn.setTooltip(new Tooltip("Skip to Next State"));
         skipBtn.setOnAction(e -> setNewPomoState());
 
     }
