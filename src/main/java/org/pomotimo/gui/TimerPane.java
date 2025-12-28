@@ -104,7 +104,7 @@ public class TimerPane extends BorderPane {
                 updateSoundIcon();
             }
         });
-        appState.mainViewStateProperty().addListener((obs, oldValue, newValue) -> {
+        appState.timerViewStateProperty().addListener((obs, oldValue, newValue) -> {
             switch (newValue) {
                 case EMPTY -> showEmptyState();
                 case TIMER -> showTimerState();
@@ -142,6 +142,7 @@ public class TimerPane extends BorderPane {
     }
 
     private void showEmptyState() {
+        presetManager.stopPlayer();
         timerContainer.setVisible(false);
         timerContainer.setManaged(false);
 

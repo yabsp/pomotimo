@@ -21,6 +21,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 
 import org.pomotimo.gui.state.AppState;
+import org.pomotimo.gui.state.TaskViewState;
 import org.pomotimo.logic.preset.Preset;
 import org.pomotimo.logic.preset.PresetManager;
 import org.pomotimo.logic.preset.Task;
@@ -68,6 +69,13 @@ public class TaskPane extends BorderPane {
         appState.currentPresetProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 updateTaskList(newValue);
+            }
+        });
+        appState.taskViewStateProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                if (newValue == TaskViewState.EMPTY) {
+                    taskListView.getItems().clear();
+                }
             }
         });
         this.setOnMousePressed(event -> this.requestFocus());
@@ -244,5 +252,6 @@ public class TaskPane extends BorderPane {
                 removeTaskItem(taskListView.getSelectionModel().getSelectedItem());
             }
         });
+        presetManager.getCurrentPreset().ifPresent(this::updateTaskList);
     }
 }

@@ -63,8 +63,9 @@ public final class AppConstants {
 
     // --- Default sounds ---
     public static final String[] DEFAULT_SOUNDS = {
-            "winter_vivaldi.mp3",
-            "zarathustra_strauss.mp3",
-            "alarm_clock_digital.mp3"
+            "winter_vivaldi.wav",
+            "zarathustra_strauss.wav",
+            "alarm_clock_digital.wav",
+            "swift_wildest_dreams.wav"
     };
 }

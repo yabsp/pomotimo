@@ -12,6 +12,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 
 import org.pomotimo.gui.state.AppState;
+import org.pomotimo.gui.state.TaskViewState;
 import org.pomotimo.gui.state.TimerViewState;
 import org.pomotimo.logic.preset.Preset;
 import org.pomotimo.logic.preset.PresetManager;
@@ -86,8 +87,10 @@ public class DeletePresetView extends BorderPane {
             if (presetManager.getCurrentPreset().isPresent()) {
                 appState.setCurrentPreset(presetManager.getCurrentPreset().get());
                 appState.setTimerViewState(TimerViewState.TIMER);
+                appState.setTaskViewState(TaskViewState.TASKLIST);
             } else {
                 appState.setTimerViewState(TimerViewState.EMPTY);
+                appState.setTaskViewState(TaskViewState.EMPTY);
             }
             checkList.getItems().remove(pr);
         });

@@ -23,6 +23,7 @@ import javafx.stage.StageStyle;
 import org.pomotimo.gui.TaskPane;
 import org.pomotimo.gui.TimerPane;
 import org.pomotimo.gui.state.AppState;
+import org.pomotimo.gui.state.TaskViewState;
 import org.pomotimo.gui.state.TimerViewState;
 import org.pomotimo.gui.utils.AlertFactory;
 import org.pomotimo.gui.utils.ElementsFactory;
@@ -163,6 +164,7 @@ public class MainFrame extends PomoFrame {
                 presetManager.setCurrentPreset(preset);
                 appState.setCurrentPreset(preset);
                 appState.setTimerViewState(TimerViewState.TIMER);
+                appState.setTaskViewState(TaskViewState.TASKLIST);
             });
             if (importedPreset.isPresent()) {
                 AlertFactory.alert(Alert.AlertType.INFORMATION, "Import Successful", "",

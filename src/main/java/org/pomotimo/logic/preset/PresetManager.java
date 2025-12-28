@@ -10,6 +10,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.pomotimo.gui.state.AppState;
+import org.pomotimo.gui.state.TaskViewState;
+import org.pomotimo.gui.state.TimerViewState;
 import org.pomotimo.logic.audio.AlarmPlayer;
 import org.pomotimo.logic.utils.PersistenceManager;
 import org.slf4j.Logger;
@@ -24,7 +26,7 @@ public class PresetManager {
     private List<Preset> presets;
     private Preset currentPreset;
     private final PersistenceManager persistenceManager;
-    public final AlarmPlayer player;
+    private final AlarmPlayer player;
     private final AppState appState;
     private static final Logger logger = LoggerFactory.getLogger(PresetManager.class);
 
@@ -55,6 +57,8 @@ public class PresetManager {
                 if (hasPresets()) {
                     setCurrentPreset(presets.getFirst());
                     appState.setCurrentPreset(presets.getFirst());
+                    appState.setTimerViewState(TimerViewState.TIMER);
+                    appState.setTaskViewState(TaskViewState.TASKLIST);
                 }
             }
             logger.debug("Presets loaded successfully.");

@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 import org.pomotimo.gui.state.AppState;
+import org.pomotimo.gui.state.TaskViewState;
 import org.pomotimo.gui.state.TimerViewState;
 import org.pomotimo.gui.utils.AlertFactory;
 import org.pomotimo.logic.audio.AudioData;
@@ -151,8 +152,10 @@ public class PresetEditor extends BorderPane {
         presetManager.addPreset(updated);
         presetManager.setCurrentPreset(updated);
 
-        appState.setCurrentPreset(updated);
         appState.setTimerViewState(TimerViewState.TIMER);
+        appState.setTaskViewState(TaskViewState.TASKLIST);
+        appState.setCurrentPreset(updated);
+
 
         currentPreset = updated;
         presetManager.scheduleSave();

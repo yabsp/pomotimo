@@ -1,5 +1,6 @@
 package org.pomotimo.gui.state;
 
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import org.pomotimo.logic.preset.Preset;
@@ -14,6 +15,9 @@ public class AppState {
 
     private final ObjectProperty<TimerViewState> timerViewState =
             new SimpleObjectProperty<>(TimerViewState.EMPTY);
+
+    private final ObjectProperty<TaskViewState> taskViewState =
+            new SimpleObjectProperty<>(TaskViewState.EMPTY);
 
     /**
      * Returning and {@link ObjectProperty<Preset>} object of our current preset.
@@ -36,14 +40,18 @@ public class AppState {
      * @param preset the new {@link Preset}.
      */
     public void setCurrentPreset(Preset preset) {
-        currentPreset.set(preset);
+        if (Platform.isFxApplicationThread()) {
+            this.currentPreset.set(preset);
+        } else {
+            Platform.runLater(() -> this.currentPreset.set(preset));
+        }
     }
 
     /**
      *
      * @return {@link ObjectProperty<TimerViewState>} with the view state of the timer pane.
      */
-    public ObjectProperty<TimerViewState> mainViewStateProperty() {
+    public ObjectProperty<TimerViewState> timerViewStateProperty() {
         return timerViewState;
     }
 
@@ -52,7 +60,31 @@ public class AppState {
      * @param state the new state of the timer. See {@link TimerViewState} for possible states.
      */
     public void setTimerViewState(TimerViewState state) {
-        timerViewState.set(state);
+        if (Platform.isFxApplicationThread()) {
+            timerViewState.set(state);
+        } else {
+            Platform.runLater(() -> this.timerViewState.set(state));
+        }
+    }
+
+    /**
+     *
+     * @return {@link ObjectProperty<TaskViewState>} with the view state of the task pane.
+     */
+    public ObjectProperty<TaskViewState> taskViewStateProperty() {
+        return taskViewState;
+    }
+
+    /**
+     *  Set the state of the task view.
+     * @param state the new state of the task. See {@link TaskViewState} for possible states.
+     */
+    public void setTaskViewState(TaskViewState state) {
+        if (Platform.isFxApplicationThread()) {
+            taskViewState.set(state);
+        } else {
+            Platform.runLater(() -> this.taskViewState.set(state));
+        }
     }
 
 }

@@ -104,11 +104,16 @@ public class PersistenceManager {
         List<AudioData> audioFiles = new ArrayList<>();
         try (Stream<Path> stream = Files.list(Paths.get(AppConstants.MEDIA_DIR.toUri()))) {
              audioFiles = stream
-                    .filter(Files::isRegularFile)
+                    .filter(e1 -> {
+                        if (Files.isRegularFile(e1)) {
+                            return e1.toString().endsWith(".wav");
+                        }
+                        return false;
+                    })
                     .map(e -> {
                         logger.debug("Following audio added to list: {}", e.toString());
-                        return AudioData
-                                .createAudioDataFromFile(e.toString());
+                        return AudioData.createAudioDataFromFile(e.toString());
+
                     })
                     .toList();
         } catch (IOException e){

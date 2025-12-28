@@ -1,9 +1,6 @@
 package org.pomotimo.logic.preset;
 
-import javafx.scene.input.DataFormat;
 import org.pomotimo.logic.config.AppConstants;
-
-import java.io.Serializable;
 import java.util.UUID;
 
 /**
