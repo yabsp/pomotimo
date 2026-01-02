@@ -1,6 +1,7 @@
 package org.pomotimo.gui;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -235,6 +236,7 @@ public class TaskPane extends BorderPane {
 
         logger.info("Adding all tasks of current presets to ListView");
         List<Task> tasks = p.getTasks();
+        tasks.sort(Comparator.comparingInt(Task::getPriority));
         taskListView.setItems(FXCollections.observableArrayList(tasks));
     }
 

@@ -101,10 +101,9 @@ shadowJar {
 jlink {
     options = ['--strip-debug', '--no-header-files', '--no-man-pages']
     launcher {
-        name = 'pomotimo'
+        name = 'Pomotimo'
     }
     jpackage {
-        resourceDir = file("src/main/resources/linux-packaging")
         imageName = 'Pomotimo'
 
         def os = org.gradle.internal.os.OperatingSystem.current()
@@ -116,19 +115,11 @@ jlink {
             icon = 'src/main/resources/icons/alt/app_icon.png'
             installerType = 'deb' // or 'rpm'
             installerOptions = ['--linux-shortcut',
-                                '--linux-deb-maintainer', 'pomotimo-dev']
+                                '--linux-menu-group', 'Office',]
         } else if (os.isMacOsX()) {
             icon = 'src/main/resources/icons/alt/app_icon.icns'
             installerType = 'dmg'
             installerOptions = ['--mac-package-name', 'Pomotimo']
         }
     }
-}
-
-tasks.jpackageImage.doLast {
-    copy {
-        from("src/main/resources/linux-packaging/pomotimo.desktop")
-        into("build/jpackage/Pomotimo/lib")
-    }
-    println "Overwrote generated .desktop file with custom version."
 }

@@ -91,9 +91,6 @@ This can be run standalone and all needed tasks will be executed.
 
 *Output location*: ```build/jpackage/```
 
-### Remark
-For installation on linux please see [the linux install guide](docs/install-linux.md).
-
 ## License
 
 This project is licensed under the **Apache License 2.0**.
