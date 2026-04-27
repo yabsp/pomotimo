@@ -1,6 +1,10 @@
-![](src/main/resources/icons/alt/app_icon.svg)
 
-# Pomotimo
+
+<h1>
+  Pomotimo
+  <img src="assets/logo/app_icon_128.png" alt="Pomotimo Logo" width="80" align="absmiddle">
+</h1>
+
 [![Java Version](https://img.shields.io/badge/Java-21-orange)](https://adoptium.net/de/temurin/releases?version=21&os=any&arch=any)
 [![Build Tool](https://img.shields.io/badge/Gradle-8.11-02303A)](https://gradle.org/releases/#8.11)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/yabsp/pomotimo/blob/c85f856bf764891e881d17939ee29564fc503609/LICENSE)
@@ -112,15 +116,9 @@ This software includes third-party open-source components. See the [NOTICE](NOTI
     * Copyright (c)
     * Licensed under [Apache 2.0](https://github.com/java-native-access/jna/blob/master/LICENSE) / LGPL 2.1.
 
-## Contributing
-Contributions are welcome!
+## Impressions
 
-1. Fork the repository.
-
-2. Create your feature branch (```git checkout -b feature/AmazingFeature```).
-
-3. Commit your changes (```git commit -m 'Add some AmazingFeature'```).
-
-4. Push to the branch (```git push origin feature/AmazingFeature```).
-
-5. Open a Pull Request.
+![](assets/app_screenshots/ss1.png)
+![](assets/app_screenshots/ss2.png)
+![](assets/app_screenshots/ss3.png)
+![](assets/app_screenshots/ss4.png)
