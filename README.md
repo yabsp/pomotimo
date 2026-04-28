@@ -9,11 +9,11 @@
 [![Build Tool](https://img.shields.io/badge/Gradle-8.11-02303A)](https://gradle.org/releases/#8.11)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/yabsp/pomotimo/blob/c85f856bf764891e881d17939ee29564fc503609/LICENSE)
 
-**Pomotimo** is a modern, cross-platform desktop application built with Java 21 and JavaFX. It features a responsive user interface and self-contained packaging.
+**Pomotimo** is a simple pomodoro timer for people preferring an offline GUI alternative. It is a cross-platform desktop application built with Java 21 and JavaFX.
 
 ## Features
 
-* **Cross-Platform:** Runs natively on Windows, Linux, and macOS.
+* **Cross-Platform:** Runs natively on Windows, Linux, and macOS. (JVM)
 * **Modern UI:** Built using JavaFX 22 with modular architecture.
 * **Persistence:** Reliable local data storage using Gson serialization.
 * **Zero-Dependency Run:** Can be bundled into a native installer (EXE, DEB, DMG) that includes its own Java runtime.
